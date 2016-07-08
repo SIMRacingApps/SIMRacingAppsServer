@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2016 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    30.5038414,
+    "Longitude":   -87.3082137,
+    "North":       269.0,
+    "Resolution":  0.8,
+    "MergePoint":  38.5,
+    "Images": {
+        "SAT":     "fiveflags-sat.png",
+        "MAP":     "fiveflags-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "fiveflags-ONTRACK.gpx",
+        "ONPITROAD": "fiveflags-ONPITROAD.gpx"        
+    }
+}

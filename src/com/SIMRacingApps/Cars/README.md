@@ -1,0 +1,1 @@
+The manufacturer logos should have a height of 256 pixels.

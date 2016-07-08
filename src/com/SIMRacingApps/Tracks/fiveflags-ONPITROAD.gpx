@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<gpx xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxedw="http://www.gpxeditor.co.uk/xmlschemas/WaypointExtension/v1" xmlns:gpxedts="http://www.gpxeditor.co.uk/xmlschemas/TrackSegExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" creator="GPXEditor" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
+  <wpt lat="30.50461" lon="-87.30764">
+    <name>Five Flags Speedway</name>
+    <point>y|dyDvg{sO</point>
+  </wpt>
+  <rte>
+    <name>Untitled</name>
+    <rtept lat="30.5031708025963" lon="-87.3081028461456">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5031740708356" lon="-87.3075824975967">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5032165579355" lon="-87.3073062300682">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5033440191241" lon="-87.3070782423019">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5035139671158" lon="-87.306906580925">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5036871830325" lon="-87.3068180680275">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5038571304245" lon="-87.3067939281464">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5040466867806" lon="-87.3068341612816">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5041676104699" lon="-87.3068931698799">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5042885340089" lon="-87.3069950938225">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5043931164078" lon="-87.3071318864822">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5044748213288" lon="-87.3072901368141">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5046414991546" lon="-87.3075422644615">
+      <name>MergePoint</name>
+      <cmt />
+    </rtept>
+    <rtept lat="30.5046774492364" lon="-87.3081564903259">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5046839856135" lon="-87.3088029026985">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.504556526181" lon="-87.3090711236">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5044127255951" lon="-87.3093742132187">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5042885340089" lon="-87.3095136880875">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5040761006648" lon="-87.3096370697022">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5038113753867" lon="-87.3096451163292">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5035793316489" lon="-87.3095592856407">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5033832379178" lon="-87.3094117641449">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5032623132532" lon="-87.3091864585876">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5032002167454" lon="-87.3089316487312">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5031838755526" lon="-87.3085051774979">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.5031708025963" lon="-87.3081028461456">
+      <name />
+      <cmt />
+    </rtept>
+  </rte>
+</gpx>

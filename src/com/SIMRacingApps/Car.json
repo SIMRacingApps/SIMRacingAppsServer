@@ -1,0 +1,1172 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2016 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Description": "An Unknown Car",
+    "MfrLogo":     "com/SIMRacingApps/Cars/default.png",
+    "Comment":     "The defaults are based on the Gen6 Chevrolet SS at Texas Oval. A basic 1.5 mile track",
+    "Gauges": {
+        "Tachometer": {
+            "default": {
+                "Name":              "RPM",
+                "TypeName":          "x1000",
+                "UOM":               "rpm",
+                "Multiplier":        0.001,
+                "Minimum":           0.0,
+                "Maximum":           11.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    0.2,
+                "StateAscending":    true
+            }
+        },
+        "Speedometer": {
+            "default": {
+                "Name":              "SPEED",
+                "TypeName":          "",
+                "UOM":               "mph",
+                "Minimum":           0.0,
+                "Maximum":           250.0,
+                "MajorIncrement":    20.0,
+                "MinorIncrement":    10.0,
+                "StateAscending":    true
+            }
+        },
+        "Gear": {
+            "default": {
+                "Name":              "GEAR",
+                "TypeName":          "",
+                "UOM":               "",
+                "Minimum":           -1.0,
+                "Maximum":           4.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   -1.0,
+                "CapacityMaximum":   4.0,
+                "CapacityIncrement": 1.0,
+                "StateAscending":    true,
+                "States": {
+                    "R": {"Start": -1.0, "End": 0.0, "Name": "Car/Gauge/Gear", "Value": "R"},
+                    "N": {"Start":  0.0, "End": 1.0, "Name": "Car/Gauge/Gear", "Value": "N"},
+                    "1": {"Start":  1.0, "End": 2.0, "Name": "Car/Gauge/Gear", "Value": "1"},
+                    "2": {"Start":  2.0, "End": 3.0, "Name": "Car/Gauge/Gear", "Value": "2"},
+                    "3": {"Start":  3.0, "End": 4.0, "Name": "Car/Gauge/Gear", "Value": "3"},
+                    "4": {"Start":  4.0, "End": 5.0, "Name": "Car/Gauge/Gear", "Value": "4"},
+                    "5": {"Start":  5.0, "End": 6.0, "Name": "Car/Gauge/Gear", "Value": "5"},
+                    "6": {"Start":  6.0, "End": 7.0, "Name": "Car/Gauge/Gear", "Value": "6"},
+                    "7": {"Start":  7.0, "End": 8.0, "Name": "Car/Gauge/Gear", "Value": "7"},
+                    "8": {"Start":  8.0, "End": 9.0, "Name": "Car/Gauge/Gear", "Value": "8"}
+                }
+            }
+        },
+        "WaterTemp": {
+            "default": {
+                "Name":              "WATER",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "Minimum":           100.0,
+                "Maximum":           300.0,
+                "MajorIncrement":    20.0,
+                "MinorIncrement":    10.0,
+                "StateAscending":    true,
+                "States": {
+                    "CRITICAL": {"Start": 266.0, "End": 99999.0},
+                    "WARNING":  {"Start": 240.0, "End": 266.0}
+                }
+            }
+        },
+        "WaterPressure": {
+            "default": {
+                "Name":              "WATER",
+                "TypeName":          "PRESSURE",
+                "UOM":               "psi",
+                "Minimum":           0.0,
+                "Maximum":           150.0,
+                "MajorIncrement":    30.0,
+                "MinorIncrement":    15.0,
+                "StateAscending":    false,
+                "States": {
+                    "CRITICAL": {"Start": 0.0,  "End": 20.0},
+                    "WARNING":  {"Start": 20.0, "End": 60.0}
+                }
+            }
+        },
+        "WaterLevel": {
+            "default": {
+                "Name":              "WATER",
+                "TypeName":          "LEVEL",
+                "UOM":               "qt",
+                "Minimum":           0.0,
+                "Maximum":           12.0,
+                "MajorIncrement":    2.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   9.5,
+                "StateAscending":    false,
+                "States": {
+                    "CRITICAL": {"Start": 0.0, "End": 2.0},
+                    "WARNING":  {"Start": 2.0, "End": 4.0}
+                }
+            }
+        },
+        "OilTemp": {
+            "default": {
+                "Name":              "OIL",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "Minimum":           100.0,
+                "Maximum":           300.0,
+                "MajorIncrement":    20.0,
+                "MinorIncrement":    10.0,
+                "StateAscending":    true,
+                "States": {
+                    "WARNING":  {"Start": 266.0, "End": 280.0},
+                    "CRITICAL": {"Start": 280.0, "End": 99999.0}
+                }
+            }
+        },
+        "OilPressure": {
+            "default": {
+                "Name":              "OIL",
+                "TypeName":          "PRESSURE",
+                "UOM":               "psi",
+                "Minimum":           0.0,
+                "Maximum":           150.0,
+                "MajorIncrement":    30.0,
+                "MinorIncrement":    15.0,
+                "StateAscending":    false,
+                "States": {
+                    "CRITICAL": {"Start": 0.0,  "End": 15.0},
+                    "WARNING":  {"Start": 15.0, "End": 30.0}
+                }
+            }
+        },
+        "OilLevel": {
+            "default": {
+                "Name":              "OIL",
+                "TypeName":          "LEVEL",
+                "UOM":               "qt",
+                "Minimum":           0.0,
+                "Maximum":           12.0,
+                "MajorIncrement":    2.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   9.5,
+                "StateAscending":    false,
+                "States": {
+                    "CRITICAL": {"Start": 0.0, "End": 2.0},
+                    "WARNING":  {"Start": 2.0, "End": 4.0}
+                }
+            }
+        },
+        "FuelPressure": {
+            "default": {
+                "Name":              "FUEL",
+                "TypeName":          "PRESSURE",
+                "UOM":               "psi",
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    20.0,
+                "MinorIncrement":    10.0,
+                "StateAscending":    false,
+                "States": {
+                    "CRITICAL": {"Start": 0.0,  "End": 20.0},
+                    "WARNING":  {"Start": 20.0, "End": 40.0}
+                }
+            }
+        },
+        "FuelLevel": {
+            "default": {
+                "Name":              "FUEL",
+                "TypeName":          "LEVEL",
+                "UOM":               "gal",
+                "Minimum":           0.0,
+                "Maximum":           20.0,
+                "MajorIncrement":    2.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   18.691,
+                "CapacityIncrement": 1.699,
+                "IsFixed":           false,
+                "IsChangable":       true,
+                "OnResetChange":     true,
+                "StateAscending":    false,
+                "States": {
+                    "CRITICAL": {"Start": 0.0, "End": 1.0},
+                    "WARNING":  {"Start": 1.0, "End": 2.0}
+                }
+            }
+        },
+        "Voltage": {
+            "default": {
+                "Name":              "VOLT",
+                "TypeName":          "",
+                "UOM":               "v",
+                "Minimum":           0.0,
+                "Maximum":           20.0,
+                "MajorIncrement":    2.0,
+                "MinorIncrement":    1.0,
+                "StateAscending":    false,
+                "States": {
+                    "CRITICAL": {"Start": 0.0, "End": 6.0},
+                    "WARNING":  {"Start": 6.0, "End": 10.0}
+                }
+            }
+        },
+        "Brake": {
+            "default": {
+                "Name":              "BRAKE",
+                "TypeName":          "",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    20.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0
+            }
+        },
+        "BrakePressure": {
+            "default": {
+                "Name":              "BRAKE",
+                "TypeName":          "PRESSURE",
+                "UOM":               "psi",    
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1500.0,
+                "MajorIncrement":    200.0,
+                "MinorIncrement":    50.0
+            }
+        },
+        "Throttle": {
+            "default": {
+                "Name":              "THROTTLE",
+                "TypeName":          "",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    20.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0
+            }
+        },
+        "ThrottleShape": {
+            "default": {
+                "Name":              "THROTTLE",
+                "TypeName":          "SHAPE{{}}",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           10.0,
+                "MajorIncrement":    2.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   10.0,
+                "CapacityIncrement": 1.0
+            }
+        },
+        "Clutch": {
+            "default": {
+                "Name":              "CLUTCH",
+                "TypeName":          "",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    20.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0
+            }
+        },
+        "Steering": {
+            "default": {
+                "Name":              "STEERING",
+                "TypeName":          "ANGLE",
+                "UOM":               "deg",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           360.0,
+                "MajorIncrement":    40.0,
+                "MinorIncrement":    8.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   360.0,
+                "CapacityIncrement": 1.0
+            }
+        },
+        "TirePressureLF": {
+            "default": {
+                "Name":              "LF TIRE",
+                "TypeName":          "PRESSURE",
+                "UOM":               "psi",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 0.5,
+                "OnResetChange":     true,
+                "IsFixed":           false,
+                "IsChangable":       true
+            }
+        },
+        "TirePressureLR": {
+            "default": {
+                "Name":              "LR TIRE",
+                "TypeName":          "PRESSURE",
+                "UOM":               "psi",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 0.5,
+                "OnResetChange":     true,
+                "IsFixed":           false,
+                "IsChangable":       true
+            }
+        },
+        "TirePressureRF": {
+            "default": {
+                "Name":              "RF TIRE",
+                "TypeName":          "PRESSURE",
+                "UOM":               "psi",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 0.5,
+                "OnResetChange":     true,
+                "IsFixed":           false,
+                "IsChangable":       true
+            }
+        },
+        "TirePressureRR": {
+            "default": {
+                "Name":              "RR TIRE",
+                "TypeName":          "PRESSURE",
+                "UOM":               "psi",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 0.5,
+                "OnResetChange":     true,
+                "IsFixed":           false,
+                "IsChangable":       true
+            }
+        },
+        "TireTempLFL": {
+            "default": {
+                "Name":              "LF/L TIRE",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "StateAscending":    true,
+                "Minimum":           30.0,
+                "Maximum":           330.0,
+                "MajorIncrement":    50.0,
+                "MinorIncrement":    25.0,
+                "CapacityMinimum":   32.0,
+                "CapacityMaximum":   330.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireTempLFM": {
+            "default": {
+                "Name":              "LF/M TIRE",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "StateAscending":    true,
+                "Minimum":           30.0,
+                "Maximum":           330.0,
+                "MajorIncrement":    50.0,
+                "MinorIncrement":    25.0,
+                "CapacityMinimum":   32.0,
+                "CapacityMaximum":   330.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireTempLFR": {
+            "default": {
+                "Name":              "LF/R TIRE",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "StateAscending":    true,
+                "Minimum":           30.0,
+                "Maximum":           330.0,
+                "MajorIncrement":    50.0,
+                "MinorIncrement":    25.0,
+                "CapacityMinimum":   32.0,
+                "CapacityMaximum":   330.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireTempLRL": {
+            "default": {
+                "Name":              "LR/L TIRE",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "StateAscending":    true,
+                "Minimum":           30.0,
+                "Maximum":           330.0,
+                "MajorIncrement":    50.0,
+                "MinorIncrement":    25.0,
+                "CapacityMinimum":   32.0,
+                "CapacityMaximum":   330.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireTempLRM": {
+            "default": {
+                "Name":              "LR/M TIRE",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "StateAscending":    true,
+                "Minimum":           30.0,
+                "Maximum":           330.0,
+                "MajorIncrement":    50.0,
+                "MinorIncrement":    25.0,
+                "CapacityMinimum":   32.0,
+                "CapacityMaximum":   330.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireTempLRR": {
+            "default": {
+                "Name":              "LR/R TIRE",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "StateAscending":    true,
+                "Minimum":           30.0,
+                "Maximum":           330.0,
+                "MajorIncrement":    50.0,
+                "MinorIncrement":    25.0,
+                "CapacityMinimum":   32.0,
+                "CapacityMaximum":   330.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireTempRFL": {
+            "default": {
+                "Name":              "RF/L TIRE",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "StateAscending":    true,
+                "Minimum":           30.0,
+                "Maximum":           330.0,
+                "MajorIncrement":    50.0,
+                "MinorIncrement":    25.0,
+                "CapacityMinimum":   32.0,
+                "CapacityMaximum":   330.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireTempRFM": {
+            "default": {
+                "Name":              "RF/M TIRE",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "StateAscending":    true,
+                "Minimum":           30.0,
+                "Maximum":           330.0,
+                "MajorIncrement":    50.0,
+                "MinorIncrement":    25.0,
+                "CapacityMinimum":   32.0,
+                "CapacityMaximum":   330.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireTempRFR": {
+            "default": {
+                "Name":              "RF/R TIRE",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "StateAscending":    true,
+                "Minimum":           30.0,
+                "Maximum":           330.0,
+                "MajorIncrement":    50.0,
+                "MinorIncrement":    25.0,
+                "CapacityMinimum":   32.0,
+                "CapacityMaximum":   330.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireTempRRL": {
+            "default": {
+                "Name":              "RR/L TIRE",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "StateAscending":    true,
+                "Minimum":           30.0,
+                "Maximum":           330.0,
+                "MajorIncrement":    50.0,
+                "MinorIncrement":    25.0,
+                "CapacityMinimum":   32.0,
+                "CapacityMaximum":   330.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireTempRRM": {
+            "default": {
+                "Name":              "RR/M TIRE",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "StateAscending":    true,
+                "Minimum":           30.0,
+                "Maximum":           330.0,
+                "MajorIncrement":    50.0,
+                "MinorIncrement":    25.0,
+                "CapacityMinimum":   32.0,
+                "CapacityMaximum":   330.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireTempRRR": {
+            "default": {
+                "Name":              "RR/R TIRE",
+                "TypeName":          "TEMP",
+                "UOM":               "F",
+                "StateAscending":    true,
+                "Minimum":           30.0,
+                "Maximum":           330.0,
+                "MajorIncrement":    50.0,
+                "MinorIncrement":    25.0,
+                "CapacityMinimum":   32.0,
+                "CapacityMaximum":   330.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireWearLFL": {
+            "default": {
+                "Name":              "LF/L TIRE",
+                "TypeName":          "WEAR",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireWearLFM": {
+            "default": {
+                "Name":              "LF/M TIRE",
+                "TypeName":          "WEAR",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireWearLFR": {
+            "default": {
+                "Name":              "LF/R TIRE",
+                "TypeName":          "WEAR",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireWearLRL": {
+            "default": {
+                "Name":              "LR/L TIRE",
+                "TypeName":          "WEAR",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireWearLRM": {
+            "default": {
+                "Name":              "LR/M TIRE",
+                "TypeName":          "WEAR",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireWearLRR": {
+            "default": {
+                "Name":              "LR/R TIRE",
+                "TypeName":          "WEAR",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireWearRFL": {
+            "default": {
+                "Name":              "RF/L TIRE",
+                "TypeName":          "WEAR",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireWearRFM": {
+            "default": {
+                "Name":              "RF/M TIRE",
+                "TypeName":          "WEAR",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireWearRFR": {
+            "default": {
+                "Name":              "RF/R TIRE",
+                "TypeName":          "WEAR",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireWearRRL": {
+            "default": {
+                "Name":              "RR/L TIRE",
+                "TypeName":          "WEAR",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireWearRRM": {
+            "default": {
+                "Name":              "RR/M TIRE",
+                "TypeName":          "WEAR",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "TireWearRRR": {
+            "default": {
+                "Name":              "RR/R TIRE",
+                "TypeName":          "WEAR",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true
+            }
+        },
+        "RRWedgeAdjustment": {
+            "default": {
+                "Name":              "RR WEDGE ADJ",
+                "TypeName":          "",
+                "UOM":               "in",
+                "StateAscending":    false,
+                "Minimum":           -0.5,
+                "Maximum":           0.5,
+                "MajorIncrement":    0.1,
+                "MinorIncrement":    0.025,
+                "CapacityMinimum":   -0.313,
+                "CapacityMaximum":   0.313,
+                "CapacityIncrement": 0.025,
+                "IsFixed":           false
+            }
+        },
+        "LRWedgeAdjustment": {
+            "default": {
+                "Name":              "LR WEDGE ADJ",
+                "TypeName":          "",
+                "UOM":               "in",
+                "StateAscending":    false,
+                "Minimum":           -0.5,
+                "Maximum":           0.5,
+                "MajorIncrement":    0.1,
+                "MinorIncrement":    0.025,
+                "CapacityMinimum":   -0.313,
+                "CapacityMaximum":   0.313,
+                "CapacityIncrement": 0.025,
+                "IsFixed":           false
+            }
+        },
+        "FrontWing": {
+            "default": {
+                "Name":              "FRONT",
+                "TypeName":          "WING",
+                "UOM":               "deg",
+                "StateAscending":    false,
+                "Minimum":           -0.5,
+                "Maximum":           0.5,
+                "MajorIncrement":    0.1,
+                "MinorIncrement":    0.025,
+                "CapacityMinimum":   -0.313,
+                "CapacityMaximum":   0.313,
+                "CapacityIncrement": 0.025,
+                "IsFixed":           false
+            }
+        },
+        "RearWing": {
+            "default": {
+                "Name":              "REAR",
+                "TypeName":          "WING",
+                "UOM":               "deg",
+                "StateAscending":    false,
+                "Minimum":           -0.5,
+                "Maximum":           0.5,
+                "MajorIncrement":    0.1,
+                "MinorIncrement":    0.025,
+                "CapacityMinimum":   -0.313,
+                "CapacityMaximum":   0.313,
+                "CapacityIncrement": 0.025,
+                "IsFixed":           false
+            }
+        },
+        "BrakeBiasAdjustment": {
+            "default": {
+                "Name":              "BRAKE BIAS ADJ",
+                "TypeName":          "",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           -3.0,
+                "Maximum":           3.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    0.25,
+                "CapacityMinimum":   -3.0,
+                "CapacityMaximum":   3.0,
+                "CapacityIncrement": 0.25,
+                "IsFixed":           false
+            }
+        },
+        "Tape": {
+            "default": {
+                "Name":              "TAPE",
+                "TypeName":          "",
+                "UOM":               "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    10.0,
+                "MinorIncrement":    5.00,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 0.1,
+                "IsFixed":           false
+            }
+        },
+        "ABS": {
+            "default": {
+                "Name":              "ABS",
+                "TypeName":          "",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           12.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   12.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "AntiRollFront": {
+            "default": {
+                "Name":              "ANTI ROLL",
+                "TypeName":          "FRONT",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           5.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   5.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "AntiRollRear": {
+            "default": {
+                "Name":              "ANTI ROLL",
+                "TypeName":          "REAR",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           5.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   5.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "FuelMixture": {
+            "default": {
+                "Name":              "FUEL",
+                "TypeName":          "MIXTURE",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           12.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   12.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "EnginePower": {
+            "default": {
+                "Name":              "ENGINE",
+                "TypeName":          "POWER",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           8.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   8.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "EngineBraking": {
+            "default": {
+                "Name":              "ENGINE",
+                "TypeName":          "BRAKING",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           5.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   5.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "PowerSteeringAssist": {
+            "default": {
+                "Name":              "POWER STEERING",
+                "TypeName":          "ASSIST",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           5.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   5.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "FrontFlap": {
+            "default": {
+                "Name":              "FRONT FLAP",
+                "TypeName":          "",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           7.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   7.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "DiffEntry": {
+            "default": {
+                "Name":              "DIFF",
+                "TypeName":          "ENTRY",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           4.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   4.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "DiffMiddle": {
+            "default": {
+                "Name":              "DIFF",
+                "TypeName":          "MIDDLE",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           4.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   4.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "DiffExit": {
+            "default": {
+                "Name":              "DIFF",
+                "TypeName":          "EXIT",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           4.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   4.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "WeightJackerRight": {
+            "default": {
+                "Name":              "WEIGHT JACKER",
+                "TypeName":          "RIGHT",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           -20.0,
+                "Maximum":           20.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   -20.0,
+                "CapacityMaximum":   20.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "WeightJackerLeft": {
+            "default": {
+                "Name":              "WEIGHT JACKER",
+                "TypeName":          "LEFT",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           -20.0,
+                "Maximum":           20.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   -20.0,
+                "CapacityMaximum":   20.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "TractionControl": {
+            "default": {
+                "Name":              "TRACTION CONTROL",
+                "TypeName":          "TC",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           6.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   6.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "WindshieldTearoff": {
+            "default": {
+                "Name":              "WINDSHIELD",
+                "TypeName":          "TEAROFF",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   1.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     true,
+                "IsChangable":       true,
+                "IsFixed":           false
+            }
+        },
+        "FastRepairs": {
+            "default": {
+                "Name":              "FAST REPAIRS",
+                "TypeName":          "",
+                "UOM":               "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           9999.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   9999.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       true,
+                "IsFixed":           false
+            }
+        }
+    },
+    "Groups": {
+        "TirePressureLF": [
+            "TireTempLFL",
+            "TireTempLFM",
+            "TireTempLFR",
+            "TireWearLFL",
+            "TireWearLFM",
+            "TireWearLFR"
+        ],
+        "TirePressureLR": [
+            "TireTempLRL",
+            "TireTempLRM",
+            "TireTempLRR",
+            "TireWearLRL",
+            "TireWearLRM",
+            "TireWearLRR"
+        ],
+        "TirePressureRF": [
+            "TireTempRFL",
+            "TireTempRFM",
+            "TireTempRFR",
+            "TireWearRFL",
+            "TireWearRFM",
+            "TireWearRFR"
+        ],
+        "TirePressureRR": [
+            "TireTempRRL",
+            "TireTempRRM",
+            "TireTempRRR",
+            "TireWearRRL",
+            "TireWearRRM",
+            "TireWearRRR"
+        ]
+    }
+}

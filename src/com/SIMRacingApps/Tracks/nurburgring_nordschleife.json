@@ -1,0 +1,20 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2016 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    50.3610709,
+    "Longitude":   6.9488127,
+    "North":       315.0,
+    "Resolution":  22.5,
+    "Images": {
+        "SAT":     "nurburgring_combined-SAT.png",
+        "MAP":     "nurburgring_combined-MAP.png"
+    },
+    "DistanceUOM": "km",
+    "TempUOM":     "C",
+    "SpeedUOM":    "kph",
+    "FinishLine":  105.0,
+    "GPX": {
+        "ONTRACK":   "nurburgring_nordschleife-ONTRACK.gpx",
+        "ONPITROAD": "nurburgring_nordschleife-ONPITROAD.gpx"        
+    }
+}

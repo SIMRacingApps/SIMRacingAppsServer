@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2016 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    30.1346736,
+    "Longitude":   -97.6343061,
+    "North":       270.0,
+    "Resolution":  4.0,
+    "MergePoint":  7.2,
+    "Images": {
+        "SAT":     "cota-map.png",
+        "MAP":     "cota-sat.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  310.0,
+    "GPX": {
+        "ONTRACK":   "cota_west-ONTRACK.gpx",
+        "ONPITROAD": "cota_west-ONPITROAD.gpx"        
+    }
+}

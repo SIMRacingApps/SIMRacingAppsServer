@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2016 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    37.0866423,
+    "Longitude":   -76.3866193,
+    "North":       316.5,
+    "Resolution":  0.8,
+    "MergePoint":  38.5,
+    "Images": {
+        "SAT":     "langley-map.png",
+        "MAP":     "langley-sat.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "langley-ONTRACK.gpx",
+        "ONPITROAD": "langley-ONPITROAD.gpx"        
+    }
+}

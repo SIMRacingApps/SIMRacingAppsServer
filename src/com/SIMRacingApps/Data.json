@@ -1,0 +1,325 @@
+{
+    "Units": {
+        "%": {      
+            "Abbr":     "%",         
+            "Singular": "Percent",                  
+            "Plural":   "Percentages",
+            "Metric":   "%",
+            "Imperial": "%", 
+            "Conversions": {
+            } 
+        },
+        "BAR": {      
+            "Abbr":     "bar",       
+            "Singular": "Unit Of Pressure",         
+            "Plural":   "Units Of Pressure",      
+            "Metric":   "KPA",
+            "Imperial": "PSI", 
+            "Conversions": {
+                "PSI":  14.5038,
+                "KPA":  100.0
+            } 
+        },
+        "C": {      
+            "Abbr":     "\u00B0C",   
+            "Singular": "Celsius",                  
+            "Plural":   "Celsius", 
+            "Metric":   "C",
+            "Imperial": "F", 
+            "Conversions": {
+            }
+        },
+        "DEG": {      
+            "Abbr":     "\u00B0",    
+            "Singular": "Degree",                   
+            "Plural":   "Degrees", 
+            "Metric":   "DEG",
+            "Imperial": "DEG", 
+            "Conversions": {
+            }
+        },
+        "F": {      
+            "Abbr":     "\u00B0F",   
+            "Singular": "Fahrenheit",               
+            "Plural":   "Fahrenheit", 
+            "Metric":   "C",
+            "Imperial": "F", 
+            "Conversions": {
+            }
+        },
+        "GAL": {      
+            "Abbr":     "gal",       
+            "Singular": "Gallon",                   
+            "Plural":   "Gallons", 
+            "Metric":   "L",
+            "Imperial": "GAL", 
+            "Conversions": {
+            }
+        },
+        "H": {      
+            "Abbr":     "h",         
+            "Singular": "Hour",                     
+            "Plural":   "Hours",                  
+            "Metric":   "H",
+            "Imperial": "H", 
+            "Conversions": {
+                "MIN":  60.0,
+                "S":    3600.0,
+                "SEC":  3600.0
+            } 
+        },
+        "HR": {      
+            "Abbr":     "h",         
+            "Singular": "Hour",                     
+            "Plural":   "Hours",                  
+            "Metric":   "HR",
+            "Imperial": "HR", 
+            "Conversions": {
+                "MIN":  60.0,
+                "S":    3600.0,
+                "SEC":  3600.0
+            } 
+        },
+        "IN": {      
+            "Abbr":     "\"",        
+            "Singular": "Inch",                     
+            "Plural":   "Inches", 
+            "Metric":   "MM",
+            "Imperial": "IN", 
+            "Conversions": {
+            }
+        },
+        "IMPGAL": {      
+            "Abbr":     "impgal",    
+            "Singular": "Imperial Gallon",          
+            "Plural":   "Imperial Gallons", 
+            "Metric":   "L",
+            "Imperial": "IMPGAL", 
+            "Conversions": {
+                "L":    4.54609
+            }
+        },
+        "KG": {      
+            "Abbr":     "kg",        
+            "Singular": "Kilogram",                
+            "Plural":   "Kilograms", 
+            "Metric":   "KG",
+            "Imperial": "LB", 
+            "Conversions": {
+                "LB":   2.20462262
+            }
+        },
+        "KM": {      
+            "Abbr":     "km",        
+            "Singular": "Kilometer",                
+            "Plural":   "Kilometers", 
+            "Metric":   "KM",
+            "Imperial": "MILE", 
+            "Conversions": {
+                "MILE": 0.62137119224,
+                "M":    1000.0
+            }
+        },
+        "KM/H": {      
+            "Abbr":     "kph",       
+            "Singular": "Kilometer Per Hour",       
+            "Plural":   "Kilometers Per Hour", 
+            "Metric":   "KM/H",
+            "Imperial": "MILE/H", 
+            "Conversions": {
+            }
+        },
+        "KPH": {      
+            "Abbr":     "kph",       
+            "Singular": "Kilometer Per Hour",       
+            "Plural":   "Kilometers Per Hour", 
+            "Metric":   "KPH",
+            "Imperial": "MPH", 
+            "Conversions": {
+                "MPH":      0.62137119224,
+                "MILE/H":   0.62137119224,
+                "M/S":      0.27778
+            }
+        },
+        "KPA": {      
+            "Abbr":     "kPa",       
+            "Singular": "Kilopascal",               
+            "Plural":   "Kilopascals", 
+            "Metric":   "KPA",
+            "Imperial": "PSI", 
+            "Conversions": {
+                "PSI":  0.14503773773020923,
+                "BAR":  0.01
+            }
+        },
+        "L": {      
+            "Abbr":     "L",         
+            "Singular": "Liter",                    
+            "Plural":   "Liters", 
+            "Metric":   "L",
+            "Imperial": "GAL", 
+            "Conversions": {
+                "GAL":  0.264172,
+                "QT":   1.05668821
+            }
+        },
+        "LB": {      
+            "Abbr":     "lb",         
+            "Singular": "Pound",                    
+            "Plural":   "Pounds", 
+            "Metric":   "KG",
+            "Imperial": "LB", 
+            "Conversions": {
+                "KG":    0.45359237
+            }
+        },
+        "LAP": {      
+            "Abbr":     "L",         
+            "Singular": "Lap",                      
+            "Plural":   "Laps", 
+            "Metric":   "LAP",
+            "Imperial": "LAP", 
+            "Conversions": {
+            }
+        },
+        "M": {      
+            "Abbr":     "m",         
+            "Singular": "Meter",                    
+            "Plural":   "Meters", 
+            "Metric":   "M",
+            "Imperial": "IN", 
+            "Conversions": {
+            }
+        },
+        "MILE": {       
+            "Abbr":     "mi",        
+            "Singular": "Mile",                     
+            "Plural":   "Miles", 
+            "Metric":   "KM",
+            "Imperial": "MILE", 
+            "Conversions": {
+                "M":    1609.64,
+                "KM":   1.60964
+            }
+        },
+        "MILE/H": {      
+            "Abbr":     "mph",       
+            "Singular": "Mile Per Hour",            
+            "Plural":   "Miles Per Hour", 
+            "Metric":   "KM/H",
+            "Imperial": "MILE/H", 
+            "Conversions": {
+                "KM/H": 1.609343999993095013007389626261
+            }
+        },
+        "MIN": {      
+            "Abbr":     "min",       
+            "Singular": "Minute",                   
+            "Plural":   "Minute", 
+            "Metric":   "MIN",
+            "Imperial": "MIN", 
+            "Conversions": {
+                "SEC":  60.0
+            }
+        },
+        "MM": {      
+            "Abbr":     "mm",        
+            "Singular": "Millimeter",               
+            "Plural":   "Millimeters", 
+            "Metric":   "MM",
+            "Imperial": "IN", 
+            "Conversions": {
+                "IN":   0.0393700787402
+            }
+        },
+        "MPH": {      
+            "Abbr":     "mph",       
+            "Singular": "Mile Per Hour",            
+            "Plural":   "Miles Per Hour", 
+            "Metric":   "KPH",
+            "Imperial": "MPH", 
+            "Conversions": {
+                "KPH":  1.609343999993095013007389626261,
+                "KM/H": 1.609343999993095013007389626261,
+                "M/S":  0.44704
+            }
+        },
+        "PSI": {      
+            "Abbr":     "psi",       
+            "Singular": "Pound Per Square Inch",    
+            "Plural":   "Pounds Per Square Inch", 
+            "Metric":   "KPA",
+            "Imperial": "PSI", 
+            "Conversions": {
+                "KPA":  6.8966,      
+                "BAR":  0.0690
+            }
+        },
+        "QT": {      
+            "Abbr":     "qt",        
+            "Singular": "Quart",                    
+            "Plural":   "Quarts", 
+            "Metric":   "L",
+            "Imperial": "QT", 
+            "Conversions": {
+                "GAL":  0.25,
+                "L":    0.946352946
+            }
+        },
+        "RAD": {      
+            "Abbr":     "rad",       
+            "Singular": "Radian",                   
+            "Plural":   "Radians", 
+            "Metric":   "RAD",
+            "Imperial": "RAD", 
+            "Conversions": {
+                "DEG":  57.2957795, "COMMENT": "180.0/Math.PI"
+            }
+        },
+        "REVS": {      
+            "Abbr":     "revs",      
+            "Singular": "Revolutions Per",          
+            "Plural":   "Revolutions Per", 
+            "Metric":   "REVS",
+            "Imperial": "REVS", 
+            "Conversions": {
+            }
+        },
+        "REVS/MIN": {      
+            "Abbr":     "rpm",       
+            "Singular": "Revolutions Per Minute",   
+            "Plural":   "Revolutions Per Minute", 
+            "Metric":   "REVS/MIN",
+            "Imperial": "REVS/MIN", 
+            "Conversions": {
+            }
+        },
+        "S": {      
+            "Abbr":     "s",         
+            "Singular": "Second",                   
+            "Plural":   "Seconds", 
+            "Metric":   "S",
+            "Imperial": "S", 
+            "Conversions": {
+            }
+        },
+        "SEC": {      
+            "Abbr":     "sec",       
+            "Singular": "Second",                   
+            "Plural":   "Seconds", 
+            "Metric":   "SEC",
+            "Imperial": "SEC", 
+            "Conversions": {
+            }
+        },
+        "": {      
+            "Abbr":     "",          
+            "Singular": "",                         
+            "Plural":   "", 
+            "Metric":   "",
+            "Imperial": "", 
+            "Conversions": {
+            }
+        }
+    }
+}

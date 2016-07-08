@@ -1,0 +1,185 @@
+#####################################################################
+# SIMRacingApps Server's Configuration File
+# If you make changes to this file, you must restart the server.
+#####################################################################
+# This file, in combination with the Server's command line arguments, 
+# allows you to personalize SRA to your liking.
+# Command line arguments override the values in this file.
+# Lines starting with a hash(#) are comment lines and are ignored.
+# Some entries are commented out by default and you must remove the hash.
+#####################################################################
+
+#####################################################################
+### The port number the server listens to
+#####################################################################
+port = 80
+
+#####################################################################
+### The SIM to connect to. Valid SIMs are:
+###    iRacing
+###    ...more to come someday. Want to contribute?
+#####################################################################
+sim = iRacing
+
+#####################################################################
+### To setup a sound device for SIMRacingApps to use
+### that is not your default sound device, add the name of the device 
+### to the "sound-device". The names of all of the enabled sound devices 
+### are printed out in the Sever window when it starts up.
+### You can completely disable all sound as well with "sound = false" below.
+###
+### Example output: Copy everything after the equals between the brackets []. 
+###                 You can also use the number. Just be aware that could 
+###                 change if new sound devices are added to your system.
+###
+### ...Sound Device[0] = [Primary Sound Driver]: com.SIMRacingApps.Util.Sound.loadMixers(Sound.java:263)[main]
+### ...Sound Device[1] = [Z300 (Turtle Beach Z300 with Dolby Headphone)]: com.SIMRacingApps.Util.Sound.loadMixers(Sound.java:263)[main]
+### ...Sound Device[2] = [Realtek Digital Output (2- Realtek High Definition Audio)]: com.SIMRacingApps.Util.Sound.loadMixers(Sound.java:263)[main]
+### ...Sound Device[3] = [Realtek Digital Output(Optical) (2- Realtek High Definition Audio)]: com.SIMRacingApps.Util.Sound.loadMixers(Sound.java:263)[main]
+### ...Sound Device[4] = [Realtek HD Audio 2nd output (2- Realtek High Definition Audio)]: com.SIMRacingApps.Util.Sound.loadMixers(Sound.java:263)[main]
+###
+### You can also control the volume as a percentage, 0.0 - 1.0. 
+### This acts like a maximum for all other sound volume settings for other plug-ins.
+###
+### Example: 
+###   sound        = true
+###   sound-device = Z300 (Turtle Beach Z300 with Dolby Headphone)
+###   sound-device = 1
+###   sound-volume = .7
+###
+####################################################################
+sound = true
+sound-volume = 1
+#sound-device = 
+
+#####################################################################
+### Here you can enable or disable any plug-ins you may have installed.
+### Each plug-in should be listed with a semicolon as a separator.
+### To disable one of the built in plug-ins, prefix it with an exclamation point(!)
+### Here is a list of the built in plug-ins:
+###    MSPEC.ShiftLight
+###    Sounds.PitCountDown
+###
+### For Example:
+###     simplugins = Plugin1.Class;Plugin2.Class;Plugin3.Class;!Sounds.PitCountDown
+###
+### NOTE: The plug-in names are case sensitive.
+#####################################################################
+simplugins = 
+
+#####################################################################
+### The log file and level of logging to see.
+### The log files can be found at Documents/SIMRacingApps/logs
+### Up to 3 logs will be available with a limit of 10MB each.
+### The level values are SEVERE, WARNING, INFO, FINE, FINER, FINEST
+### Only levels above the value specified are recorded
+### To disable logging, set the log to nothing "log = " 
+#####################################################################
+log = SIMRacingApps
+level = INFO
+
+#####################################################################
+### MSPEC Shift Light's COMM Port Assignments
+### Refer to MSPEC's documentation for installing drivers
+### and determining the COMM Port at http://shiftlight.com.au
+### Uncomment only for the light(s) you have.
+### Each light must have a unique port assigned to it.
+### For example: If your light is on COM3, then use 
+###     mspec-rpm = 3
+### The MSPEC.ShiftLight simplugin is automatically loaded, 
+### but does nothing unless you set any of these parameters.
+###
+### By default the light will come on when speeding. You can control
+### this with the "mspec-speeding" variable
+#####################################################################
+#mspec-rpm = 3
+#mspec-yellowflag = 3
+#mspec-greenflag = 3
+#mspec-blueflag = 3
+#mspec-eflag = 3
+mspec-speeding = true
+
+#####################################################################
+### RPMs for the Shift Lights can be overridden here.
+### You can override by track, car, gear and engine power.
+### Track, Gear and Power are optional.
+### You must specify all 3 values (start,shift,blink) or they will be ignored.
+### The format is as follows:
+###    [{track}-]{car}-ShiftLightStart[-{gear}][-{power}] = rpm
+###    [{track}-]{car}-ShiftLightShift[-{gear}][-{power}] = rpm
+###    [{track}-]{car}-ShiftLightBlink[-{gear}][-{power}] = rpm
+### Start is where the first light in a row of lights should come on.
+### Shift is where the last light will come on.
+### Blink is after Shift and it's where the light will blink.
+### {track} and {car} are the values the SIM returns. 
+### Spaces are converted to underscores. 
+### You should be able to find these values in the server output window.
+#####################################################################
+#Here is an example I used for testing with some bogus values:
+#stockcars_chevyss-ShiftLightStart = 6000
+#stockcars_chevyss-ShiftLightShift = 7000
+#stockcars_chevyss-ShiftLightBlink = 8000
+
+#####################################################################
+### teamspeak-client = The host where TeamSpeak is running.
+### teamspeak-carnumber = Does SRA prepend you car number to your alias.
+#####################################################################
+teamspeak-client = localhost
+teamspeak-carnumber = true
+
+#####################################################################
+### The number of milliseconds to delay between sending key strokes
+#####################################################################
+sendkeysdelay = 6
+
+#####################################################################
+### The minimum speed calculation can be controlled with these variables
+### The formula is: SUM(this car's last {laps} lap times) > (SUM(leader's last {laps-leader} lap times) * {percent/100})
+#####################################################################
+minimum-speed-laps         = 3
+minimum-speed-laps-leader  = 3
+minimum-speed-percentage   = 110
+
+#####################################################################
+### These settings control how the audible pit count down works.
+### If the device is not specified, it uses the 
+### overall master sound-device.
+### The volume is a percentage of the master "sound-volume" setting.
+#####################################################################
+#pit-count-down-device = 
+pit-count-down-volume = 1
+pit-count-down-play10 = Y
+pit-count-down-play0  = Y
+pit-count-down-start  = 5
+#####################################################################
+### Some known patterns to spotter packs. Your version may vary. 
+### Double backslashes are required for the directory separator.
+#####################################################################
+#pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\JJ Spotter Pack v6.51\\n%d.wav
+#pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\Dale Jr Spotter Pack\\n%d_A1.wav
+
+#####################################################################
+### Strings for the Chat Widget
+### For more details, see the help on Chat from the main menu.
+###
+### The buttons on the widget have 4 columns. 2 on the left and 2 on the right.
+### There are 6 rows of buttons for a total of 24 different buttons.
+### Each button must have a button name and the text to send separated by a semi-colon. 
+### For Example:
+###    chat-row1-col1-name = PASS LEFT
+###    chat-row1-col1-text = /RL-1 [#[CARNUMBER]] Pass Left
+###    chat-row2-col1-name = PASS RIGHT
+###    chat-row2-col1-text = /RL-1 [#[CARNUMBER]] Pass Right
+###
+### The following fields will be replaced in the text with the following values:
+###    [CAR]                 = The selected Car
+###    [CARORME]             = The selected Car or ME
+###    [CARNUMBER]           = Your Car Number
+###    [DRIVERNAME]          = Your Name
+### If the text starts with a slash(/), then the car to send it to follows.
+### You can override this by selecting a car first in the widget.
+#####################################################################
+chat-row1-col1-name = PASS LEFT
+chat-row1-col1-text = /RL-1 [#[CARNUMBER]] Pass Left
+#chat-row2-col1-name = PASS RIGHT
+#chat-row2-col1-text = /RL-1 [#[CARNUMBER]] Pass Right

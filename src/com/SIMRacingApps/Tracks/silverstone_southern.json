@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2016 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    52.0723451,
+    "Longitude":   -1.0146634,
+    "North":       180.0,
+    "Resolution":  5.9,
+    "MergePoint":  8.5,
+    "Images": {
+        "SAT":     "silverstone-sat.png",
+        "MAP":     "silverstone-map.png"
+    },
+    "DistanceUOM": "km",
+    "TempUOM":     "C",
+    "SpeedUOM":    "kph",
+    "FinishLine":  45.0,
+    "GPX": {
+        "ONTRACK":   "silverstone_southern-ONTRACK.gpx",
+        "ONPITROAD": "silverstone_southern-ONPITROAD.gpx"        
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2016 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "North":       315.0,
+    "Resolution":  5.5,
+    "Images": {
+        "SAT":     "nurburgring_gp-SAT.png",
+        "MAP":     "nurburgring_gp-MAP.png"
+    },
+    "DistanceUOM": "km",
+    "TempUOM":     "C",
+    "SpeedUOM":    "kph",
+    "FinishLine":  90.0,
+    "GPX": {
+        "ONTRACK":   "nurburgring_gp-ONTRACK.gpx",
+        "ONPITROAD": "nurburgring_gp-ONPITROAD.gpx"        
+    }
+}

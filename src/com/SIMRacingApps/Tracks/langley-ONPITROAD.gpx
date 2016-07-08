@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<gpx xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxedw="http://www.gpxeditor.co.uk/xmlschemas/WaypointExtension/v1" xmlns:gpxedts="http://www.gpxeditor.co.uk/xmlschemas/TrackSegExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" creator="GPXEditor" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
+  <wpt lat="37.08697" lon="-76.38579">
+    <name>Langley Speedway</name>
+    <point>qpjaFdbfqM</point>
+  </wpt>
+  <rte>
+    <name>Untitled</name>
+    <rtept lat="37.0863299846503" lon="-76.3863126933575">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0866250146141" lon="-76.3859197497368">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0867657208078" lon="-76.3857252895832">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0868353173232" lon="-76.3856394588947">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0869381990115" lon="-76.3856112957001">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0870577231504" lon="-76.3856367766857">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0871681693391" lon="-76.3856944441795">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0873330818418" lon="-76.385864764452">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0874283980789" lon="-76.3860632479191">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0874601701312" lon="-76.3862644135952">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0874102426144" lon="-76.3865540921688">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0873194652268" lon="-76.3867726922035">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0873391336204" lon="-76.3869007691197">
+      <name>MergePoint</name>
+      <cmt />
+    </rtept>
+    <rtept lat="37.0868171617166" lon="-76.3875304162502">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0865796254637" lon="-76.3875867426396">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0864464837989" lon="-76.3876269757748">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0862679525631" lon="-76.3876135647297">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0861317843887" lon="-76.3875760138035">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0859880510504" lon="-76.3874486088753">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0858897070303" lon="-76.3872984051704">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0858231356212" lon="-76.3871133327484">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0858397784789" lon="-76.3869671523571">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0859714082252" lon="-76.3867981731892">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0861643135578" lon="-76.3865379996462">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="37.0863299846503" lon="-76.3863126933575">
+      <name />
+      <cmt />
+    </rtept>
+  </rte>
+</gpx>

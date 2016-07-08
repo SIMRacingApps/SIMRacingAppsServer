@@ -1,0 +1,17 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2016 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    52.3882188,
+    "Longitude":   4.5442128,
+    "North":       270.0,
+    "Resolution":  4.0,
+    "MergePoint":  38.5,
+    "Images": {
+        "SAT":     "zandvoort-map.png",
+        "MAP":     "zandvoort-sat.png"
+    },
+    "DistanceUOM": "km",
+    "TempUOM":     "C",
+    "SpeedUOM":    "kph",
+    "FinishLine":  200.0
+}

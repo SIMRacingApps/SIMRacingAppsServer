@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2016 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    35.6110315,
+    "Longitude":   -78.0608381,
+    "North":       97.0,
+    "Resolution":  0.7,
+    "MergePoint":  38.5,
+    "Images": {
+        "SAT":     "southernnational-SAT.png",
+        "MAP":     "southernnational-MAP.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "southernnational-ONTRACK.gpx",
+        "ONPITROAD": "southernnational-ONPITROAD.gpx"        
+    }
+}

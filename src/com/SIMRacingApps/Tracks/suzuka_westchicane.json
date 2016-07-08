@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2016 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    34.8438538,
+    "Longitude":   136.5317019,
+    "North":       270.0,
+    "Resolution":  4.5,
+    "MergePoint":  8.5,
+    "Images": {
+        "SAT":     "suzuka-sat.png",
+        "MAP":     "suzuka-map.png"
+    },
+    "DistanceUOM": "km",
+    "TempUOM":     "C",
+    "SpeedUOM":    "kph",
+    "FinishLine":  300.0,
+    "GPX": {
+        "ONTRACK":   "suzuka_westchicane-ONTRACK.gpx",
+        "ONPITROAD": "suzuka_westchicane-ONPITROAD.gpx"        
+    }
+}

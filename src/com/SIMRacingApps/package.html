@@ -1,0 +1,33 @@
+<body>
+This package is the root level package of com.SIMRacingapps.
+It defines all of the SIM API level classes and methods.
+It also defines several servlets that are loaded into a J2EE server like Apache Tomcat.
+These servlets provide a Web Server interface to the SIM data.
+<ul>
+	<dt>{@link com.SIMRacingApps.Connector}</dt>
+		<dd>The base class of all SIM connectors. You do not instantiate this class directly.
+		    Instead, you call the static factor method {@link com.SIMRacingApps.Connector#createConnector(String)}
+		    and pass in the name of the SIM you want it to connect to. Supported SIMs are; iRacing.
+		    <p>
+		    The connector instance is the owner of the {@link com.SIMRacingApps.Session} instance. 
+		    Access to that instance is obtained through {@link com.SIMRacingApps.Connector#getSession()}
+		    </p>
+		</dd>
+	<dt>{@link com.SIMRacingApps.Session}</dt>
+		<dd>The base class of all SIM sessions. Each SIM's connector should instantiate a SIM specific version of this class</dd>
+	<dt>{@link com.SIMRacingApps.Track}</dt>
+		<dd>The base class of all SIM tracks. Each SIM's session should instantiate a SIM specific version of this class.</dd>
+	<dt>{@link com.SIMRacingApps.Car}</dt>
+		<dd>The base class of all SIM cars. Each SIM's session should create SIM specific versions of the cars.</dd>
+	<dt>{@link com.SIMRacingApps.Gauge}</dt>
+		<dd>The base class of all Gauges on a car. Each SIM's car should instantiate SIM specific versions of the gauges for each car.</dd>
+	<dt>{@link com.SIMRacingApps.TeamSpeak}</dt>
+		<dd>This class is used to implement the interface to TeamSpeak. Each SIM does not have to implement a SIM specific version of this.</dd>
+</ul>
+The connector has methods that each SIM has to implement to retrieve data.
+<p>
+There is an example Java App in the project called SIMRacingAppsJavaApp.
+Open the main.java file in this project and run it as a verification your project is setup properly.
+<p>
+For an example of how to use the Servlet, see the WebContent/apps/_template folder, to see how to subscribe to Web Events that are processed by Angular.
+</body>
