@@ -115,7 +115,7 @@
         <sequential>
             <propertyfile file="${version.properties}">
                 <entry key="major" type="int" value="1" />
-                <entry key="minor" type="int" value="0" />
+                <entry key="minor" type="int" value="1" />
                 <entry key="build" type="string" value="${build.prefix}${build.date}" />
                 <entry key="built-by" type="string" value="Jeffrey Gilliam" />
                 <entry key="copyright" type="string" value="Copyright (C) 2015 - ${build.year} Jeffrey Gilliam" />
