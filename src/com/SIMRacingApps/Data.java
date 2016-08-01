@@ -642,7 +642,7 @@ public class Data extends Object {
      * @param name (Optional), The name of the value.
      * @return     The State
      */
-    public String    getState(String name)                          { return m_data.get(name) == null ? null : m_data.get(name).State;}
+    public String    getState(String name)                          { return m_data.get(name) == null ? "" : m_data.get(name).State;}
     public String    getState()                                     { return getState(m_defaultname);}
 
     /**

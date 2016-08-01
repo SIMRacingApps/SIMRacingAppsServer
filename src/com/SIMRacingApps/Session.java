@@ -236,8 +236,22 @@ public class Session {
         ||  (_car2.getId().getInteger() == -1 && !carIdentifier2.equalsIgnoreCase("PITSTALL"))
         ||  (_car1.getId().getInteger() == -1 && !carIdentifier1.equalsIgnoreCase("PITSTALL"))
         )
-            return new Data("Session/DiffCars"+carIdentifier1+"/"+carIdentifier2,"");
+            return new Data("Session/DiffCars"+carIdentifier1+"/"+carIdentifier2,0.0,"s");
 
+        if (carIdentifier1.equalsIgnoreCase("PITSTALL")) {
+            if (!_car1.getPitLocation().getState().equals(Data.State.NORMAL))
+                return new Data("Session/DiffCars"+carIdentifier1+"/"+carIdentifier2,0.0,"s");
+            else
+                _car1 = _car1;
+        }
+        
+        if (carIdentifier2.equalsIgnoreCase("PITSTALL")) {
+            if (!_car2.getPitLocation().getState().equals(Data.State.NORMAL))
+                return new Data("Session/DiffCars"+carIdentifier1+"/"+carIdentifier2,0.0,"s");
+            else
+                _car2 = _car2;
+        }
+        
         Data sessionlap = m_SIMPlugin.getSession().getLap();
 
         if ((m_SIMPlugin.getSession().getType().getString().equalsIgnoreCase("RACE") && sessionlap.getInteger() > 1)
@@ -855,6 +869,34 @@ public class Session {
      */
     public    Data setAdvanceFlag() {
         return new Data("Session/setAdvanceFlag","","String");
+    }
+    
+    /**
+     * Changes the camera.
+     * 
+     * This is very SIM specific. Some SIMs can do this, others cannot.
+     * The name of the group and camera are very SIM specific. 
+     * Some SIMs limit the group and camera you can choose based on if you are driving or spectating or watching a replay.
+     * So, if the SIM doesn't allow the change, then this function will not really know. Therefore, there I cannot detect an error condition.
+     * 
+     * <p>PATH = {@link #setCamera(String,String,String) /Session/setCamera/(CARIDENTIFIER)/Group/Camera}
+     *
+     *@param carIdentifier (Optional) A car identifier as defined by {@link com.SIMRacingApps.Session#getCar(String)}. Default to "REFERENCE".
+     *@param group (Optional) The name of the camera group to change to. Default use current group.
+     *@param camera (Optional) The name of the camera. The group is required if the camera is not blank. Default to current camera in the current group.
+     *@return The group/camera name in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data setCamera(String carIdentifier, String group, String camera) {
+        return new Data("Session/setCamera/"+carIdentifier+"/"+group+"/"+camera,group+"/"+camera,"String");
+    }
+    public    Data setCamera(String carIdentifier, String group) {
+        return setCamera(carIdentifier,group,"");
+    }
+    public    Data setCamera(String carIdentifier) {
+        return setCamera(carIdentifier,"","");
+    }
+    public    Data setCamera() {
+        return setCamera("REFERENCE","","");
     }
     
     /**

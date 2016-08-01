@@ -1357,7 +1357,7 @@ public class Car {
      * 
      * <p>PATH = {@link #getPitLocation() /Car/(CARIDENTIFIER)/PitLocation}
      * 
-     * @return The pit location.
+     * @return The pit location. State is OFF if not known.
      */
     public Data getPitLocation() {
         return new Data("Car/I"+Integer.toString(m_id)+"/PitLocation",0.0,"%");
@@ -1697,6 +1697,30 @@ public class Car {
         return setBlackFlag(0,"s");
     }
 
+    /**
+     * Changes the camera to focus on this car.
+     * 
+     * This is very SIM specific. Some cameras can do this, others cannot.
+     * The name of the group and camera is also very SIM specific. 
+     * Some SIM limit the camera you can choose based on if you are driving or spectating or watch a replay.
+     * So, if the SIM doesn't allow the change, then this function will not really know. Therefore, there is not an error condition.
+     * 
+     * <p>PATH = {@link #setCamera(String,String) /Car/(CARIDENTIFIER)/setCamera/Group/Camera}
+     *
+     *@param group (Optional) The name of the camera group to change to. Default use current group.
+     *@param camera (Optional) The name of the camera. The group is required if the camera is not blank. Default to current camera in the current group.
+     *@return The group/camera name in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data setCamera(String group, String camera) {
+        return new Data("Car/I"+Integer.toString(m_id)+"/setCamera","","String");
+    }
+    public    Data setCamera(String group) {
+        return setCamera(group,"");
+    }
+    public    Data setCamera() {
+        return setCamera("","");
+    }
+    
     /**
      * Sends the text string as a chat message to this driver.
      * Each SIM must override this and provide this functionality.

@@ -152,7 +152,7 @@ public class PitCountDown extends SIMPluginCallback {
                 m_beenOnTrack = true;
                 
             //upon existing the pit reset this flag so nothing will play unless we get on the track and pit again.
-            if (status.equals(Car.Status.LEAVINGPITS))
+            if (status.equals(Car.Status.LEAVINGPITS) || status.equals(Car.Status.INVALID))
                 m_beenOnTrack = false;
             
             if (m_beenOnTrack  //This is to stop it from playing when you start the race or qualifying from pit road

@@ -59,6 +59,7 @@ sound-volume = 1
 ### Here is a list of the built in plug-ins:
 ###    MSPEC.ShiftLight
 ###    Sounds.PitCountDown
+###    Sounds.PitSpeedLimit
 ###
 ### For Example:
 ###     simplugins = Plugin1.Class;Plugin2.Class;Plugin3.Class;!Sounds.PitCountDown
@@ -157,6 +158,18 @@ pit-count-down-start  = 5
 #####################################################################
 #pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\JJ Spotter Pack v6.51\\n%d.wav
 #pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\Dale Jr Spotter Pack\\n%d_A1.wav
+
+#####################################################################
+### These settings control how the audible pit speed limit beeper works.
+### If the device is not specified, it uses the 
+### overall master sound-device.
+### The volume is a percentage of the master "sound-volume" setting.
+#####################################################################
+#pit-speed-limit-device = 
+pit-speed-limit-volume = 1
+pit-speed-limit-beep-rate = 200
+pit-speed-limit-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/short_beep.wav
+pit-speed-limit-beep-rate-excessive = 100
 
 #####################################################################
 ### Strings for the Chat Widget
