@@ -168,8 +168,18 @@ pit-count-down-start  = 5
 #pit-speed-limit-device = 
 pit-speed-limit-volume = 1
 pit-speed-limit-beep-rate = 200
-pit-speed-limit-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/short_beep.wav
+pit-speed-limit-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/speeding_beep.wav
 pit-speed-limit-beep-rate-excessive = 100
+
+#####################################################################
+### These settings control how the audible shift beep works.
+### If the device is not specified, it uses the 
+### overall master sound-device.
+### The volume is a percentage of the master "sound-volume" setting.
+#####################################################################
+#shift-device = 
+shift-volume = 1
+shift-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/shift_beep.wav
 
 #####################################################################
 ### Strings for the Chat Widget
