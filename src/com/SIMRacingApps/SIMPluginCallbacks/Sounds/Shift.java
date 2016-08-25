@@ -131,7 +131,7 @@ public class Shift extends SIMPluginCallback {
             String gear  = data.get("Car/REFERENCE/Gauge/Gear/ValueCurrent").getString();
             String state = data.get("Car/REFERENCE/Gauge/Tachometer/ValueCurrent").getState();
 
-            if (state.equals("SHIFT") && !gear.equals(m_gear)) {
+            if (state.equals("SHIFT") && !gear.equals(m_gear) && !gear.equals("N")) {
                 m_clip.play();
                 m_gear = gear;
             }
