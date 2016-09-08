@@ -1,0 +1,34 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2016 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "COMMENT1":    "The Lat/Lon is the center of the track around which the image is rotated",
+    "COMMENT1a":   "tip: if you center the map within the browser frame, the url will change to the center of the view",
+    "COMMENT1b":   "If a WayPoint is found in the GPX file named Center, it will override these values",
+    "Latitude":    47.9365919,
+    "Longitude":   0.2267702,
+    "COMMENT2":    "North is angle you want the track's north to point to, where 270 is straight up",
+    "North":       195.0,
+    "COMMENT3":    "Resolution is the number of meters per pixel. Considering the size is 800x480 pixels",
+    "Resolution":  14.5,
+    "COMMENT4":    "MergePoint is the point at which you are legally able to reenter the track after pitting",
+    "COMMENT5":    "If the GPX File has a point named MergePoint, it is used instead",
+    "MergePoint":  8.5,
+    "COMMENT6":    "Images map to the Layer Name to show (MAP,OSM). Must have at least MAP",
+    "Images": {
+        "MAP":     "lemans-MAP.png"
+    },
+    "COMMENT7":    "The following units of measures should be in the track's country's native measurement system",
+    "DistanceUOM": "km",
+    "TempUOM":     "C",
+    "SpeedUOM":    "kph",
+    "COMMENT8":    "FinishLine starts out at zero degrees, 3 o'clock. Use this to rotate it to line up with North's rotation",
+    "FinishLine":  105.0,
+    "COMMENT9":    "GPX is the file saved from http://www.gpxeditor.co.uk of the GPS coordinates.",
+    "COMMENT9a":   "Right Click, Draw New, Route. Draw the points starting at the finish line and ending at the finish line",
+    "COMMENT9b":   "Save as GPX file associated to the names here",
+    "COMMENT9c":   "ONTRACK should have at least one of the points named MergePoint. But you can have multiple, Bristol for example",
+    "GPX": {
+        "ONTRACK":   "lemans_nochicane-ONTRACK.gpx",
+        "ONPITROAD": "lemans_nochicane-ONPITROAD.gpx"        
+    }
+}
