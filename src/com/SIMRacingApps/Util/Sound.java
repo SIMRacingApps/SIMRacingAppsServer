@@ -104,6 +104,16 @@ public class Sound {
     }
     
     /**
+     * Returns the system time of the last time this clip was played.
+     * Use to compare with System.currentTimeMillis().
+     * 
+     * @return The last time played as a long
+     */
+    public long getLastTimePlayed() {
+        return m_lastTimePlayed;
+    }
+    
+    /**
      * Returns the master volume percentage
      * 
      * @return The master volume as a percentage in the range between 0.0 to 1.0

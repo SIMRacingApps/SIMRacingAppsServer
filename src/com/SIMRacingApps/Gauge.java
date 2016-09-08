@@ -763,7 +763,20 @@ public class Gauge {
     public Data getMinimum(String UOM)    { 
         Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/Minimum",m_minimum,m_uom,Data.State.NORMAL);
         d.addConversion(SIMValue);
-        return d.convertUOM(UOM); 
+        d = d.convertUOM(UOM);
+        //now loop through the states and see if the value should be overridden with a constant.
+        Double v = d.getDouble();
+        Iterator<Entry<Double,StateRange>> itr = m_states.entrySet().iterator();
+
+        //pick the one with the highest start if the ranges overlap.
+        //all ranges overlap NORMAL
+        while (itr.hasNext()) {
+            StateRange range = itr.next().getValue();
+            if (v >= range.start && v < range.end)
+                if (range.value != null)
+                    d  = range.value;
+        }
+        return d;
     }
     public Data getMinimum()              { return getMinimum(m_defaultUOM); }
     
@@ -793,7 +806,21 @@ public class Gauge {
     public Data getMaximum(String UOM)    { 
         Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/Maximum",m_maximum,m_uom,Data.State.NORMAL);
         d.addConversion(SIMValue);
-        return d.convertUOM(UOM); 
+        d = d.convertUOM(UOM); 
+        //now loop through the states and see if the value should be overridden with a constant.
+        Double v = d.getDouble();
+        Iterator<Entry<Double,StateRange>> itr = m_states.entrySet().iterator();
+
+        //pick the one with the highest start if the ranges overlap.
+        //all ranges overlap NORMAL
+        while (itr.hasNext()) {
+            StateRange range = itr.next().getValue();
+            if (v >= range.start && v < range.end)
+                if (range.value != null)
+                    d  = range.value;
+        }
+        
+        return d;
     }
     public Data getMaximum()              { return getMaximum(m_defaultUOM); }
     
@@ -885,7 +912,20 @@ public class Gauge {
     public Data getCapacityMaximum(String UOM) { 
         Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/CapacityMaximum",m_capacityMaximum,m_uom,Data.State.NORMAL); 
         d.addConversion(SIMValue);
-        return d.convertUOM(UOM); 
+        d = d.convertUOM(UOM); 
+        //now loop through the states and see if the value should be overridden with a constant.
+        Double v = d.getDouble();
+        Iterator<Entry<Double,StateRange>> itr = m_states.entrySet().iterator();
+
+        //pick the one with the highest start if the ranges overlap.
+        //all ranges overlap NORMAL
+        while (itr.hasNext()) {
+            StateRange range = itr.next().getValue();
+            if (v >= range.start && v < range.end)
+                if (range.value != null)
+                    d  = range.value;
+        }
+        return d;
     }
     public Data getCapacityMaximum()      { return getCapacityMaximum(m_defaultUOM); }
 
@@ -914,7 +954,20 @@ public class Gauge {
     public Data getCapacityMinimum(String UOM){ 
         Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/CapacityMinimum",m_capacityMinimum,m_uom,Data.State.NORMAL);
         d.addConversion(SIMValue);
-        return d.convertUOM(UOM); 
+        d = d.convertUOM(UOM); 
+        //now loop through the states and see if the value should be overridden with a constant.
+        Double v = d.getDouble();
+        Iterator<Entry<Double,StateRange>> itr = m_states.entrySet().iterator();
+
+        //pick the one with the highest start if the ranges overlap.
+        //all ranges overlap NORMAL
+        while (itr.hasNext()) {
+            StateRange range = itr.next().getValue();
+            if (v >= range.start && v < range.end)
+                if (range.value != null)
+                    d  = range.value;
+        }
+        return d;
     }
     public Data getCapacityMinimum()      { return getCapacityMinimum(m_defaultUOM); }
 

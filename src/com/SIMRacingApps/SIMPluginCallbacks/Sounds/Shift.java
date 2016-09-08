@@ -1,6 +1,7 @@
 package com.SIMRacingApps.SIMPluginCallbacks.Sounds;
 
 import java.util.Map;
+
 import com.SIMRacingApps.Data;
 import com.SIMRacingApps.SIMPlugin;
 import com.SIMRacingApps.SIMPlugin.SIMPluginException;
@@ -30,6 +31,8 @@ import com.SIMRacingApps.Util.Sound;
  */
 public class Shift extends SIMPluginCallback {
 
+    private final long TIMETOPLAY = 5000L;  //play anyway if more than this since the last time played.
+    
     private final Sound m_clip;
     private final String m_device;
     
@@ -61,6 +64,7 @@ public class Shift extends SIMPluginCallback {
         
         Subscribe("Car/REFERENCE/Gauge/Tachometer/ValueCurrent");
         Subscribe("Car/REFERENCE/Gauge/Gear/ValueCurrent");
+        Subscribe("Car/REFERENCE/Gauge/Gear/CapacityMaximum");
 	}
 	
 	/**
@@ -128,10 +132,16 @@ public class Shift extends SIMPluginCallback {
             return true;
         
         synchronized (m_clip) {
-            String gear  = data.get("Car/REFERENCE/Gauge/Gear/ValueCurrent").getString();
-            String state = data.get("Car/REFERENCE/Gauge/Tachometer/ValueCurrent").getState();
+            String gear     = data.get("Car/REFERENCE/Gauge/Gear/ValueCurrent").getString();
+            String maxgear  = data.get("Car/REFERENCE/Gauge/Gear/CapacityMaximum").getString();
+            String state    = data.get("Car/REFERENCE/Gauge/Tachometer/ValueCurrent").getState();
 
-            if (state.equals("SHIFT") && !gear.equals(m_gear) && !gear.equals("N")) {
+            if (state.equals("SHIFT") 
+            && (!gear.equals(m_gear) || (m_clip.getLastTimePlayed() + TIMETOPLAY) < System.currentTimeMillis()) 
+            && !gear.equals("N")
+            && !gear.equals(maxgear)
+            ) {
+                Server.logger().finer(String.format("Shift in %s gear of %s", gear,maxgear));
                 m_clip.play();
                 m_gear = gear;
             }
