@@ -587,7 +587,7 @@ public class Car {
 
     /**
      * Returns the amount of fuel you need to add to complete the number of laps specified.
-     * It calls {@link #getFuelLevelNeeded(int, double, String)}, then subtracts what is in your fuel tank.
+     * It calls {@link #getFuelLevelToFinish(int, double, String)}, then subtracts what is in your fuel tank.
      * The amount could be more than will fit in the fuel cell.
      * 
      * <p>PATH = {@link #getFuelLevelNeeded(int, double, String) /Car/(CARIDENTIFIER)/FuelLevelNeeded/(LAPSTOAVERAGE)/(LAPS)/(UOM)}
