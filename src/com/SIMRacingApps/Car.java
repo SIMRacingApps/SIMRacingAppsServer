@@ -881,7 +881,7 @@ public class Car {
     }
 
     /**
-     * Returns Y if the black flag has been waved for this car.
+     * Returns true if the black flag has been waved for this car.
      * This flag means come to the pits to serve a penality.
      * 
      * <p>PATH = {@link #getIsBlackFlag() /Car/(CARIDENTIFIER)/IsBlackFlag}
@@ -892,7 +892,7 @@ public class Car {
     }
     
     /**
-     * Returns Y if the blue flag has been waved for this car.
+     * Returns true if the blue flag has been waved for this car.
      * This flag means move out of the racing grove to give way to the leaders.
      * 
      * <p>PATH = {@link #getIsBlueFlag() /Car/(CARIDENTIFIER)/IsBlueFlag}
@@ -903,7 +903,7 @@ public class Car {
     }
     
     /**
-     * Returns Y if the disqualify flag has been waved for this car.
+     * Returns true if the disqualify flag has been waved for this car.
      * This means you must exist the race.
      * 
      * <p>PATH = {@link #getIsDisqualifyFlag() /Car/(CARIDENTIFIER)/IsDisqualifyFlag}
@@ -927,7 +927,7 @@ public class Car {
     }
     
     /**
-     * Returns Y if the 2 cars refer to the same car
+     * Returns true if the 2 cars refer to the same car
      * 
      * <p>PATH = {@link #getIsEqual(String) /Car/(CARIDENTIFIER)/IsEqual/(CARIDENTIFIER)}
      * @param carIdentifier (Optional) Car as defined by {@link com.SIMRacingApps.Session#getCar(String)}. Default REFERENCE.
@@ -945,7 +945,7 @@ public class Car {
     }
 
     /**
-     * Returns if the car is in a fixed setup session.
+     * Returns true if the car is in a fixed setup session.
      * 
      * <p>PATH = {@link #getIsFixedSetup /Car/(CARIDENTIFIER)/IsFixedSetup}
      * 
@@ -956,7 +956,7 @@ public class Car {
     }
 
     /**
-     * Returns if the car is over the specified speed limit.
+     * Returns true if the car is over the specified speed limit.
      * 
      * <p>PATH = {@link #getIsOverSpeedLimit() /Car/(CARIDENTIFIER)/IsOverSpeedLimit}
      * 
@@ -991,7 +991,7 @@ public class Car {
     }
 
     /**
-     * Returns if the car is a spectator.
+     * Returns true if the car is a spectator.
      * 
      * <p>PATH = {@link #getIsSpectator() /Car/(CARIDENTIFIER)/IsSpectator}
      * 
@@ -1002,7 +1002,7 @@ public class Car {
     }
 
     /**
-     * Returns if the car is under the specified speed limit.
+     * Returns true if the car is under the specified speed limit.
      * 
      * <p>PATH = {@link #getIsUnderSpeedLimit() /Car/(CARIDENTIFIER)/IsUnderSpeedLimit}
      * 
@@ -1023,7 +1023,7 @@ public class Car {
     }
 
     /**
-     * Returns Y if the yellow flag has been waved for this car.
+     * Returns true if the yellow flag has been waved for this car.
      * This is not a full course caution flag. 
      * It is for a local issue near this car.
      * 
