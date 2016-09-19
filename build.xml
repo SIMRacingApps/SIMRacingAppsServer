@@ -8,7 +8,9 @@
         if ( ! "0".equals( verboseMode ) )
             logger.setMessageOutputLevel( 9 );
     </script>
-    <property name="build.prefix" value="" />
+    <property name="build.major" value="1" />
+    <property name="build.minor" value="2" />
+    <property name="build.prefix" value="BETA-" />
     <tstamp>
         <format property="build.time" pattern="yyyy.MM.dd.HH.mm.ss" />
     </tstamp>
@@ -114,8 +116,8 @@
     <target name="version">
         <sequential>
             <propertyfile file="${version.properties}">
-                <entry key="major" type="int" value="1" />
-                <entry key="minor" type="int" value="1" />
+                <entry key="major" type="int" value="${build.major}" />
+                <entry key="minor" type="int" value="${build.minor}" />
                 <entry key="build" type="string" value="${build.prefix}${build.date}" />
                 <entry key="built-by" type="string" value="Jeffrey Gilliam" />
                 <entry key="copyright" type="string" value="Copyright (C) 2015 - ${build.year} Jeffrey Gilliam" />
