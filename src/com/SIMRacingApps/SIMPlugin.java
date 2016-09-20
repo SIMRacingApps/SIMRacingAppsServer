@@ -642,7 +642,10 @@ public class SIMPlugin {
     private String m_version = null;
     /**
      * Returns the version of the SIMRacingApps Plugin as a String in a printable format.
-     * @return The Server Version
+     * 
+     * <p>PATH = {@link #getVersion() /Version}
+     * 
+     * @return The Server Version for this SIM
      */
     public Data getVersion() {
         Data d = new Data("Version",String.format("%s Plugin Version: Unknown",getSIMName().getString()),"String");
