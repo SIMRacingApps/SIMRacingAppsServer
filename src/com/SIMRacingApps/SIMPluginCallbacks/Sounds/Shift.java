@@ -15,6 +15,7 @@ import com.SIMRacingApps.Util.Sound;
  * <pre>
  *    shift-device = A Sound Device
  *    shift-volume = 1.0
+ *    shift-replay = false
  *    shift-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/shift_beep.wav
  *    
  * #Also these global settings will be used if the specific settings above are not set.
@@ -35,6 +36,7 @@ public class Shift extends SIMPluginCallback {
     
     private final Sound m_clip;
     private final String m_device;
+    private final Boolean m_replay;
     
     private Double m_volume;
     
@@ -50,6 +52,7 @@ public class Shift extends SIMPluginCallback {
 		
 		m_device              = Server.getArg("shift-device");
 		m_volume              = Server.getArg("shift-volume", -1.0);
+		m_replay              = Server.getArg("shift-replay", false);
         
 		String defaultFile    = "com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/shift_beep.wav";
 		String soundFile      = Server.getArg("shift-clip",defaultFile);
@@ -65,6 +68,7 @@ public class Shift extends SIMPluginCallback {
         Subscribe("Car/REFERENCE/Gauge/Tachometer/ValueCurrent");
         Subscribe("Car/REFERENCE/Gauge/Gear/ValueCurrent");
         Subscribe("Car/REFERENCE/Gauge/Gear/CapacityMaximum");
+        Subscribe("Session/IsReplay");
 	}
 	
 	/**
@@ -135,6 +139,11 @@ public class Shift extends SIMPluginCallback {
             String gear     = data.get("Car/REFERENCE/Gauge/Gear/ValueCurrent").getString();
             String maxgear  = data.get("Car/REFERENCE/Gauge/Gear/CapacityMaximum").getString();
             String state    = data.get("Car/REFERENCE/Gauge/Tachometer/ValueCurrent").getState();
+            boolean replay = data.get("Session/IsReplay").getBoolean();
+            
+            //should we be playing in replay mode?
+            if (!m_replay && replay)
+                return true;
 
             if (state.equals("SHIFT") 
             && (!gear.equals(m_gear) || (m_clip.getLastTimePlayed() + TIMETOPLAY) < System.currentTimeMillis()) 

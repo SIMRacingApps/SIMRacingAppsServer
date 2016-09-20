@@ -495,58 +495,68 @@ public class Session {
     public    Data    getIncidentLimit()                              { /*int*/                                  return new Data("Session/IncidentLimit",0,"x",Data.State.OFF); } 
 
     /**
-     * Returns 'Y' if the green flag is waving.
+     * Returns true if the green flag is waving.
      * 
      * <p>PATH = {@link #getIsGreenFlag() /Session/IsGreenFlag}
      * 
-     * @return 'Y' if the green flag is out in a {@link com.SIMRacingApps.Data} container.
+     * @return true if the green flag is out in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data    getIsGreenFlag()                 { /*Boolean*/                             return new Data("Session/IsGreenFlag",false,"boolean",Data.State.NORMAL); }
 
     /**
-     * Returns 'Y' if the caution flag is waving.
+     * Returns true if the caution flag is waving.
      * 
      * <p>PATH = {@link #getIsCautionFlag() /Session/IsCautionFlag}
      * 
-     * @return 'Y' if the caution flag is out in a {@link com.SIMRacingApps.Data} container.
+     * @return true if the caution flag is out in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data    getIsCautionFlag()               { /*Boolean*/                             return new Data("Session/IsCautionFlag",false,"boolean",Data.State.NORMAL); }
 
     /**
-     * Returns 'Y' if the checkered flag is waving.
+     * Returns true if the checkered flag is waving.
      * 
      * <p>PATH = {@link #getIsCheckeredFlag() /Session/IsCheckeredFlag}
      * 
-     * @return 'Y' if the checkered flag is out in a {@link com.SIMRacingApps.Data} container.
+     * @return true if the checkered flag is out in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data    getIsCheckeredFlag()             { /*Boolean*/                             return new Data("Session/IsCheckeredFlag",false,"boolean",Data.State.NORMAL); }
 
     /**
-     * Returns 'Y' if the crossed flag is waving. This generally means the leader has passed the halfway point.
+     * Returns true if the crossed flag is waving. This generally means the leader has passed the halfway point.
      * 
      * <p>PATH = {@link #getIsCrossedFlag() /Session/IsCrossedFlag}
      * 
-     * @return 'Y' if the crossed flag is out in a {@link com.SIMRacingApps.Data} container.
+     * @return true if the crossed flag is out in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data    getIsCrossedFlag()               { /*Boolean*/                             return new Data("Session/IsCrossedFlag",false,"boolean",Data.State.NORMAL); }
 
     /**
-     * Returns 'Y' if the white flag is waving.
+     * Returns true if the white flag is waving.
      * 
      * <p>PATH = {@link #getIsWhiteFlag() /Session/IsWhiteFlag}
      * 
-     * @return 'Y' if the white flag is out in a {@link com.SIMRacingApps.Data} container.
+     * @return true if the white flag is out in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data    getIsWhiteFlag()                 { /*Boolean*/                             return new Data("Session/IsWhiteFlag",false,"boolean",Data.State.NORMAL); }
 
     /**
-     * Returns 'Y' if the red flag is waving.
+     * Returns true if the red flag is waving.
      * 
      * <p>PATH = {@link #getIsRedFlag() /Session/IsRedFlag}
      * 
-     * @return 'Y' if the green flag is out in a {@link com.SIMRacingApps.Data} container.
+     * @return true if the green flag is out in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data    getIsRedFlag()                   { /*Boolean*/                             return new Data("Session/IsRedFlag",false,"boolean",Data.State.NORMAL); }
+    
+    /**
+     * Returns true if the session is in replay mode.
+     * Otherwise, false which assumes all data is live (real-time).
+     * 
+     * <p>PATH = {@link #getIsReplay() /Session/IsReplay}
+     * 
+     * @return true if the green flag is out in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getIsReplay()                    { /*Boolean*/                             return new Data("Session/IsReplay",false,"boolean",Data.State.NORMAL); }
     
     /**
      * Returns the current lap of the race or REFERENCE car if in a different type of session.

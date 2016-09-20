@@ -18,6 +18,7 @@ import com.SIMRacingApps.Util.Sound;
  *    pit-count-down-volume = 1.0
  *    pit-count-down-start  = 5
  *    pit-count-down-play10 = Y
+ *    pit-count-down-replay = N
  *    pit-count-down-play0  = Y
  *    pit-count-down-pattern = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/n%d.wav
  *        #some know patterns to spotter packs. Your version may vary
@@ -42,6 +43,7 @@ public class PitCountDown extends SIMPluginCallback {
     private final boolean m_play10;
     private final boolean m_play0;
     private final String m_device;
+    private final boolean m_replay;
     private final int m_startCount;
     
     private Double m_volume;
@@ -60,6 +62,7 @@ public class PitCountDown extends SIMPluginCallback {
 		m_volume              = Server.getArg("pit-count-down-volume", -1.0);
 		m_play10              = Server.getArg("pit-count-down-play10",true);
         m_play0               = Server.getArg("pit-count-down-play0",true);
+        m_replay              = Server.getArg("pit-count-down-replay",false);
 		m_startCount          = (int)Math.min(10.0, Math.max(0.0, (double)Server.getArg("pit-count-down-start",5)));
         
 		String defaultPattern = "com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/n%d.wav";
@@ -76,6 +79,7 @@ public class PitCountDown extends SIMPluginCallback {
         
         Subscribe("Car/REFERENCE/Status");
         Subscribe("Session/DiffCars/REFERENCE/PITSTALL");
+        Subscribe("Session/IsReplay");
 	}
 	
 	/**
@@ -146,6 +150,11 @@ public class PitCountDown extends SIMPluginCallback {
         
         synchronized (m_clips) {
             String status = data.get("Car/REFERENCE/Status").getString();
+            boolean replay = data.get("Session/IsReplay").getBoolean();
+            
+            //should we be playing in replay mode?
+            if (!m_replay && replay)
+                return true;
             
             //set this flag to show we have left the pits
             if (status.equals(Car.Status.ONTRACK) || status.equals(Car.Status.APPROACHINGPITS))

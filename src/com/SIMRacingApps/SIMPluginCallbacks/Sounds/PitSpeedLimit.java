@@ -18,6 +18,7 @@ import com.SIMRacingApps.Util.Sound;
  *    pit-speed-limit-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/speeding_beep.wav
  *    pit-speed-limit-rate = 200
  *    pit-speed-limit-rate-excessive = 100
+ *    pit-speed-limit-replay = false
  *    
  * #Also these global settings will be used if the specific settings above are not set.
  *    sound-device = A Sound Device Name
@@ -37,6 +38,7 @@ public class PitSpeedLimit extends SIMPluginCallback {
     private final String m_device;
     private final Integer m_rate;
     private final Integer m_rate_excessive;
+    private final Boolean m_replay;
     
     private Double m_volume;
     
@@ -54,6 +56,7 @@ public class PitSpeedLimit extends SIMPluginCallback {
 		m_volume              = Server.getArg("pit-speed-limit-volume", -1.0);
         m_rate                = Server.getArg("pit-speed-limit-rate", 300);
         m_rate_excessive      = Server.getArg("pit-speed-limit-excessive", 200);
+        m_replay              = Server.getArg("pit-speed-limit-replay",false);
         
 		String defaultFile    = "com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/speeding_beep.wav";
 		String soundFile      = Server.getArg("pit-speed-limit-clip",defaultFile);
@@ -68,6 +71,7 @@ public class PitSpeedLimit extends SIMPluginCallback {
         
         Subscribe("Car/REFERENCE/Status");
         Subscribe("Car/REFERENCE/Gauge/Speedometer/ValueCurrent");
+        Subscribe("Session/IsReplay");
 	}
 	
 	/**
@@ -137,6 +141,11 @@ public class PitSpeedLimit extends SIMPluginCallback {
         
         synchronized (m_clip) {
             String status = data.get("Car/REFERENCE/Status").getString();
+            boolean replay = data.get("Session/IsReplay").getBoolean();
+            
+            //should we be playing in replay mode?
+            if (!m_replay && replay)
+                return true;
             
             //set this flag to show we have left the pits
             if (status.equals(Car.Status.ONTRACK) || status.equals(Car.Status.APPROACHINGPITS))

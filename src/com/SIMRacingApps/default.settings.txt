@@ -152,6 +152,7 @@ pit-count-down-volume = 1
 pit-count-down-play10 = Y
 pit-count-down-play0  = Y
 pit-count-down-start  = 5
+pit-count-down-replay = false
 #####################################################################
 ### Some known patterns to spotter packs. Your version may vary. 
 ### Double backslashes are required for the directory separator.
@@ -170,6 +171,7 @@ pit-speed-limit-volume = 1
 pit-speed-limit-beep-rate = 200
 pit-speed-limit-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/speeding_beep.wav
 pit-speed-limit-beep-rate-excessive = 100
+pit-speed-limit-replay = false
 
 #####################################################################
 ### These settings control how the audible shift beep works.
@@ -180,6 +182,7 @@ pit-speed-limit-beep-rate-excessive = 100
 #shift-device = 
 shift-volume = 1
 shift-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/shift_beep.wav
+shift-replay = false
 
 #####################################################################
 ### Strings for the Chat Widget
