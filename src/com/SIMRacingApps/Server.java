@@ -20,13 +20,17 @@ import java.util.logging.Formatter;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
+
 import javax.websocket.server.ServerContainer;
 import javax.websocket.server.ServerEndpointConfig;
+
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+
 import com.SIMRacingApps.Util.FindFile;
 import com.SIMRacingApps.Util.SendKeys;
 import com.SIMRacingApps.Util.Sound;
+import com.SIMRacingApps.servlets.ConsumerTester;
 import com.SIMRacingApps.servlets.DataEvent;
 import com.SIMRacingApps.servlets.DataService;
 import com.SIMRacingApps.servlets.DataSocket;
@@ -243,13 +247,13 @@ public class Server {
         if (s.isEmpty())
             return defaultValue;
         try {
-            if (s.equalsIgnoreCase("false"))
+            if (s.equalsIgnoreCase("f") || s.equalsIgnoreCase("false"))
                 return false;
-            if (s.equalsIgnoreCase("true"))
+            if (s.equalsIgnoreCase("t") || s.equalsIgnoreCase("true"))
                 return true;
-            if (s.equalsIgnoreCase("N"))
+            if (s.equalsIgnoreCase("n") || s.equalsIgnoreCase("no"))
                 return false;
-            if (s.equalsIgnoreCase("Y"))
+            if (s.equalsIgnoreCase("y") || s.equalsIgnoreCase("yes"))
                 return true;
             int i = Integer.parseInt(s);
             if (i != 0)
@@ -556,6 +560,7 @@ public class Server {
             servlet = contextHandler.addServlet(Data.class,          "/SIMRacingApps/Data/*");
             servlet.setInitOrder(0); //Jetty's way to load on startup
             servlet = contextHandler.addServlet(DataEvent.class,     "/SIMRacingApps/DataEvent");
+            servlet = contextHandler.addServlet(ConsumerTester.class,"/SIMRacingApps/ConsumerTester");
         
             ServerContainer container = WebSocketServerContainerInitializer.configureContext(contextHandler); 
              

@@ -712,13 +712,13 @@ public class SIMPlugin {
         //copy non blank requests to the args array
         for (int index=0; index < s.length; index++) {
             if (name == null) {
-                if (!s[index].isEmpty()) {
-                    name = s[index].toUpperCase();
+                if (!s[index].trim().isEmpty()) {
+                    name = s[index].trim().toUpperCase();
                 }
             }
             else {
-                if (!s[index].isEmpty())
-                    args.add(s[index]);
+                if (!s[index].trim().isEmpty())
+                    args.add(s[index].trim());
             }
         }
 

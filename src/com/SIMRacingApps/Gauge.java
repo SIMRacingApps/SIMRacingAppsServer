@@ -608,6 +608,7 @@ public class Gauge {
     private double m_capacityIncrement;   
     private int m_currentLap;               //the current lap update each tick by calling updateCurrentLap()
     protected int    m_lapChanged;          //the lap when this gauge was changed because we pitted
+    protected int  m_count;
 //  protected int    m_lapChangedPrevious;  //the previous value of lapChanged whenever you have reset or pitted
 
 //  private boolean m_isInCar;            //returns true if this gauge is a real gauge on the real car or it's virtual from the SIM
@@ -1135,6 +1136,7 @@ public class Gauge {
         m_capacityIncrement = m_minorIncrement;
         m_states = new TreeMap<Double,StateRange>();
         m_lapChanged = 1;
+        m_count = 1;
 
 //        m_isInCar = false;
         m_isFixed = true;
@@ -1232,6 +1234,7 @@ public class Gauge {
         + "    \"IsChangable\":       \"" + (m_isChangeable ? "true" : "false") + "\",\n"
         + "    \"OnResetChange\":     \"" + (m_onResetChange ? "true" : "false") + "\",\n"
         + "    \"LapChanged\":        " + m_lapChanged + ",\n"
+        + "    \"Count\":             " + m_count + ",\n"
         + "    \"Reader\":            \"" + (SIMValue == null ? "null" : SIMValue.getClass().getName()) + "\",\n"
         + "    \"ValueCurrent\":        " + (value == null ? new Data(m_name,0.0,m_uom).toString(m_name) : value.toString(value.getName())) + ",\n"
         + "    \"ValueNext\":           " + (setupValue == null ? new Data(m_name,0.0,m_uom).toString(m_name) : setupValue.toString(setupValue.getName())) + ",\n"
@@ -1389,6 +1392,7 @@ public class Gauge {
         d = d.convertUOM(UOM);
 //        d.add("LapChangedPrevious",m_lapChangedPrevious,"lap");
         d.add("LapChanged",m_lapChanged,"lap");
+        d.add("Count",m_count,"");
         return d;
     }
     public Data getValueCurrent() { return getValueCurrent(m_defaultUOM); }
@@ -1405,6 +1409,20 @@ public class Gauge {
         return new Data("Car/"+m_car+"/Gauge/"+m_type+"/LapChanged",m_lapChanged,"lap",Data.State.NORMAL);
     }
 
+    /**
+     * Returns the number of times this gauge was changed.
+     * The count starts at one, so the initial reading counts.
+     * 
+     * <p>PATH = {@link #getCount() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/Count} 1.2
+     * 
+     * @since 1.2
+     * @return The number of times this gauge was changed.
+     */
+    public Data getCount() {
+        //_initValues();
+        return new Data("Car/"+m_car+"/Gauge/"+m_type+"/Count",m_count,"",Data.State.NORMAL);
+    }
+    
     /**
      * Returns the number of laps since the object for this gauge was changed.
      * 
@@ -2013,6 +2031,7 @@ public class Gauge {
                     afterPitValue = beforePitValue != null ? beforePitValue : m_SIMValue;
                     beforePitValue = null;
                     m_lapChanged = lap;
+                    m_count++;
 
                     if (m_isDebug)
                         Server.logger().finer(String.format("%s.afterPitting(%s). Saving Laps=%d, value=%f %s as Historical"

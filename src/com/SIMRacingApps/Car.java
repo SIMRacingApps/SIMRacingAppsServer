@@ -14,6 +14,7 @@ import com.SIMRacingApps.SIMPlugin;
 import com.SIMRacingApps.Data;
 import com.SIMRacingApps.Data.State;
 import com.SIMRacingApps.Session.CarIdentifiers;
+import com.SIMRacingApps.SIMPluginCallbacks.SIMPluginCallback;
 import com.SIMRacingApps.Util.FindFile;
 
 /**
@@ -1203,7 +1204,7 @@ public class Car {
     
     /**
      * Returns the invalid status of each lap in in an array.
-     * N means good green flag lap, Y means under yellow, or pitted.
+     * false means good green flag lap, true means under yellow, or pitted.
      * Mainly used to determine the good laps to use in averages.
      * 
      * The array is indexed as zero based.
@@ -1266,6 +1267,29 @@ public class Car {
      */
     public Data getManufacturerLogo() {
         return new Data("Car/I"+Integer.toString(m_id)+"/ManufacturerLogo",m_mfrLogo,"",Data.State.NORMAL);
+    }
+    
+    /**
+     * Returns the maximum number of tire sets for this session.
+     * It first checks to see if the DataPublisher.Post plugin is loaded and publishing.
+     * If so, it asked if the server has a max tires count.
+     * 
+     * The SIM could override this and return a number if the SIM supports it as well.
+     * The SIM should check to see if the plugin returned a value first before overriding it.
+     * 
+     * <p>PATH = {@link #getMaxTires() /Car/(CARIDENTIFIER)/MaxTires} 1.2
+     * 
+     * @since 1.2
+     * @return The maximum number of tire sets.
+     */
+    public Data getMaxTires() {
+        Data d = new Data("Car/I"+Integer.toString(m_id)+"/MaxTires",99);
+        SIMPluginCallback callback = this.m_SIMPlugin.getCallback("DataPublisher.Post");
+        if (callback != null) {
+            Data max = ((com.SIMRacingApps.SIMPluginCallbacks.DataPublisher.Post)callback).getMaxTires();
+            d.setValue(max.getValue(),max.getUOM(),max.getState());
+        }
+        return d;
     }
     
     /**

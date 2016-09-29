@@ -53,20 +53,16 @@ sound-volume = 1
 #sound-device = 
 
 #####################################################################
-### Here you can enable or disable any plug-ins you may have installed.
+### Here you can add plugins that do no come bundled with SIMRacingAppServer.
+### Typically a developer will provide you with a .SRA file that contains the plugin.
+### But, you have to add it to this list manually yourself. This is to prevent trojans.
 ### Each plug-in should be listed with a semicolon as a separator.
-### To disable one of the built in plug-ins, prefix it with an exclamation point(!)
-### Here is a list of the built in plug-ins:
-###    MSPEC.ShiftLight
-###    Sounds.PitCountDown
-###    Sounds.PitSpeedLimit
-###
 ### For Example:
 ###     simplugins = Plugin1.Class;Plugin2.Class;Plugin3.Class;!Sounds.PitCountDown
 ###
 ### NOTE: The plug-in names are case sensitive.
 #####################################################################
-simplugins = 
+SimPlugins = 
 
 #####################################################################
 ### The log file and level of logging to see.
@@ -85,20 +81,19 @@ level = INFO
 ### and determining the COMM Port at http://shiftlight.com.au
 ### Uncomment only for the light(s) you have.
 ### Each light must have a unique port assigned to it.
-### For example: If your light is on COM3, then use 
+### For example: If your red light is on COM3, then use 
 ###     mspec-rpm = 3
-### The MSPEC.ShiftLight simplugin is automatically loaded, 
-### but does nothing unless you set any of these parameters.
 ###
 ### By default the light will come on when speeding. You can control
 ### this with the "mspec-speeding" variable
 #####################################################################
+MSPEC.ShiftLight = N
 #mspec-rpm = 3
 #mspec-yellowflag = 3
 #mspec-greenflag = 3
 #mspec-blueflag = 3
 #mspec-eflag = 3
-mspec-speeding = true
+mspec-speeding = Y
 
 #####################################################################
 ### RPMs for the Shift Lights can be overridden here.
@@ -126,7 +121,7 @@ mspec-speeding = true
 ### teamspeak-carnumber = Does SRA prepend you car number to your alias.
 #####################################################################
 teamspeak-client = localhost
-teamspeak-carnumber = true
+teamspeak-carnumber = Y
 
 #####################################################################
 ### The number of milliseconds to delay between sending key strokes
@@ -147,6 +142,7 @@ minimum-speed-percentage   = 110
 ### overall master sound-device.
 ### The volume is a percentage of the master "sound-volume" setting.
 #####################################################################
+Sounds.PitCountDown = Y
 #pit-count-down-device = 
 pit-count-down-volume = 1
 pit-count-down-play10 = Y
@@ -166,6 +162,7 @@ pit-count-down-replay = false
 ### overall master sound-device.
 ### The volume is a percentage of the master "sound-volume" setting.
 #####################################################################
+Sounds.PitSpeedLimit = Y
 #pit-speed-limit-device = 
 pit-speed-limit-volume = 1
 pit-speed-limit-beep-rate = 200
@@ -179,6 +176,7 @@ pit-speed-limit-replay = false
 ### overall master sound-device.
 ### The volume is a percentage of the master "sound-volume" setting.
 #####################################################################
+Sounds.Shift = Y
 #shift-device = 
 shift-volume = 1
 shift-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/shift_beep.wav
@@ -209,3 +207,21 @@ chat-row1-col1-name = PASS LEFT
 chat-row1-col1-text = /RL-1 [#[CARNUMBER]] Pass Left
 #chat-row2-col1-name = PASS RIGHT
 #chat-row2-col1-text = /RL-1 [#[CARNUMBER]] Pass Right
+
+#####################################################################
+### Setup for DataPublisher
+### To have you data published to your league's web site,
+### you must know your league's id for the SIM and the URL to the server.
+### Your league admin will provide you with this information.
+### You can enter as many leagues as you want here and any time
+### you are in one of these league's session, 
+### it will start transmitting your data.
+###
+### By default, this is turned off. Enable it by setting 
+###     DataPublisher-Post = Y
+### The default interval is 5000 milliseconds, change that by adding
+###     DataPublisher-Post-Interval-{leagueID} = 10000 
+#####################################################################
+DataPublisher-Post = N
+DataPublisher-Post-URL-{leagueID} = http://yourLeague/...
+DataPublisher-Post-Interval-{leagueID} = 5000

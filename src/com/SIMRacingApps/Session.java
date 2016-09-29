@@ -483,6 +483,16 @@ public class Session {
     public    Data    getDiffCarsRelative()                            { /*double(seconds),int(lap)*/            return getDiffCarsRelative("LEADERREFERENCE","REFERENCE"); }
     
     /**
+     * Returns a SIM specific ID for the current session.
+     * 
+     * <p>PATH = {@link #getId() /Session/Id} 1.2
+     *
+     * @since 1.2
+     * @return The Id in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getId()                                          { /*string*/                                 return new Data("Session/Id","","",Data.State.OFF); } 
+    
+    /**
      * Returns the total number of incidents allowed for this session.
      * If the session does not specify them, such as, practice, then 9999 is returned.
      * 
@@ -594,6 +604,16 @@ public class Session {
      * @return The number of laps to go in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data    getLapsToGo()                    { /*int*/                                 return new Data("Session/LapsToGo",0,"lap"); }
+
+    /**
+     * Returns a SIM specific League ID for the current session.
+     * 
+     * <p>PATH = {@link #getLeagueId() /Session/LeagueId} 1.2
+     *
+     * @since 1.2
+     * @return The League Id in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getLeagueId()                     { /*string*/                                 return new Data("Session/LeagueId","","",Data.State.OFF); } 
 
     /**
      * This class enumerates the various messages that a SIM can raise that applies to all cars.

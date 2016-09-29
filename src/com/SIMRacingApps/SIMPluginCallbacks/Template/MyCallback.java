@@ -88,4 +88,20 @@ public class MyCallback extends SIMPluginCallback {
         
         return true;
     }
+    
+    /**
+     * Gets a value.
+     * 
+     * <p>PATH = {@link #get?() /SIMPluginCallback/{plugin}/{name}/?}
+     * 
+     * @return The ? in a {@link com.SIMRacingApps.Data} container.
+     */
+/*    
+    public Data get?() {
+        //TODO: add code to get the value to return. Remember to synchronize, this is in a different thread.
+        synchronize (?) {
+            return new Data("", ?,"",Data.State.NORMAL);
+        }
+    }
+/**/    
 }
