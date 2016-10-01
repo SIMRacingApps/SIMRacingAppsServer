@@ -100,9 +100,9 @@ public class Post extends SIMPluginCallback {
         //these the user can override with their own properties file.
         while (itr.hasNext()) {
             String key = itr.next().toString();
-            String path = m_variables.getProperty(key);
-            Subscribe(path);
-            Server.logger().finer(String.format("Publishing: '%s' using '%s'",key,path));
+            String format = m_variables.getProperty(key);
+            Subscribe(key);
+            Server.logger().finer(String.format("Publishing: '%s' formatted as '%s'",key,format));
         }
 	}
 	
@@ -176,10 +176,11 @@ public class Post extends SIMPluginCallback {
                     
                     while (itr.hasNext()) {
                         String key = itr.next().toString();
-                        String path = m_variables.getProperty(key);
-                        Data d = data.get(path);
-                        if (d != null)
-                            output_map.put(key, d.getString());
+                        String format = m_variables.getProperty(key);
+                        Data d = data.get(key);
+                        if (d != null) {
+                            output_map.put(key, d.getStringFormatted(format));
+                        }
                     }
                     
                     //add sim name, version and time stamp
