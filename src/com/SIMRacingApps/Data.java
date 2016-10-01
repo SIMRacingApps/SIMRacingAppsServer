@@ -822,17 +822,33 @@ public class Data extends Object {
         Locale l = m_data.get(name).locale;
 
 //        if (!format.equals("")) {
-            //TODO: add support for date/time formatting based on UOM being "s" or "s/s" or "sec"
             try {
+                //support for date/time formatting based on UOM being "s" or "s/s" or "sec"
                 if (getType(name) != null)
-                    switch (getType(name)) {
-                    case BOOLEAN: s = getBoolean(name) ? "true" : "false"; break;
-                    case STRING:  s = String.format(l, !format.equals("") ? format : "%s", getStringTranslated(name),  getUOMAbbrTranslated(name),  getUOMDescTranslated(name)); break;
-                    case DOUBLE:  s = String.format(l, !format.equals("") ? format : "%f", getDouble(name),            getUOMAbbrTranslated(name),  getUOMDescTranslated(name)); break;
-                    case INTEGER: s = String.format(l, !format.equals("") ? format : "%d", getInteger(name),           getUOMAbbrTranslated(name),  getUOMDescTranslated(name)); break;
-                    case LONG:    s = String.format(l, !format.equals("") ? format : "%d", getLong(name),              getUOMAbbrTranslated(name),  getUOMDescTranslated(name)); break;
-                    case FLOAT:   s = String.format(l, !format.equals("") ? format : "%f", getFloat(name),             getUOMAbbrTranslated(name),  getUOMDescTranslated(name)); break;
-                    default:      s = getStringTranslated(name); break;
+                    if ((!format.isEmpty() && (format.contains("t") || format.contains("T")))
+                    && (  this.getUOM().equalsIgnoreCase("s")
+                       || this.getUOM().equalsIgnoreCase("s/s")
+                       || this.getUOM().equalsIgnoreCase("sec")
+                       || this.getUOM().equalsIgnoreCase("lap")
+                       )
+                    ){
+                        if (this.getUOM().equalsIgnoreCase("lap"))
+                            s = String.format(l, !format.equals("") ? format : "%d", getInteger(name),           getUOMAbbrTranslated(name),  getUOMDescTranslated(name));
+                        else {
+                            Double d = getDouble(name) * 1000.0;
+                            s = String.format(l, format, d.longValue(),  getUOMAbbrTranslated(name),  getUOMDescTranslated(name));
+                        }
+                    }
+                    else {
+                        switch (getType(name)) {
+                        case BOOLEAN: s = getBoolean(name) ? "true" : "false"; break;
+                        case STRING:  s = String.format(l, !format.equals("") ? format : "%s", getStringTranslated(name),  getUOMAbbrTranslated(name),  getUOMDescTranslated(name)); break;
+                        case DOUBLE:  s = String.format(l, !format.equals("") ? format : "%f", getDouble(name),            getUOMAbbrTranslated(name),  getUOMDescTranslated(name)); break;
+                        case INTEGER: s = String.format(l, !format.equals("") ? format : "%d", getInteger(name),           getUOMAbbrTranslated(name),  getUOMDescTranslated(name)); break;
+                        case LONG:    s = String.format(l, !format.equals("") ? format : "%d", getLong(name),              getUOMAbbrTranslated(name),  getUOMDescTranslated(name)); break;
+                        case FLOAT:   s = String.format(l, !format.equals("") ? format : "%f", getFloat(name),             getUOMAbbrTranslated(name),  getUOMDescTranslated(name)); break;
+                        default:      s = getStringTranslated(name); break;
+                        }
                     }
             }
             catch (MissingFormatArgumentException ex) {
