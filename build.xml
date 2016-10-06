@@ -125,7 +125,7 @@
                 <entry key="license" type="string" value="Apache License, Version 2.0, January 2004" />
                 <entry key="licenseUrl" type="string" value="/SIMRacingApps/LICENSE.TXT" />
                 <entry key="noticeUrl" type="string" value="/SIMRacingApps/NOTICE.TXT" />
-                <entry key="releasenotes" type="string" value="/SIMRacingApps/documentation/SIMRacingApps_ReleaseNotes.txt" />
+                <entry key="releasenotes" type="string" value="/SIMRacingApps/documentation/SIMRacingApps_${build.prefix}ReleaseNotes.txt" />
             </propertyfile>
             <replaceregexp match="^#.*$" replace="#Sat, 01 Jan 2000 00:00:00 -0000" byline="true">
                 <fileset dir="." includes="${version.properties}" />
