@@ -992,6 +992,17 @@ public class Car {
     }
 
     /**
+     * Returns true if the car is the pace car.
+     * 
+     * <p>PATH = {@link #getIsPaceCar() /Car/(CARIDENTIFIER)/IsPaceCar}
+     * 
+     * @return true or false in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getIsPaceCar() {
+        return new Data("Car/I"+Integer.toString(m_id)+"/IsPaceCar",false,"boolean");
+    }
+
+    /**
      * Returns true if the car is a spectator.
      * 
      * <p>PATH = {@link #getIsSpectator() /Car/(CARIDENTIFIER)/IsSpectator}

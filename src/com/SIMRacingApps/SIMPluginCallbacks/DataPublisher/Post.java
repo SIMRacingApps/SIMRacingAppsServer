@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -96,6 +97,15 @@ public class Post extends SIMPluginCallback {
         Subscribe("Version");
         Subscribe("Session/Id");
         Subscribe("Session/LeagueId");
+        Subscribe("Car/ME/IsSpectator");
+        
+        for (int i=0; i < 64; i++) {
+            Subscribe(String.format("Car/I%d/Number", i));
+            Subscribe(String.format("Car/I%d/DriverName", i));
+            Subscribe(String.format("Car/I%d/ClassName", i));            
+            Subscribe(String.format("Car/I%d/IsSpectator", i));
+            Subscribe(String.format("Car/I%d/IsPaceCar", i));
+        }
         
         //these the user can override with their own properties file.
         while (itr.hasNext()) {
@@ -152,10 +162,11 @@ public class Post extends SIMPluginCallback {
                     
         //read the data and do something with it. You are in your own thread now.
         Data leagueId = data.get("Session/LeagueId");
+        Data isSpectatorME = data.get("Car/ME/IsSpectator");
 
         int interval = Server.getArg(String.format("datapublisher-post-interval-%s",leagueId.getString()), 5000);
 
-        if (m_lastUpdate + interval <= System.currentTimeMillis()) {
+        if (!isSpectatorME.getBoolean() && m_lastUpdate + interval <= System.currentTimeMillis()) {
     
             String publish_URL = Server.getArg(String.format("datapublisher-post-url-%s",leagueId.getString()),"");
             
@@ -195,6 +206,29 @@ public class Post extends SIMPluginCallback {
                         m_session = (String) output_map.get("Session/Id");
                         m_date    = (String) output_map.get("PostDateGMT");
                     }
+
+                    ArrayList<Map<String,String>> drivers = new ArrayList<Map<String,String>>();
+
+                    for (int i=0; i < 64; i++) {
+                        Data number = data.get(String.format("Car/I%d/Number", i));
+                        Data isSpectator = data.get(String.format("Car/I%d/IsSpectator", i));
+                        Data isPaceCar = data.get(String.format("Car/I%d/IsPaceCar", i));
+                        
+                        if (number != null 
+                        && !number.getString().isEmpty() 
+                        && !isSpectator.getBoolean()
+                        && !isPaceCar.getBoolean()
+                        ) {
+                            Map<String,String> driver = new HashMap<String,String>();
+                            
+                            driver.put("Number",number.getString());
+                            driver.put("DriverName",data.get(String.format("Car/I%d/DriverName", i)).getString());
+                            driver.put("ClassName",data.get(String.format("Car/I%d/ClassName", i)).getString());
+                            drivers.add(driver);
+                        }
+                    }
+
+                    output_map.put("Drivers", drivers);
                     
                     output_map.put("StartDateGMT", m_date);
 
