@@ -221,7 +221,10 @@ chat-row1-col1-text = /RL-1 [#[CARNUMBER]] Pass Left
 ###     DataPublisher-Post = Y
 ### The default interval is 5000 milliseconds, change that by adding
 ###     DataPublisher-Post-Interval-{leagueID} = 10000 
+### Log the data being sent and received
+###     DataPublisher-Post-Log = false
 #####################################################################
 DataPublisher-Post = N
 DataPublisher-Post-URL-{leagueID} = http://yourLeague/...
 DataPublisher-Post-Interval-{leagueID} = 5000
+DataPublisher-Post-Log = false

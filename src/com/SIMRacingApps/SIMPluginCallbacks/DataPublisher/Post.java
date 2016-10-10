@@ -44,6 +44,7 @@ public class Post extends SIMPluginCallback {
 	private String m_date = "1970-01-01 00:00:00";
     private SimpleDateFormat m_dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private Map<String,Object> m_results = new HashMap<String,Object>();
+    private boolean m_logit = false;
 
     /**
 	 * Constructor. 
@@ -55,6 +56,8 @@ public class Post extends SIMPluginCallback {
     public Post(SIMPlugin SIMPlugin) throws SIMPluginException {
 		super(SIMPlugin,"DataPublisher.Post");
 		
+        m_logit = Server.getArg("datapublisher-post-log",m_logit);
+        
 		m_genson = new Genson();
 	    m_dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
 		
@@ -176,6 +179,8 @@ public class Post extends SIMPluginCallback {
                     URL url = new URL(publish_URL);
                     HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
                     urlc.setRequestProperty("Referer", "http://SIMRacingApps.com/");
+                    urlc.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                    
                     urlc.setRequestMethod("POST");
                     urlc.setDoInput(true);
                     urlc.setDoOutput(true);
@@ -237,7 +242,10 @@ public class Post extends SIMPluginCallback {
                     if (os != null) {
                         String packet = m_genson.serialize(output_map);
                         
-                        os.write(packet.getBytes());
+                        if (m_logit)
+                            Server.logger().info(String.format("DataPublisher.Post.Sent = %s", packet));
+                            
+                        os.write(packet.getBytes("UTF-8"));
                         os.flush();
                         os.close();
                         
@@ -270,7 +278,8 @@ public class Post extends SIMPluginCallback {
                                 }
                             }
                             catch (Exception e) {}
-                            Server.logger().finer(String.format("DataPublish.Post Server Returned %s",result));
+                            if (m_logit)
+                                Server.logger().info(String.format("DataPublish.Post Server Returned %s",result));
                         }
                     }
                 }
