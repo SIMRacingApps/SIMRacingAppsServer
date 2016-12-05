@@ -65,7 +65,7 @@ public class PitSpeedLimit extends SIMPluginCallback {
         if (!clip.getErrorMessage().isEmpty())
             clip = new Sound(m_device,defaultFile);
         
-        clip.setVolume(m_volume * 100.0);
+        clip.setVolume(m_volume);
         clip.setMinTimeBetweenPlays(m_rate);
         m_clip = clip;
         

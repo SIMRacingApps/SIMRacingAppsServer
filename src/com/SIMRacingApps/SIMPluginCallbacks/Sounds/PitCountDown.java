@@ -72,7 +72,7 @@ public class PitCountDown extends SIMPluginCallback {
             Sound clip = new Sound(m_device,String.format(soundPattern,i));
             if (!clip.getErrorMessage().isEmpty())
                 clip = new Sound(m_device,String.format(defaultPattern,i));
-            clip.setVolume(m_volume * 100.0);
+            clip.setVolume(m_volume);
             clip.setMinTimeBetweenPlays(15000);
             m_clips.add(clip);
         }

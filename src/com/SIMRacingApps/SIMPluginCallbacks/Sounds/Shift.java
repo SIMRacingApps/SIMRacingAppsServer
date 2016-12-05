@@ -61,7 +61,7 @@ public class Shift extends SIMPluginCallback {
         if (!clip.getErrorMessage().isEmpty())
             clip = new Sound(m_device,defaultFile);
         
-        clip.setVolume(m_volume * 100.0);
+        clip.setVolume(m_volume);
         clip.setMinTimeBetweenPlays(500);
         m_clip = clip;
         
