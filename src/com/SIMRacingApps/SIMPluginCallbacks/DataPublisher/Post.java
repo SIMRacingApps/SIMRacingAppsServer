@@ -6,18 +6,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.TimeZone;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 
 import com.owlike.genson.*;
 import com.SIMRacingApps.Data;
@@ -27,8 +22,164 @@ import com.SIMRacingApps.SIMPlugin.SIMPluginException;
 import com.SIMRacingApps.SIMPluginCallbacks.SIMPluginCallback;
 
 /**
- * TODO: Pull documentation from http://issues.simracingapps.com/71
- *
+ * This plugin will be designed to send that data to an external web server. 
+ * For it to work properly, each driver would need to be running SRA 
+ * with the web server address configured. The web server would need 
+ * to write the data to a database and then provide several views to 
+ * that data to accomplish what you want.
+ * <p>
+ * Note: It's important to not publish any data that the SIM Vendor would consider cheating, 
+ * or that a driver would not want shared.
+ * <p>
+ * Each user would have to enter the web server address into their settings file for this plugin to start publishing. Each entry will have to have the League ID appended. The League ID can be found by looking at the URL on the Leagues Page to "View" the league in iRacing. PRL's league id for the AdvoCare league is 1643. (NOTE: Using a league id of zero(0) will publish all other iRacing Sessions). Unless a URL is defined for a league, it will not publish anything.
+ * <pre>
+ * settings.txt:
+ * 1. DataPublisher-Post = true
+ * 2. DataPublisher-Post-URL-1643 = http://www.YourLeaguesWebsite.com/Data
+ * 3. DataPublisher-Post-Interval-1643 = 5000
+ * 4. DataPublisher-Post-Log = false
+ * </pre>
+ * The plugin will start sending data, for the defined interval in milliseconds, 
+ * using a HTTP POST with the data as a JSON formatted payload. 
+ * The web server would have to be able to parse this and store it in a database. 
+ * <pre>
+ * Here's a PHP example.
+ * 
+ * $json = file_get_contents('php://input');
+ * $obj = json_decode($json);
+ * </pre>
+ * The web server doesn't have to use all the fields, 
+ * but should also expect new fields to be added at any time. 
+ * Also, each publisher may not be on the same SRA version, 
+ * thus each driver may be publishing different fields. 
+ * Also, timing of each driver could be different, such that, 
+ * 2 drivers could be the leader in position 1, but that should work itself out within a few seconds.
+ * <p>
+ * Example JSON Payload 
+ * (Each of these corresponds to the API call to get them http://simracingapps.com/docs/JavaScriptDoc/index.html):
+ * <pre> 
+ * {
+ *     "Version": "1.1 Build: 2016.09.15",
+ *     "SIMName": "iRacing",
+ *     "SIMVersion": "iRacing Plugin Version: 1.1 Build: 2016.09.15",
+ *     "Session/DiffCars/ME/LEADER": -3.211,
+ *     "Session/Id": "116/1075/45011263/10718048",
+ *     "Session/IsCautionFlag": false,
+ *     "Session/LeagueId": 1643,
+ *     "Session/Type", "RACE",
+ *     "Session/Lap": 2,
+ *     "Session/Laps": 200,
+ *     "Session/LapsToGo": 198,
+ *     "Session/StrengthOfField": 2443,
+ *     "Session/Cars": 32,
+ *     "Session/StartDateGMT": "2016-12-25 01:10:00",
+ *     "Session/PostDateGMT": "2016-12-25 01:10:05",
+ *     "Track/Description": "Atlanta Motor Speedway",
+ *     "Car/ME/TeamName": "Trucks",
+ *     "Car/ME/DriverName": "James Krahula",
+ *     "Car/ME/DriverNameShort": "J. Krahula",
+ *     "Car/ME/DriverInitials": "JK",
+ *     "Car/ME/Id": 12345,
+ *     "Car/ME/DriverClubName": "Georgia",
+ *     "Car/ME/Discontinuality": 0,
+ *     "Car/ME/ClassName": "GT3",
+ *     "Car/ME/ClassColor": "14540253",
+ *     "Car/ME/Description": "Chevrolet Silverado",
+ *     "Car/ME/DriverRating": "12345-A3.65",
+ *     "Car/ME/Number": "24",
+ *     "Car/ME/NumberSlant": "forward",
+ *     "Car/ME/Color": "14540253",
+ *     "Car/ME/ColorNumberBackground": "14540253",
+ *     "Car/ME/ColorNumberOutline": "14540253",
+ *     "Car/ME/ColorNumber": "14540253",
+ *     "Car/ME/Lap": 22,
+ *     "Car/ME/Lap/LED": 1,
+ *     "Car/ME/PitTime": 13.3,
+ *     "Car/ME/Gauge/TirePressureLF/Count": 1,
+ *     "Car/ME/Gauge/TirePressureLR/Count": 1,
+ *     "Car/ME/Gauge/TirePressureRF/Count": 2,
+ *     "Car/ME/Gauge/TirePressureRR/Count": 2,
+ *     "Car/ME/Position": 3,
+ *     "Car/ME/PositionQualifying": 2,
+ *     "Car/ME/PositionClass": 1,
+ *     "Car/ME/PositionQualifyingClass": 1,
+ *     "Car/ME/Lap/BEST": 32.123,
+ *     "Car/ME/LapTime/BEST": 3,
+ *     "Car/ME/LapTime/LAST": 33.222,
+ *     "Car/ME/Lap/COMPLETED": 21,
+ *     "Car/ME/Lap/PITTED": 17,
+ *     "Car/ME/LapTimes": [32.123,32.3,32.4,...],
+ *     "Car/ME/PitTimes": [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13.3],
+ *     "Car/ME/IsBlackFlag": false,
+ *     "Drivers" : [
+ *         {
+ *             "Number": "24",
+ *             "DriverName": "James Krahula",
+ *             "ClassName": "Trucks"
+ *         },
+ *         {
+ *             "Number": "61",
+ *             "DriverName": "Jeffrey Gilliam",
+ *             "ClassName": "Trucks"
+ *         }
+ *     ]
+ * }
+ * </pre>
+ * The web server should return the following in the response packet payload. 
+ * I will see if I can either display these or actually enforce them. 
+ * The positions are your real-time points positions based on how your league works. 
+ * I will write new Widget to display these like the Standings App does.
+ * <pre>
+ * {
+ *     "MaxTires": 3,
+ *     "DriverInfo" : [
+ *         {
+ *             "Car/ME/Number": "24",
+ *             "Car/ME/TirePressureRF/Count": 0,
+ *             "Car/ME/TirePressureRR/Count": 0,
+ *             "Car/ME/TirePressureLF/Count": 1,
+ *             "Car/ME/TirePressureLR/Count": 1,
+ *             "Car/ME/IsChase": true
+ *         },
+ *         {
+ *             "Car/ME/Number": "61",
+ *             "Car/ME/TireRF/Count": 1,
+ *             "Car/ME/TireRR/Count": 1,
+ *             "Car/ME/TireLF/Count": 1,
+ *             "Car/ME/TireLR/Count": 1,
+ *             "Car/ME/IsChase": false
+ *         }
+ *     ],
+ *     "LeaguePositions": [
+ *         {
+ *             "DriverName": "James Krahula",
+ *             "Number": "24",
+ *             "Points": 4022,
+ *             "Change": 3
+ *         },
+ *         {
+ *             "DriverName": "Jeffrey Gilliam",
+ *             "Number": "61",
+ *             "Points": 4023,
+ *             "Change": -1
+ *         },
+ *         ...
+ *     ],
+ *     "LeaguePositionsClass": [
+ *         "GT3": [
+ *             {
+ *                 "DriverName": "Jeffrey Gilliam",
+ *                 "Number": "61",
+ *                 "Points": 4023,
+ *                 "Change": 3
+ *             },
+ *             ...
+ *         ],
+ *         ...
+ *     ]
+ * }
+ * </pre>
+ * 
  * @author    Jeffrey Gilliam
  * @since     1.2
  * @copyright Copyright (C) 2015 - 2016 Jeffrey Gilliam
