@@ -26,7 +26,7 @@ import com.sun.jna.platform.win32.Advapi32Util;
  * This class has helper methods for finding and opening files in the user's path or classpath.
  * 
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2016 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2017 Jeffrey Gilliam
  * @since 1.0
  * @license Apache License 2.0
  */

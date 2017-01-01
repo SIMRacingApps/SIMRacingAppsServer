@@ -47,7 +47,7 @@ import com.owlike.genson.stream.JsonStreamException;
  *      "licenseUrl": "/SIMRacingApps/LICENSE.TXT",
  *      "minor": "0",
  *      "license": "Apache License, Version 2.0, January 2004",
- *      "copyright": "Copyright (C) 2015 - 2016 Jeffrey Gilliam",
+ *      "copyright": "Copyright (C) 2015 - 2017 Jeffrey Gilliam",
  *      "major": "1",
  *      "noticeUrl": "/SIMRacingApps/NOTICE.TXT",
  *      "build": "BETA-2015.06.29",

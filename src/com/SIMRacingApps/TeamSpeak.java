@@ -29,7 +29,7 @@ import com.SIMRacingApps.Data;
  * See an example test application at the bottom of the source code.
  * @author Jeffrey Gilliam
  * @since 1.0
- * @copyright Copyright (C) 2015 - 2016 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2017 Jeffrey Gilliam
  * @license Apache License 2.0
  */
 public class TeamSpeak {

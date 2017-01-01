@@ -6,7 +6,7 @@ import com.SIMRacingApps.JComponents.JWidgetPanel;
  * This is the base class for all Java Widgets.
  * 
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2016 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2017 Jeffrey Gilliam
  * @since 1.0
  * @license Apache License 2.0
  */

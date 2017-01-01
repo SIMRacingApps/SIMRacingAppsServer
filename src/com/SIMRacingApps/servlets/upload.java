@@ -38,7 +38,7 @@ import com.SIMRacingApps.Util.FindFile;
  *    widgets\MyNewWidget\listing.properties
  * </pre>
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2016 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2017 Jeffrey Gilliam
  * @since 1.0
  * @license Apache License 2.0
  */
