@@ -29,6 +29,7 @@ import com.SIMRacingApps.SIMPlugin.SIMPluginException;
 import com.SIMRacingApps.Server;
 import com.SIMRacingApps.Windows;
 import com.SIMRacingApps.Util.FindFile;
+import com.SIMRacingApps.Util.URLBroadcastThread;
 
 /**
  * This class implements the "/Data" interface for the HTTP protocol.
@@ -282,6 +283,7 @@ public class Data extends HttpServlet {
         }
         
         DataService.start();
+        URLBroadcastThread.start(ip);
     }
 
     /**
