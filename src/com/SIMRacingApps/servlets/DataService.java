@@ -573,21 +573,27 @@ public class DataService {
                             String[] callbacksToLoad = ("MSPEC.ShiftLight;Sounds.PitCountDown;Sounds.PitSpeedLimit;Sounds.Shift;DataPublisher.Post;"+Server.getArg("simplugins","")).split(";");
                             
                             for (int i=0; i < callbacksToLoad.length; i++) {
+                                String callback = callbacksToLoad[i].trim();
                                 boolean okToLoad = Server.getArg(
-                                                    callbacksToLoad[i].replaceAll("[.]", "-"), 
-                                                    callbacksToLoad[i].equals("DataPublisher.Post") 
-                                                    ? false 
-                                                    : true
+                                                    callback.replaceAll("[.]", "-"),
+                                                    Server.getArg(
+                                                        callback,
+                                                        callback.equals("DataPublisher.Post") 
+                                                        ? false 
+                                                        : true
+                                                    )
                                                   );
                                 
-                                for (int j=0; j < callbacksToLoad.length; j++)
-                                    if (callbacksToLoad[j].startsWith("!") && callbacksToLoad[j].substring(1).equals(callbacksToLoad[i]))
+                                for (int j=0; j < callbacksToLoad.length; j++) {
+                                    String callback2 = callbacksToLoad[j].trim();
+                                    if (callback2.startsWith("!") && callback2.substring(1).equals(callback))
                                         okToLoad = false;
+                                }
                                 
                                 //if callback starts with an exclamation point, then that means do not load it
                                 //this way the built in callbacks can be turned off.
-                                if (okToLoad && !callbacksToLoad[i].startsWith("!"))
-                                    m_SIMPlugin.addCallback(callbacksToLoad[i]);
+                                if (okToLoad && !callback.startsWith("!"))
+                                    m_SIMPlugin.addCallback(callback);
                             }
                         }
     

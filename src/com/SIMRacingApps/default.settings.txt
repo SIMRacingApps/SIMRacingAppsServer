@@ -17,7 +17,7 @@ port = 80
 #####################################################################
 ### The SIM to connect to. Valid SIMs are:
 ###    iRacing
-###    ...more to come someday. Want to contribute?
+###    ...more to come someday. Know Java and want to contribute?
 #####################################################################
 sim = iRacing
 
@@ -87,7 +87,7 @@ level = INFO
 ### By default the light will come on when speeding. You can control
 ### this with the "mspec-speeding" variable
 #####################################################################
-MSPEC.ShiftLight = N
+MSPEC-ShiftLight = N
 #mspec-rpm = 3
 #mspec-yellowflag = 3
 #mspec-greenflag = 3
@@ -142,7 +142,7 @@ minimum-speed-percentage   = 110
 ### overall master sound-device.
 ### The volume is a percentage of the master "sound-volume" setting.
 #####################################################################
-Sounds.PitCountDown = Y
+Sounds-PitCountDown = Y
 #pit-count-down-device = 
 pit-count-down-volume = 1
 pit-count-down-play10 = Y
@@ -162,7 +162,7 @@ pit-count-down-replay = false
 ### overall master sound-device.
 ### The volume is a percentage of the master "sound-volume" setting.
 #####################################################################
-Sounds.PitSpeedLimit = Y
+Sounds-PitSpeedLimit = Y
 #pit-speed-limit-device = 
 pit-speed-limit-volume = 1
 pit-speed-limit-beep-rate = 200
@@ -176,7 +176,7 @@ pit-speed-limit-replay = false
 ### overall master sound-device.
 ### The volume is a percentage of the master "sound-volume" setting.
 #####################################################################
-Sounds.Shift = Y
+Sounds-Shift = Y
 #shift-device = 
 shift-volume = 1
 shift-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/shift_beep.wav
