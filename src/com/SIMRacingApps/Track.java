@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
@@ -71,6 +72,7 @@ public class Track {
     private Map<String,Object> m_trackmap = null;
     private Map<String,ArrayList<Map<String,Double>>> m_trackpaths = new HashMap<String,ArrayList<Map<String,Double>>>();
     private long m_lastLoadTime = 0L;
+    private Locale m_us = new Locale("us"); //used to override formatting for key lookups
 
 //    protected String m_distanceUOM, m_tempUOM, m_speedUOM;
 
@@ -229,7 +231,7 @@ public class Track {
                                     if (name.equalsIgnoreCase("Center")) {
                                         m_trackmap.put("Latitude", lat);
                                         m_trackmap.put("Longitude", lon);
-                                        Server.logger().info(String.format("Center = %f,%f",lat,lon));
+                                        Server.logger().info(String.format(m_us,"Center = %f,%f",lat,lon));
                                     }
                                 }
                             }
@@ -268,7 +270,7 @@ public class Track {
                                 
                                 while (i > 0 
                                 &&     prevPercent + .001 < rec.percent
-                                &&     !String.format("%.1f", (prevPercent + .001) * 100.0).equals(String.format("%.1f", rec.percent * 100.0))
+                                &&     !String.format(m_us,"%.1f", (prevPercent + .001) * 100.0).equals(String.format(m_us,"%.1f", rec.percent * 100.0))
                                 ) {
                                     double percent = prevPercent + 0.001; //This is the next precent we need to write out.
                                     double percentDiff = (percent - prevRec.percent) / (rec.percent - prevRec.percent);
@@ -280,9 +282,9 @@ public class Track {
                                     percentageEntry.put("Latitude",  prevRec.lat + latDiff);
                                     percentageEntry.put("Longitude", prevRec.lon + lonDiff);
                                     percentageEntry.put("Bearing",rec.bearing);
-                                    percentageMap.put(String.format("%.1f", percent * 100.0), percentageEntry);
+                                    percentageMap.put(String.format(m_us,"%.1f", percent * 100.0), percentageEntry);
                                     
-                                    String s = String.format("%s, \"%.1f\": { \"Latitude\": %-16.12f, \"Longitude\": %-16.12f, \"Bearing\": %-16.12f }",
+                                    String s = String.format(m_us,"%s, \"%.1f\": { \"Latitude\": %-16.12f, \"Longitude\": %-16.12f, \"Bearing\": %-16.12f }",
                                             GPXEntry.getKey(), 
                                             percent * 100.0,
                                             prevRec.lat + latDiff,
@@ -293,24 +295,24 @@ public class Track {
                                     prevPercent = percent;
                                 }
                 
-                                if (i == 0 || !String.format("%.1f", prevPercent * 100.0).equals(String.format("%.1f", rec.percent * 100.0))) {
+                                if (i == 0 || !String.format(m_us,"%.1f", prevPercent * 100.0).equals(String.format(m_us,"%.1f", rec.percent * 100.0))) {
                                         
                                     Map<String,Double> percentageEntry = new HashMap<String,Double>();
                                     percentageEntry.put("Latitude",  rec.lat);
                                     percentageEntry.put("Longitude", rec.lon);
                                     percentageEntry.put("Bearing",rec.bearing + 270.0);
-                                    percentageMap.put(String.format("%.1f", rec.percent * 100.0), percentageEntry);
+                                    percentageMap.put(String.format(m_us,"%.1f", rec.percent * 100.0), percentageEntry);
                                     
                                     if (rec.name.equalsIgnoreCase("MergePoint")) {
                                         //TODO: Do I Override the MergePoint or only add it if missing. ONTRACK or ONPITROAD?
                                         if (GPXEntry.getKey().equals("ONTRACK")) {
                                             mergePoints.add(rec.percent * 100.0);
                                             //m_trackmap.put("MergePoint", rec.percent * 100.0);
-                                            Server.logger().info(String.format("%s.MergePoint = %f",GPXEntry.getKey(),rec.percent * 100.0));
+                                            Server.logger().info(String.format(m_us,"%s.MergePoint = %f",GPXEntry.getKey(),rec.percent * 100.0));
                                         }
                                     }
                                     
-                                    String s = String.format("%s, \"%.1f\": { \"Latitude\": %-16.12f, \"Longitude\": %-16.12f, \"Distance\": \"%-16.12fm / %-16.12fm\", \"Bearing\": %-16.12f, \"Name\": \"%s\" }",
+                                    String s = String.format(m_us,"%s, \"%.1f\": { \"Latitude\": %-16.12f, \"Longitude\": %-16.12f, \"Distance\": \"%-16.12fm / %-16.12fm\", \"Bearing\": %-16.12f, \"Name\": \"%s\" }",
                                                GPXEntry.getKey(),
                                                rec.percent * 100.0,
                                                rec.lat,
@@ -537,12 +539,12 @@ public class Track {
             @SuppressWarnings("unchecked")
             Map<String,Map<String,Double>> map = (Map<String, Map<String, Double>>) m_trackmap.get(location.toUpperCase());
             if (map != null) {
-                Map<String,Double> latlng = map.get(String.format("%.1f",percentage));
+                Map<String,Double> latlng = map.get(String.format(m_us,"%.1f",percentage));
                 if (latlng != null) {
                     bearing = latlng.get("Bearing");
                     if (bearing == null) {
                         //get the previous location behind us
-                        Map<String,Double> prevlatlng = map.get(String.format("%.1f",percentage - 0.1));
+                        Map<String,Double> prevlatlng = map.get(String.format(m_us,"%.1f",percentage - 0.1));
                         if (percentage < 0.1) {
                             latlng = map.get("100.0");
                             prevlatlng = map.get("99.9");
@@ -552,7 +554,7 @@ public class Track {
                     }
                 }
                 else
-                    Server.logger().fine(String.format("TrackMap(%s) missing %.1f",location,percentage));
+                    Server.logger().fine(String.format(m_us,"TrackMap(%s) missing %.1f",location,percentage));
             }
         }
 
@@ -691,11 +693,11 @@ public class Track {
                     @SuppressWarnings("unchecked")
                     Map<String,Map<String,Double>> map = (Map<String, Map<String, Double>>) m_trackmap.get(location.toUpperCase());
                     if (map != null) {
-                        Map<String,Double> latlng = map.get(String.format("%.1f",percentage));
+                        Map<String,Double> latlng = map.get(String.format(m_us,"%.1f",percentage));
                         if (latlng != null)
                             lat = latlng.get("Latitude");
                         else
-                            Server.logger().fine(String.format("TrackMap(%s) missing %.1f",location,percentage));
+                            Server.logger().fine(String.format(m_us,"TrackMap(%s) missing %.1f",location,percentage));
                     }
                 }
             }
@@ -770,11 +772,11 @@ public class Track {
                     @SuppressWarnings("unchecked")
                     Map<String,Map<String,Double>> map = (Map<String, Map<String, Double>>) m_trackmap.get(location.toUpperCase());
                     if (map != null) {
-                        Map<String,Double> latlng = map.get(String.format("%.1f",percentage));
+                        Map<String,Double> latlng = map.get(String.format(m_us,"%.1f",percentage));
                         if (latlng != null)
                             lng = latlng.get("Longitude");
                         else
-                            Server.logger().fine(String.format("TrackMap(%s) missing %.1f",location,percentage));
+                            Server.logger().fine(String.format(m_us,"TrackMap(%s) missing %.1f",location,percentage));
                     }
                 }
             }
@@ -868,7 +870,7 @@ public class Track {
                     @SuppressWarnings("unchecked")
                     Map<String,Map<String,Double>> map = (Map<String, Map<String, Double>>) m_trackmap.get(location.toUpperCase());
                     if (map != null) {
-                        segment = map.get(String.format("Segment-%d",i));
+                        segment = map.get(String.format(m_us,"Segment-%d",i));
                         if (segment != null) {
                             segments.add(segment);
                         }
