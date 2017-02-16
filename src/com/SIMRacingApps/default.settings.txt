@@ -190,9 +190,9 @@ shift-replay = false
 ### There are 6 rows of buttons for a total of 24 different buttons.
 ### Each button must have a button name and the text to send separated by a semi-colon. 
 ### For Example:
-###    chat-row1-col1-name = PASS LEFT
+###    chat-row1-col1-name = /[CAR]<br />PASS LEFT
 ###    chat-row1-col1-text = /RL-1 [#[CARNUMBER]] Pass Left
-###    chat-row2-col1-name = PASS RIGHT
+###    chat-row2-col1-name = /[CAR]<br />PASS RIGHT
 ###    chat-row2-col1-text = /RL-1 [#[CARNUMBER]] Pass Right
 ###
 ### The following fields will be replaced in the text with the following values:
@@ -203,10 +203,10 @@ shift-replay = false
 ### If the text starts with a slash(/), then the car to send it to follows.
 ### You can override this by selecting a car first in the widget.
 #####################################################################
-chat-row1-col1-name = PASS LEFT
+chat-row1-col1-name = /[CAR]<br />PASS LEFT
 chat-row1-col1-text = /RL-1 [#[CARNUMBER]] Pass Left
-#chat-row2-col1-name = PASS RIGHT
-#chat-row2-col1-text = /RL-1 [#[CARNUMBER]] Pass Right
+chat-row2-col1-name = /[CAR]<br />PASS RIGHT
+chat-row2-col1-text = /RL-1 [#[CARNUMBER]] Pass Right
 
 #####################################################################
 ### Setup for DataPublisher
