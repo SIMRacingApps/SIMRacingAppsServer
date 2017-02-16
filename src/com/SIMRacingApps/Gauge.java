@@ -689,17 +689,29 @@ public class Gauge {
    public void setDefaultUOM(String uom)  { m_defaultUOM = uom; }
    
     /**
-      * Returns the Unit of Measure for this gauge (i.e. "F")
+      * Returns the Internal Unit of Measure for this gauge (i.e. "F")
       * 
-      * <p>PATH = {@link #getUOM() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/UOM}
+      * <p>PATH = {@link #getInternalUOM() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/InternalUOM}
       * 
-      * @return The Unit of Measure.
+      * @return The Internal Unit of Measure.
       */
-    public Data getUOM()                  {
-        Data withUOM = new Data("",0.0,m_uom).convertUOM(m_defaultUOM);
-        return new Data("Car/"+m_car+"/Gauge/"+m_type+"/UOM",withUOM.getUOM(),"String",Data.State.NORMAL); 
+    public Data getInternalUOM()                  {
+        return new Data("Car/"+m_car+"/Gauge/"+m_type+"/InternalUOM",m_uom,"String",Data.State.NORMAL); 
     }
     
+    /**
+     * Returns the Unit of Measure for this gauge (i.e. "F") based on the users locale.
+     * This may not be the same as the internal UOM that is what all the values are in.
+     * All the values are converted to this UOM before returning them.
+     * 
+     * <p>PATH = {@link #getUOM() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/UOM}
+     * 
+     * @return The Unit of Measure.
+     */
+   public Data getUOM()                  {
+       Data withUOM = new Data("",0.0,m_uom).convertUOM(m_defaultUOM);
+       return new Data("Car/"+m_car+"/Gauge/"+m_type+"/UOM",withUOM.getUOM(),"String",Data.State.NORMAL); 
+   }
     /**
       * Sets the unit of measure.
       * See {@link com.SIMRacingApps.Gauge#getUOM()}
@@ -1540,7 +1552,8 @@ public class Gauge {
     }
     
     /**
-     * Add a new state range to this gauge.
+     * Add a new state range to this gauge. 
+     * The values should be in the same UOM that getInternalUOM() returns.
      * @param name  The name of the state.
      * @param start The starting value, inclusive.
      * @param end   The ending value, exclusive.
@@ -1553,6 +1566,7 @@ public class Gauge {
 
     /**
      * Add a new state range to this gauge that transforms the value.
+     * The values should be in the same UOM that getInternalUOM() returns.
      * @param name  The name of the state.
      * @param start The starting value, inclusive.
      * @param end   The ending value, exclusive.

@@ -2063,7 +2063,7 @@ public class Car {
             //This code cannot make any assumptions about the error the track code may return.
             //In my test file, the speed limit is a published 45mph, but the track code returns 44.7.
             //My point is, the track code should round it up or floor it, not this code.
-            double PitRoadSpeedLimit = m_SIMPlugin.getSession().getTrack().getPitSpeedLimit(gauge.getUOM().getString()).getDouble();
+            double PitRoadSpeedLimit = m_SIMPlugin.getSession().getTrack().getPitSpeedLimit(gauge.getInternalUOM().getString()).getDouble();
 
             //double WayOverPitSpeed     = 1.10;
             double WayOverPitSpeed     = (PitRoadSpeedLimit + (gauge.getUOM().equals("mph") ? 15.0 : 25.0)) / PitRoadSpeedLimit;
