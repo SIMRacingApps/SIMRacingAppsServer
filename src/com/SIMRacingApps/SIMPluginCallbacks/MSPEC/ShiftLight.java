@@ -17,6 +17,7 @@ import com.SIMRacingApps.SIMPluginCallbacks.SIMPluginCallback;
 
 /**
  * This class implements the interface to the MSPEC Shift Light.
+ * This light can be purchase from <a href="http://shiftlight.com.au">MSPEC ShiftLight</a>
  * <p>
  * Each light must have a unique port assigned to it in the settings.
  * For example: If your light is on COM3, then use
