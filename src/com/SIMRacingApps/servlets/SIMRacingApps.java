@@ -30,6 +30,10 @@ import com.SIMRacingApps.Util.FindFile;
  * http://localhost/SIMRacingApps/com/SIMRacingApps/Tracks/daytona_oval.json
  * <p>
  * http://localhost/SIMRacingApps/com/SIMRacingApps/Tracks/daytona.png
+ * @author Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2017 Jeffrey Gilliam
+ * @since 1.1
+ * @license Apache License 2.0
  */
 @WebServlet(description = "Returns the requested resource doGet()", urlPatterns = { "/SIMRacingApps", "/SIMRacingApps/*" }, loadOnStartup=1)
 public class SIMRacingApps extends HttpServlet {

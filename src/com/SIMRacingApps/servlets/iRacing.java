@@ -21,6 +21,10 @@ import com.SIMRacingApps.Server;
  * It serves as a proxy to the internal iRacing server so clients can call it from external devices.
  * It simply passes the portion of the URL that comes after /iRacing to the iRacing server.
  * What gets returned is defined by iRacing, so consult their documentation as needed.
+ * @author Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2017 Jeffrey Gilliam
+ * @since 1.1
+ * @license Apache License 2.0
  */
 @WebServlet(description = "Returns the requested resource doGet()", urlPatterns = { "/iRacing/*" }, loadOnStartup=0)
 public class iRacing extends HttpServlet {
