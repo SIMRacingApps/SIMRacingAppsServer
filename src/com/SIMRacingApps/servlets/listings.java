@@ -54,7 +54,20 @@ import com.owlike.genson.stream.JsonStreamException;
  *      "copyrightUrl": "/SIMRacingApps/COPYRIGHT.TXT",
  *      "built-by": "Jeffrey Gilliam",
  *      "releasenotes": "/SIMRacingApps/documentation/SIMRacingApps_ReleaseNotes.txt",
- *      "userpath": "C:\Users\Jeff\SIMRacingApps"
+ *      "userpath": "C:\Users\Jeff\SIMRacingApps",
+ *      "translations": {
+ *          "COPYRIGHT":    "Copyright",
+ *          "LICENSE":      "License",
+ *          "NOTICE":       "NOTICE",
+ *          "RELEASENOTES": "Release Notes",
+ *          "VERSION":      "Version",
+ *          "favorites":    "Favorites",
+ *          "apps":         "Apps",
+ *          "widgets":      "Widgets",
+ *          "documentation":"Documentation",
+ *          "installbefore":"To install or update an App, Widget or Patch, choose a File to upload, then click 'Upload.' Files will be uploaded into your user directory",
+ *          "installafter": "which is searched first by the server."
+ *      }
  *  },
  *  "headers": [
  *      "apps",
@@ -160,6 +173,13 @@ public class listings extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Server.logger().info(String.format("doGet() called"));
 
+        String lang = "";
+        
+        if (request.getParameter("lang") != null) {
+            lang = request.getParameter("lang");
+            Server.logger().info("lang = "+lang);
+        }
+        
         //add these headers to try and prevent the various browsers from caching this data
         response.addHeader("Expires", "Sat, 01 Mar 2014 00:00:00 GMT");
         response.addHeader("Pragma", "no-cache");
@@ -193,6 +213,41 @@ public class listings extends HttpServlet {
                 if (count++ > 0)
                     JSON.append(",");
                 JSON.append("\"userpath\": \"" + String.join(";", FindFile.getUserPath()).replace("\\", "/") + "\"");
+                
+                in = this.getClass().getClassLoader().getResourceAsStream("nls/menu-text-"+lang+".properties");
+                if (in == null) {
+                    //try to split the language and remove the country piece
+                    String[] langs = lang.split("[-]");
+                    if (langs.length > 0) {
+                        in = this.getClass().getClassLoader().getResourceAsStream("nls/menu-text-"+langs[0]+".properties");
+                    }
+                }
+                if (in == null) {
+                    //No translation, use english
+                    in = this.getClass().getClassLoader().getResourceAsStream("nls/menu-text-en-us.properties");
+                }
+                if (in == null) {
+                    //No translation, use english
+                    in = this.getClass().getClassLoader().getResourceAsStream("nls/menu-text-en.properties");
+                }
+
+                Properties translations = new Properties();
+                translations.load(in);
+                JSON.append(",\"translations\": {");
+                itr = translations.entrySet().iterator();
+                count = 0;
+                while (itr.hasNext()) {
+                    Entry<Object,Object> entry = itr.next();
+                    if (count++ > 0)
+                        JSON.append(",");
+                    JSON.append("\"");
+                    JSON.append(entry.getKey());
+                    JSON.append("\": \"");
+                    JSON.append(entry.getValue());
+                    JSON.append("\"");
+                }
+                JSON.append("}\n");
+                
                 JSON.append("}\n");
             } catch (IOException e) {
                 Server.logStackTrace(Level.WARNING, "while reading version.properties",e);
@@ -206,21 +261,21 @@ public class listings extends HttpServlet {
         Map<String,Map<String,Object>> favoritesList = new TreeMap<String,Map<String,Object>>();
         _loadListFavorites("favorites",favoritesList);
         JSON.append(",\"favorites\": [\n");
-        JSON.append(_getJSON("favorites",favoritesList));
+        JSON.append(_getJSON("favorites",favoritesList,lang));
         JSON.append("]\n");
         
         Map<String,Map<String,Object>> appsList = new TreeMap<String,Map<String,Object>>();
         _loadListUser("apps",appsList);
         _loadList("apps",appsList);
         JSON.append(",\"apps\": [\n");
-        JSON.append(_getJSON("apps",appsList));
+        JSON.append(_getJSON("apps",appsList,lang));
         JSON.append("]\n");
 
         Map<String,Map<String,Object>> widgetsList = new TreeMap<String,Map<String,Object>>();
         _loadListUser("widgets",widgetsList);
         _loadList("widgets",widgetsList);
         JSON.append(",\"widgets\": [\n");
-        JSON.append(_getJSON("widgets",widgetsList));
+        JSON.append(_getJSON("widgets",widgetsList,lang));
         JSON.append("]\n");
         
         Map<String,Map<String,Object>> docsList = new TreeMap<String,Map<String,Object>>();
@@ -229,7 +284,7 @@ public class listings extends HttpServlet {
         JSON.append("   ,{ \"name\": \"SIMRacingApps - Java API Reference\", \"description\": \"Not Just for Java. Has details on how API works.\", \"doc\": \"JavaDoc/index.html\", \"url\": \"JavaDoc/index.html\", \"width\": 1000, \"height\": 700, \"icon\": \"documentation/javadoc.png\", \"args\": \"\" },");
         _loadListUser("documentation",docsList);
         _loadList("documentation",docsList);
-        JSON.append(_getJSON("documentation",docsList));
+        JSON.append(_getJSON("documentation",docsList,lang));
         JSON.append("   ,{ \"name\": \"SIMRacingApps - Release Notes\", \"description\": \"\", \"doc\": \"documentation/SIMRacingApps_ReleaseNotes.txt\", \"url\": \"documentation/SIMRacingApps_ReleaseNotes.txt\", \"width\": 1000, \"height\": 700, \"icon\": \"SRA-Logo.png\", \"args\": \"\" }");
         JSON.append("   ,{ \"name\": \"Browse SIM Raw Data\", \"description\": \"\", \"doc\": \"Data/SIM\", \"url\": \"Data/SIM\", \"width\": 1000, \"height\": 700, \"icon\": \"SRA-Logo.png\", \"args\": \"\" }");
         JSON.append("]\n");
@@ -402,7 +457,7 @@ public class listings extends HttpServlet {
     }
     
     @SuppressWarnings("unchecked")
-    private StringBuffer _getJSON(String header, Map<String,Map<String,Object>> list) {
+    private StringBuffer _getJSON(String header, Map<String,Map<String,Object>> list, String lang) {
         StringBuffer JSON = new StringBuffer();
         int count = 0;
         
@@ -434,6 +489,16 @@ public class listings extends HttpServlet {
                 }
 
                 o = listing.get("description");
+                //if lang is passed in, see if the description is translated
+                if (lang != null && lang.length() > 0) {
+                    String[] locale = lang.split("[-]");
+                    Object desc = listing.get("description-"+lang);
+                    if (desc == null && locale.length > 0)
+                        desc = listing.get("description-"+locale[0]);
+                    if (desc != null)
+                        o = desc;
+                }
+                
                 ArrayList<Object> descriptions;
                 if (o instanceof ArrayList) 
                     descriptions = (ArrayList<Object>) o;
