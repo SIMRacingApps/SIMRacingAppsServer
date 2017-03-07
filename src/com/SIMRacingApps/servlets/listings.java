@@ -280,8 +280,8 @@ public class listings extends HttpServlet {
         
         Map<String,Map<String,Object>> docsList = new TreeMap<String,Map<String,Object>>();
         JSON.append(",\"documentation\": [\n");
-        JSON.append("    { \"name\": \"SIMRacingApps - Apps, Widgets, and JavaScript API Reference\", \"description\": \"You Will Find All You Need To Know to Build Apps\", \"doc\": \"JavaScriptDoc/index.html\", \"url\": \"JavaScriptDoc/index.html\", \"width\": 1000, \"height\": 700, \"icon\": \"documentation/javascriptdoc.png\", \"args\": \"\" }");
-        JSON.append("   ,{ \"name\": \"SIMRacingApps - Java API Reference\", \"description\": \"Not Just for Java. Has details on how API works.\", \"doc\": \"JavaDoc/index.html\", \"url\": \"JavaDoc/index.html\", \"width\": 1000, \"height\": 700, \"icon\": \"documentation/javadoc.png\", \"args\": \"\" },");
+        JSON.append("    { \"name\": \"SIMRacingApps - Apps, Widgets, and JavaScript API Reference\", \"description\": \"\", \"doc\": \"JavaScriptDoc/index.html\", \"url\": \"JavaScriptDoc/index.html\", \"width\": 1000, \"height\": 700, \"icon\": \"documentation/javascriptdoc.png\", \"args\": \"\" }");
+        JSON.append("   ,{ \"name\": \"SIMRacingApps - Java API Reference\", \"description\": \"\", \"doc\": \"JavaDoc/index.html\", \"url\": \"JavaDoc/index.html\", \"width\": 1000, \"height\": 700, \"icon\": \"documentation/javadoc.png\", \"args\": \"\" },");
         _loadListUser("documentation",docsList);
         _loadList("documentation",docsList);
         JSON.append(_getJSON("documentation",docsList,lang));
