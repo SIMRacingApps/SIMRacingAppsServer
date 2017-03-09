@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2017 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    36.26415,
+    "Longitude":   -115.01914,
+    "North":       188.0,
+    "Resolution":  0.6,
+    "MergePoint":  49.6,
+    "Images": {
+        "SAT":     "bullring-sat.png",
+        "MAP":     "bullring-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "bullring-ONTRACK.gpx",
+        "ONPITROAD": "bullring-ONPITROAD.gpx"        
+    }
+}
