@@ -92,7 +92,7 @@ public class Server {
             try {
                 new File(FindFile.getUserPath()[0]+"/logs").mkdirs();
                 //make the files small enough to email
-                String filename = FindFile.getUserPath()[0]+"\\logs\\"+m_log+"-%g.log";
+                String filename = FindFile.getUserPath()[0]+"\\logs\\"+m_log+"-%g.log.txt";
                 int maxsize = 10000000;
                 int maxfiles = 3;
                 _file = new FileHandler(filename,maxsize,maxfiles);
