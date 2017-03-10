@@ -287,6 +287,7 @@ public class listings extends HttpServlet {
         JSON.append(_getJSON("documentation",docsList,lang));
         JSON.append("   ,{ \"name\": \"SIMRacingApps - Release Notes\", \"description\": \"\", \"doc\": \"documentation/SIMRacingApps_ReleaseNotes.txt\", \"url\": \"documentation/SIMRacingApps_ReleaseNotes.txt\", \"width\": 1000, \"height\": 700, \"icon\": \"SRA-Logo.png\", \"args\": \"\" }");
         JSON.append("   ,{ \"name\": \"Browse SIM Raw Data\", \"description\": \"\", \"doc\": \"Data/SIM\", \"url\": \"Data/SIM\", \"width\": 1000, \"height\": 700, \"icon\": \"SRA-Logo.png\", \"args\": \"\" }");
+        JSON.append("   ,{ \"name\": \"View Server Log\", \"description\": \"\", \"doc\": \"logs/"+Server.getLog()+"\", \"url\": \"logs/"+Server.getLog()+"\", \"width\": 1000, \"height\": 700, \"icon\": \"SRA-Logo.png\", \"args\": \"\" }");
         JSON.append("]\n");
 
         JSON.append("}");

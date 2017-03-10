@@ -63,6 +63,10 @@ public class Server {
     private static int m_port          = 80;
     private static Map<String,String> m_args = new HashMap<String,String>();
     
+    public static String getLog() {
+        return m_log + "-0.log.txt";
+    }
+    
     public static void setLog(String logname) {
         m_log = logname;
     }
