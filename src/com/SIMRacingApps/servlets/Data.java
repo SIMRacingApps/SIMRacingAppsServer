@@ -4,6 +4,8 @@ import java.io.*;
 //import java.lang.management.ManagementFactory;
 import java.net.Inet4Address;
 import java.net.InetAddress;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.net.UnknownHostException;
 import java.util.*;
 import java.util.logging.Level;
@@ -253,8 +255,14 @@ public class Data extends HttpServlet {
         try {
             String userPath = FindFile.getUserPath()[0];
             new File(userPath).mkdirs();
-            
-            in = this.getClass().getClassLoader().getResourceAsStream("com/SIMRacingApps/version.properties");
+            //URLClassLoader loader = (URLClassLoader)Thread.currentThread().getContextClassLoader();
+            URLClassLoader loader = (URLClassLoader)Thread.currentThread().getContextClassLoader();
+            URL[] urls = loader.getURLs();
+            String classpath = "";
+            for (int i=0; i < urls.length; i++)
+                classpath = classpath.length() > 0 ? ";" + urls[i].toString() : urls[i].toString();
+                
+            in = loader.getResourceAsStream("com/SIMRacingApps/version.properties");
             //in = new FileInputStream(config.getServletContext().getRealPath("") + "version.properties");
             m_version.load(in);
             in.close();
@@ -273,7 +281,8 @@ public class Data extends HttpServlet {
                 + String.format("%nJava Runtime: %s by %s", System.getProperty("java.runtime.version"),System.getProperty("java.vm.vendor"))
                 + String.format("%nJava VM Name: %s", System.getProperty("java.vm.name"))
                 + String.format("%nOS: %s, Version: %s", System.getProperty("os.name"),System.getProperty("os.version"))
-                + String.format("%nJava CLASSPATH: %s", System.getProperty("java.class.path"))
+                + String.format("%nJava java.class.path: %s", System.getProperty("java.class.path"))
+                + String.format("%nJava main thread classpath: %s", classpath)
                 + String.format("%n*************************************************************************************************")
             );
             Windows.setConsoleTitle(

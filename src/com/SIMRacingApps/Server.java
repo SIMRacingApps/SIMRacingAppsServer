@@ -334,9 +334,12 @@ public class Server {
      * -userpath {userPath}, A path where where users can add their own widgets and apps.
      *                       It can be a list of directories separated by a semi-colon, just like the PATH environment variable. 
      *                       All paths must be absolute paths,
-     *                       Defaults to "%USERPROFILE%\SIMRacingApps".
+     *                       Defaults to "%USERPROFILE%\Documents\SIMRacingApps".
      * <p>
      * -sendkeysdelay {milliseconds}, changes the delay sendkeys uses. Default is 32ms
+     * <p>
+     * -ip {IpAddress}, When users are connected to more than one network, this option forces
+     *                  the server to bind to the specified address instead of the first one.
      * 
      * @param args command line arguments
      */
@@ -369,8 +372,11 @@ public class Server {
                     settings = value;
                 }
                 else
-                if (arg.equals("userdir") && !value.isEmpty()) {
+                if ((arg.equals("userpath") || arg.equals("userdir")) && !value.isEmpty()) {
                     FindFile.setUserPath(value);
+                    //make sure the user's first folder exists
+                    new File(FindFile.getUserPath()[0]+"/storage").mkdirs();
+                    new File(FindFile.getUserPath()[0]+"/favorites").mkdirs();
                 }
             }
             catch (Exception e) {

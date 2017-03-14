@@ -137,7 +137,7 @@ public class SIMPlugin {
         String SIMClass = "com.SIMRacingApps.SIMPlugins."+SIM+"."+SIM+"SIMPlugin";
         SIMPlugin c = null;
         try {
-            c = (SIMPlugin) Class.forName(SIMClass).newInstance();
+            c = (SIMPlugin) Thread.currentThread().getContextClassLoader().loadClass(SIMClass).newInstance();
             c.m_SIMName = SIM;
             Server.logger().info(c.getVersion().getString());
         } 
@@ -198,7 +198,7 @@ public class SIMPlugin {
             String callbackClass = "com.SIMRacingApps.SIMPluginCallbacks."+name;
             SIMPluginCallback c = null;
             try {
-                Class<?> cl = Class.forName(callbackClass);
+                Class<?> cl = Thread.currentThread().getContextClassLoader().loadClass(callbackClass);
                 c = (SIMPluginCallback) cl.getConstructor(SIMPlugin.class).newInstance(this);
                 m_callbacks.add( c );
                 m_loadedCallbacks.put( name, c );

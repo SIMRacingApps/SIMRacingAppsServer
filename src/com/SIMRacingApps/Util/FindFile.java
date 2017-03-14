@@ -152,22 +152,31 @@ public class FindFile {
      * Sets the user's paths by parsing the "path" argument for semicolon as a separator.
      * If the path is null or empty, it will not change the existing path.
      * 
+     * If the path is relative, then it will be created in the user's documents folder.
+     * 
      * @param path A semicolon separated list of directories to use as the user's path.
      */
     public static void setUserPath(String path) {
         if (path != null && !path.isEmpty()) {
-            m_userPath = path.split("[;]");
-            new File(m_userPath[0]).mkdirs();  //if these folders do not exist, then create them
+            String[] paths = path.split("[;]");
+            for (int i=0; i < paths.length; i++) {
+                File file = new File(paths[i]);
+                if (!file.isAbsolute())
+                    paths[i] = FindFile.getUserDocumentsPath() + "/" + paths[i];
+            }
+            m_userPath = paths;
         
             try {
                 //now add all these folders to the classpath
                 ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
     
-                URL [] paths = new URL[m_userPath.length];
-                for (int i=0; i < m_userPath.length; i++) 
-                    paths[i] = new URL("file://"+m_userPath[i]);
+                URL [] urls = new URL[m_userPath.length];
+                for (int i=0; i < m_userPath.length; i++) {
+                    new File(m_userPath[i]).mkdirs();  //if these folders do not exist, then create them
+                    urls[i] = new URL("file://"+m_userPath[i]);
+                }
                 
-                ClassLoader urlCl = URLClassLoader.newInstance(paths, prevCl);
+                ClassLoader urlCl = URLClassLoader.newInstance(urls, prevCl);
                 Thread.currentThread().setContextClassLoader(urlCl);
             } catch (MalformedURLException e) {
                 Server.logStackTrace(Level.SEVERE, "Adding to classpath", e);
