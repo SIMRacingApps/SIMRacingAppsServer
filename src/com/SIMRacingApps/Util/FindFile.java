@@ -14,9 +14,11 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+
 import com.SIMRacingApps.Server;
 import com.owlike.genson.Genson;
 import com.owlike.genson.stream.JsonStreamException;
@@ -87,6 +89,24 @@ public class FindFile {
         m_bis = new BufferedInputStream(m_is);
     }
 
+    /**
+     * Provided an array of names, this returns the first one found.
+     * 
+     * @param pathnames An array of files to find.
+     * @return The file found.
+     * @throws FileNotFoundException When none of the files are found.
+     */
+    public static FindFile find(ArrayList<String> pathnames) throws FileNotFoundException {
+        for (int i=0; i < pathnames.size(); i++) {
+            try {
+                FindFile file = new FindFile(pathnames.get(i));
+                return file;
+            }
+            catch (FileNotFoundException e) {}
+        }
+        throw new FileNotFoundException(pathnames.size() > 0 ? pathnames.get(0) : "");
+    }
+    
     /**
      * Returns the java.io.File object for the file that was found.
      * It may not be able to do certain things if the file is found in a jar.

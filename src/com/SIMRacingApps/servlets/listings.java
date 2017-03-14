@@ -3,6 +3,7 @@ package com.SIMRacingApps.servlets;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -190,11 +191,10 @@ public class listings extends HttpServlet {
         StringBuffer JSON = new StringBuffer("{");
         
         if (m_version != null) {
-            InputStream in;
             try {
                 //reload the file in case it changes while the server is running.
                 //in = new FileInputStream(this.getServletContext().getRealPath("") + "version.properties");
-                in = this.getClass().getClassLoader().getResourceAsStream("com/SIMRacingApps/version.properties");
+                InputStream in = this.getClass().getClassLoader().getResourceAsStream("com/SIMRacingApps/version.properties");
                 m_version.load(in);
                 in.close();
                 JSON.append("\"version\": {");
@@ -214,41 +214,45 @@ public class listings extends HttpServlet {
                     JSON.append(",");
                 JSON.append("\"userpath\": \"" + String.join(";", FindFile.getUserPath()).replace("\\", "/") + "\"");
                 
-                in = this.getClass().getClassLoader().getResourceAsStream("nls/menu-text-"+lang+".properties");
-                if (in == null) {
-                    //try to split the language and remove the country piece
+                FindFile file = null;
+                try {
+                    ArrayList<String> files = new ArrayList<String>();
+                    files.add("nls/menu-text-"+lang+".properties"); 
                     String[] langs = lang.split("[-]");
-                    if (langs.length > 0) {
-                        in = this.getClass().getClassLoader().getResourceAsStream("nls/menu-text-"+langs[0]+".properties");
+                    if (langs.length > 0 && !langs[0].equals(lang)) {
+                        files.add("nls/menu-text-"+langs[0]+".properties");
                     }
+                    files.add("nls/menu-text-en-us.properties");
+                    files.add("nls/menu-text-en.properties");
+                    
+                    file = FindFile.find(files);
+
+                    Properties translations = new Properties();
+                    translations.load(file.getInputStream());
+                    JSON.append(",\"translations\": {");
+                    itr = translations.entrySet().iterator();
+                    count = 0;
+                    while (itr.hasNext()) {
+                        Entry<Object,Object> entry = itr.next();
+                        if (count++ > 0)
+                            JSON.append(",");
+                        JSON.append("\"");
+                        JSON.append(entry.getKey());
+                        JSON.append("\": \"");
+                        JSON.append(entry.getValue());
+                        JSON.append("\"");
+                    }
+                    JSON.append("}\n");
+                    
+                    JSON.append("}\n");
                 }
-                if (in == null) {
-                    //No translation, use english
-                    in = this.getClass().getClassLoader().getResourceAsStream("nls/menu-text-en-us.properties");
+                catch (FileNotFoundException e) {
                 }
-                if (in == null) {
-                    //No translation, use english
-                    in = this.getClass().getClassLoader().getResourceAsStream("nls/menu-text-en.properties");
+                finally {
+                    if (file != null)
+                        file.close();
                 }
 
-                Properties translations = new Properties();
-                translations.load(in);
-                JSON.append(",\"translations\": {");
-                itr = translations.entrySet().iterator();
-                count = 0;
-                while (itr.hasNext()) {
-                    Entry<Object,Object> entry = itr.next();
-                    if (count++ > 0)
-                        JSON.append(",");
-                    JSON.append("\"");
-                    JSON.append(entry.getKey());
-                    JSON.append("\": \"");
-                    JSON.append(entry.getValue());
-                    JSON.append("\"");
-                }
-                JSON.append("}\n");
-                
-                JSON.append("}\n");
             } catch (IOException e) {
                 Server.logStackTrace(Level.WARNING, "while reading version.properties",e);
             }
@@ -319,7 +323,7 @@ public class listings extends HttpServlet {
                             try {
                                 @SuppressWarnings("unchecked")
                                 Map<String,Object> listing = (Map<String, Object>) m_genson.deserialize(is_p, Map.class);
-                                list.put(name.substring(0,name.length()-1).replace(folder+"/", ""),listing);
+                                list.putIfAbsent(name.substring(0,name.length()-1).replace(folder+"/", ""),listing);
                             }
                             catch (JsonStreamException | JsonBindingException e) {
                                 Server.logStackTrace(Level.SEVERE, "listing file in jar: " + p, e);
@@ -356,7 +360,7 @@ public class listings extends HttpServlet {
                                     Map<String,Object> listing = (Map<String, Object>) m_genson.deserialize(is_p, Map.class);
                                     //not take the first folder listed off of the name and leave the rest.
                                     String fa[] = folder.split("/");
-                                    list.put((folder+"/"+l).substring(fa[0].length()+1),listing);
+                                    list.putIfAbsent((folder+"/"+l).substring(fa[0].length()+1),listing);
                                 }
                                 catch (JsonStreamException | JsonBindingException e) {
                                     Server.logStackTrace(Level.SEVERE, "listing file in classpath: " + p, e);
@@ -398,7 +402,7 @@ public class listings extends HttpServlet {
                                 @SuppressWarnings("unchecked")
                                 Map<String,Object> listing = (Map<String, Object>) m_genson.deserialize(is_p, Map.class);
                                 //not take the first folder listed off of the name and leave the rest.
-                                list.put((folder+"/"+l.getName()).substring(fa[0].length()+1),listing);
+                                list.putIfAbsent((folder+"/"+l.getName()).substring(fa[0].length()+1),listing);
                             }
                             catch (JsonStreamException | JsonBindingException e) {
                                 Server.logStackTrace(Level.SEVERE, "listing file in userPath: " + p, e);
@@ -439,7 +443,7 @@ public class listings extends HttpServlet {
                                         @SuppressWarnings("unchecked")
                                         Map<String,Object> listing = (Map<String, Object>) m_genson.deserialize(is_p, Map.class);
                                         //not take the first folder listed off of the name and leave the rest.
-                                        list.put((folder+"/"+l.getName()).substring(fa[0].length()+1),listing);
+                                        list.putIfAbsent((folder+"/"+l.getName()).substring(fa[0].length()+1),listing);
                                     }
                                     catch (JsonStreamException | JsonBindingException e) {
                                         Server.logStackTrace(Level.SEVERE, "listing file in userPath: " + p, e);
