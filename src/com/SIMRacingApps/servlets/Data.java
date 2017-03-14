@@ -205,6 +205,9 @@ public class Data extends HttpServlet {
 //        }
 //        ip = ip.substring(1);
 //        System.err.println(ip);
+
+        //see if the user want's to tell us what port to bind to
+        String ip = Server.getArg("ip", "" );
         
         try {
 
@@ -221,8 +224,9 @@ public class Data extends HttpServlet {
                 for (InetAddress addr : addresses) {
                     String host = addr.getHostAddress();
                     if (addr instanceof Inet4Address) {
-                        ip ="http://" + host + ((Server.getPort() == 80) ? "" : ":" + Server.getPort());
-                        Server.logger().fine("Found Address = " + ip);
+                        if (ip.isEmpty()) //this will use the first one found, but list them all in the log
+                            ip = host;
+                        Server.logger().info("Found Address = " + host);
                     }
                 }
 //            }
@@ -242,6 +246,9 @@ public class Data extends HttpServlet {
 //        catch (MalformedObjectNameException e) {
 //            Server.logStackTrace(Level.WARNING, "while getting IP address",e);
 //        }
+        
+        ip = "http://" + ip + ((Server.getPort() == 80) ? "" : ":" + Server.getPort()); 
+        
         InputStream in;
         try {
             String userPath = FindFile.getUserPath()[0];
