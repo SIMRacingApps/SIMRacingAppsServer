@@ -119,9 +119,13 @@ mspec-speeding = Y
 #####################################################################
 ### teamspeak-client = The host where TeamSpeak is running.
 ### teamspeak-carnumber = Does SRA prepend you car number to your alias.
+### teamspeak-apikey = AAAA-BBBB-CCC-DDDD-EEEE-FFFF 
+###    Required since 3.1.3
+###    Get from your copy in Tools -> Options -> Addons -> ClientQuery -> Settings 
 #####################################################################
 teamspeak-client = localhost
 teamspeak-carnumber = Y
+teamspeak-apikey = 
 
 #####################################################################
 ### The number of milliseconds to delay between sending key strokes

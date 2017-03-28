@@ -283,6 +283,70 @@ public class TeamSpeak {
         }
     }
 
+    private void _authMessage() throws NotConnectedException {
+        Server.logger().warning("settings: teamspeak-apikey not valid or not set");
+        try {
+            Thread.sleep(5000L);
+        } catch (InterruptedException e) {}
+        throw new NotConnectedException();
+    }
+    
+    private boolean _auth(BufferedReader in, PrintStream out) throws Exception {
+
+        String apikey = Server.getArg("teamspeak-apikey","");
+
+        if (apikey.isEmpty())
+            return true;
+        
+        try {
+            Server.logger().info(String.format("TeamSpeak: _auth(apikey=%s):",apikey));
+            out.printf("auth apikey=%s\n",apikey);
+
+            try
+            {
+                while (true)
+                {
+                    String s = in.readLine();
+                    if (!s.isEmpty()) {
+                        Server.logger().finest(String.format("TeamSpeak Debug: _auth(): %s",s));
+
+                        ArrayList<Map<String,String>> vars = _parseLine(s);
+                        if (_processEvent(vars,s)) {
+                            //do nothing
+                        }
+                        else
+                        if (vars.get(0).containsKey("error")) {
+                            if (_getErrorId(vars.get(0)) == 1796)
+                                _authMessage();
+                            
+                            if (_getErrorId(vars.get(0)) == 1794  
+                            ||  _getErrorId(vars.get(0)) == 1540  //convert error
+                            ||  _getErrorId(vars.get(0)) == 1799  //invalid server Connection
+                            )
+                                throw new NotConnectedException();
+
+                            if (_getErrorId(vars.get(0)) != 0)
+                                Server.logger().warning(String.format("TeamSpeak: _auth() returned error %d, %s", _getErrorId(vars.get(0)),_decode(vars.get(0).get("msg"))));
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (SocketTimeoutException e) {
+                Server.logger().warning("TeamSpeak: _auth(): SocketTimeoutException: "+e.getMessage());
+            }
+
+        }   
+        catch (NotConnectedException e) { throw e; }
+        catch (Exception e)
+        {
+            Server.logStackTrace(Level.SEVERE,"TeamSpeak: _auth(): Unexpected Exception caught",e);
+            throw e;
+        }
+
+        return true;
+    }
+
     private void _getClientList(BufferedReader in, PrintStream out) throws Exception {
 
         try {
@@ -310,6 +374,9 @@ public class TeamSpeak {
                             }
                             else
                             if (vars.containsKey("error")) {
+                                if (_getErrorId(vars) == 1796)
+                                    _authMessage();
+                                
                                 if (_getErrorId(vars) == 1794  
                                 ||  _getErrorId(vars) == 1540  //convert error
                                 ||  _getErrorId(vars) == 1799  //invalid server Connection
@@ -380,6 +447,9 @@ public class TeamSpeak {
                         }
                         else
                         if (vars.get(0).containsKey("error")) {
+                            if (_getErrorId(vars.get(0)) == 1796)
+                                _authMessage();
+                            
                             if (_getErrorId(vars.get(0)) == 1794  
                             ||  _getErrorId(vars.get(0)) == 1540  //convert error
                             ||  _getErrorId(vars.get(0)) == 1799  //invalid server Connection
@@ -440,6 +510,9 @@ public class TeamSpeak {
                         }
                         else
                         if (vars.get(0).containsKey("error")) {
+                            if (_getErrorId(vars.get(0)) == 1796)
+                                _authMessage();
+                            
                             if (_getErrorId(vars.get(0)) == 1794  
                             ||  _getErrorId(vars.get(0)) == 1540  //convert error
                             ||  _getErrorId(vars.get(0)) == 1799  //invalid server Connection
@@ -501,6 +574,9 @@ public class TeamSpeak {
                             }
                             else
                             if (vars.get(0).containsKey("error")) {
+                                if (_getErrorId(vars.get(0)) == 1796)
+                                    _authMessage();
+                                
                                 if (_getErrorId(vars.get(0)) == 1794  
                                 ||  _getErrorId(vars.get(0)) == 1540  //convert error
                                 ||  _getErrorId(vars.get(0)) == 1799  //invalid server Connection
@@ -550,6 +626,9 @@ public class TeamSpeak {
 
                         ArrayList<Map<String,String>> vars = _parseLine(s);
                         if (vars.get(0).containsKey("error")) {
+                            if (_getErrorId(vars.get(0)) == 1796)
+                                _authMessage();
+                            
                             if (_getErrorId(vars.get(0)) == 1794  
                             ||  _getErrorId(vars.get(0)) == 1540  //convert error
                             ||  _getErrorId(vars.get(0)) == 1799  //invalid server Connection
@@ -658,6 +737,7 @@ public class TeamSpeak {
                                                 Server.logger().finest("TeamSpeak: startListener(): SocketTimeoutException flushing...: "+e.getMessage());
                                             }
                                             Server.logger().info("TeamSpeak: Connected to ClientQuery Plug-in");
+                                            _auth(in,out);
     
                                             eventsRegistered = _registerEvents(in,out);
                                         }
