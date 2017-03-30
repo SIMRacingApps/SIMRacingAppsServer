@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2017 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    40.31861,
+    "Longitude":   -84.6338,
+    "North":       170.0,
+    "Resolution":  1.0,
+    "MergePoint":  39.4,
+    "Images": {
+        "SAT":     "eldora-sat.png",
+        "MAP":     "eldora-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "eldora-ONTRACK.gpx",
+        "ONPITROAD": "eldora-ONPITROAD.gpx"        
+    }
+}

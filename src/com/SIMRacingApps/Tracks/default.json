@@ -6,7 +6,7 @@
     "COMMENT1b":   "If a WayPoint is found in the GPX file named Center, it will override these values",
     "Latitude":    35.351669,
     "Longitude":   -80.682891,
-    "COMMENT2":    "North is angle you want the track's north to point to, where 270 is straight up",
+    "COMMENT2":    "North is angle you want the track's north to point to, where 270 is straight up and 90 is down",
     "North":       166.0,
     "COMMENT3":    "Resolution is the number of meters per pixel. Considering the size is 800x480 pixels",
     "Resolution":  2.5,

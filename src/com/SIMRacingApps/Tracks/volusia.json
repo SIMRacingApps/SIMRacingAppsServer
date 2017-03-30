@@ -1,0 +1,18 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2017 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "North":       260.0,
+    "Resolution":  0.8,
+    "Images": {
+        "SAT":     "volusia-sat.png",
+        "MAP":     "volusia-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "volusia-ONTRACK.gpx",
+        "ONPITROAD": "volusia-ONPITROAD.gpx"        
+    }
+}
