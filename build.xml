@@ -10,7 +10,7 @@
     </script>
     <property name="build.major" value="1" />
     <property name="build.minor" value="2" />
-    <property name="build.prefix" value="BETA-" />
+    <property name="build.prefix" value="" />
     <tstamp>
         <format property="build.time" pattern="yyyy.MM.dd.HH.mm.ss" />
     </tstamp>
@@ -19,6 +19,12 @@
     </tstamp>
     <tstamp>
         <format property="build.year" pattern="yyyy" />
+    </tstamp>
+    <tstamp>
+        <format property="build.month" pattern="MM" />
+    </tstamp>
+    <tstamp>
+        <format property="build.day" pattern="dd" />
     </tstamp>
     <property environment="env" />
     <property name="userpath" value="${user.home}/Documents/SIMRacingApps" />
@@ -119,6 +125,11 @@
                 <entry key="major" type="int" value="${build.major}" />
                 <entry key="minor" type="int" value="${build.minor}" />
                 <entry key="build" type="string" value="${build.prefix}${build.date}" />
+                <entry key="year" type="string" value="${build.year}" />
+                <entry key="month" type="int" value="${build.month}" />
+                <entry key="month2" type="string" value="${build.month}" />
+                <entry key="day" type="int" value="${build.day}" />
+                <entry key="day2" type="string" value="${build.day}" />
                 <entry key="built-by" type="string" value="Jeffrey Gilliam" />
                 <entry key="copyright" type="string" value="Copyright (C) 2015 - ${build.year} Jeffrey Gilliam" />
                 <entry key="copyrightUrl" type="string" value="/SIMRacingApps/COPYRIGHT.TXT" />
