@@ -165,9 +165,12 @@ public class SIMPlugin {
      * 
      */
     protected SIMPlugin() throws SIMPluginException {
-        String teamspeakClient = Server.getArg("teamspeak-client", "localhost");
-        m_teamspeak = new TeamSpeak(this,teamspeakClient);
-        m_teamspeak.startListener();
+        Boolean teamspeak = Server.getArg("teamspeak", true);
+        if (teamspeak) {
+            String teamspeakClient = Server.getArg("teamspeak-client", "localhost");
+            m_teamspeak = new TeamSpeak(this,teamspeakClient);
+            m_teamspeak.startListener();
+        }
     }
 
     /**

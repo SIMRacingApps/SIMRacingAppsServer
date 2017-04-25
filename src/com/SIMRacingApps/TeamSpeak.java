@@ -284,7 +284,7 @@ public class TeamSpeak {
     }
 
     private void _authMessage() throws NotConnectedException {
-        Server.logger().warning("settings: teamspeak-apikey not valid or not set");
+        Server.logger().warning("settings: teamspeak-apikey not valid or not set. See https://github.com/SIMRacingApps/SIMRacingApps/wiki/TeamSpeak-Integration");
         try {
             Thread.sleep(5000L);
         } catch (InterruptedException e) {}

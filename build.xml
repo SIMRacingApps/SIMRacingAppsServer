@@ -9,8 +9,8 @@
             logger.setMessageOutputLevel( 9 );
     </script>
     <property name="build.major" value="1" />
-    <property name="build.minor" value="2" />
-    <property name="build.prefix" value="" />
+    <property name="build.minor" value="3" />
+    <property name="build.prefix" value="BETA-" />
     <tstamp>
         <format property="build.time" pattern="yyyy.MM.dd.HH.mm.ss" />
     </tstamp>
@@ -130,6 +130,7 @@
                 <entry key="month2" type="string" value="${build.month}" />
                 <entry key="day" type="int" value="${build.day}" />
                 <entry key="day2" type="string" value="${build.day}" />
+                <entry key="prefix" type="string" value="${build.prefix}" />
                 <entry key="built-by" type="string" value="Jeffrey Gilliam" />
                 <entry key="copyright" type="string" value="Copyright (C) 2015 - ${build.year} Jeffrey Gilliam" />
                 <entry key="copyrightUrl" type="string" value="/SIMRacingApps/COPYRIGHT.TXT" />

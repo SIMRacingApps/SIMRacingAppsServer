@@ -228,13 +228,14 @@ public class Server {
      * Returns the value of the specified argument as a string. 
      * The defaultValue be returned if arg not found or blank.
      * It is not case sensitive, all args are stored in lower case.
+     * All values are trimmed of leading and trailing spaces.
      * @param arg The argument name
      * @param defaultValue The value to use if argument not found
      * @return The value of the argument
      */
     public static String getArg(String arg,String defaultValue) {
         if (m_args.containsKey(arg.toLowerCase()))
-            return m_args.get(arg.toLowerCase());
+            return m_args.get(arg.toLowerCase()).trim();
         return defaultValue;
     }
     
