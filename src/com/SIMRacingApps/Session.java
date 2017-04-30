@@ -128,6 +128,72 @@ public class Session {
     }
     
     /**
+     * Returns the name of the current camera.
+     * 
+     * <p>PATH = {@link #getCamera() /Session/Camera}
+     * 
+     * @return The name of the current camera in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getCamera() {
+        return new Data("Session/Camera","");
+    }
+    
+    /**
+     * Returns the group name of the current camera.
+     * 
+     * <p>PATH = {@link #getCameraGroup() /Session/CameraGroup}
+     * 
+     * @return The name of the current camera group in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getCameraGroup() {
+        return new Data("Session/CameraGroup","");
+    }
+    
+    /**
+     * Returns the name of what the camera is focused on.
+     * 
+     * <p>PATH = {@link #getCameraFocus() /Session/CameraFocus}
+     * 
+     * @return The name of what the current camera is focused on in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getCameraFocus() {
+        return new Data("Session/CameraFocus","","");
+    }
+    
+    /**
+     * Returns an array of the camera names for this session.
+     * The camera names are SIM specific and it is not recommended that you assume what 
+     * the names will be.
+     * 
+     * <p>PATH = {@link #getCameras() /Session/Cameras}
+     * 
+     * @param group (Optional) The name of the group to get the cameras from.
+     * @return The camera names array in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getCameras(String group) {
+        ArrayList<String> a = new ArrayList<String>();
+        return new Data("Session/Cameras/"+group,a,"String");
+    }
+    public Data getCameras() {
+        ArrayList<String> a = new ArrayList<String>();
+        return new Data("Session/Cameras",a,"String");
+    }
+    
+    /**
+     * Returns an array of the camera groups for this session.
+     * The camera groups are SIM specific and it is not recommended that you assume what 
+     * the names will be.
+     * 
+     * <p>PATH = {@link #getCameraGroups() /Session/CameraGroups}
+     * 
+     * @return The camera names array in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getCameraGroups() {
+        ArrayList<String> a = new ArrayList<String>();
+        return new Data("Session/CameraGroups",a,"String");
+    }
+    
+    /**
      * Returns an instance of a Car object as defined by the "car" argument. 
      * SIM implementors should override this method and return a SIM specific car object.
      * @param carIndentifier A string representing the car you want. Values accepted are:
@@ -905,28 +971,46 @@ public class Session {
      * Changes the camera.
      * 
      * This is very SIM specific. Some SIMs can do this, others cannot.
-     * The name of the group and camera are very SIM specific. 
-     * Some SIMs limit the group and camera you can choose based on if you are driving or spectating or watching a replay.
+     * The name of the camera is very SIM specific. 
+     * Some SIMs limit the camera you can choose based on if you are driving or spectating or watching a replay.
      * So, if the SIM doesn't allow the change, then this function will not really know. Therefore, there I cannot detect an error condition.
      * 
-     * <p>PATH = {@link #setCamera(String,String,String) /Session/setCamera/(CARIDENTIFIER)/Group/Camera}
+     * <p>PATH = {@link #setCamera(String,String,String) /Session/setCamera/(CAMERA)/(FOCUSON)/(CARIDENTIFIER)}
      *
-     *@param carIdentifier (Optional) A car identifier as defined by {@link com.SIMRacingApps.Session#getCar(String)}. Default to "REFERENCE".
-     *@param group (Optional) The name of the camera group to change to. Default use current group.
-     *@param camera (Optional) The name of the camera. The group is required if the camera is not blank. Default to current camera in the current group.
-     *@return The group/camera name in a {@link com.SIMRacingApps.Data} container.
+     * @param cameraName The name of the camera. Can be the string CURRENT or blank to use the currently selected camera.
+     * @param focusOn (Optional) What to focus on. Valid values are (CRASHES,LEADER,EXCITING,DRIVER). Default is DRIVER.
+     * @param carIdentifier (Optional) A car identifier as defined by {@link com.SIMRacingApps.Session#getCar(String)}. Default is REFERENCE.
+     * @return The camera name in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data setCamera(String carIdentifier, String group, String camera) {
-        return new Data("Session/setCamera/"+carIdentifier+"/"+group+"/"+camera,group+"/"+camera,"String");
+    public    Data setCamera(String cameraName,String focusOn,String carIdentifier) {
+        return new Data("Session/setCamera/"+cameraName+"/"+focusOn+"/"+carIdentifier,"","String");
     }
-    public    Data setCamera(String carIdentifier, String group) {
-        return setCamera(carIdentifier,group,"");
+    public    Data setCamera(String cameraName,String focusOn) {
+        return setCamera(cameraName,focusOn,"REFERENCE");
     }
-    public    Data setCamera(String carIdentifier) {
-        return setCamera(carIdentifier,"","");
+    public    Data setCamera(String cameraName) {
+        return setCamera(cameraName,getCameraFocus().getString());
     }
-    public    Data setCamera() {
-        return setCamera("REFERENCE","","");
+    
+    /**
+     * Changes the focus of the current camera.
+     * 
+     * This is very SIM specific. Some SIMs can do this, others cannot.
+     * The name of the camera is very SIM specific. 
+     * Some SIMs limit the camera you can choose based on if you are driving or spectating or watching a replay.
+     * So, if the SIM doesn't allow the change, then this function will not really know. Therefore, there I cannot detect an error condition.
+     * 
+     * <p>PATH = {@link #setCameraFocus(String,String) /Session/setCamera/(FOCUSON)/(CARIDENTIFIER)}
+     *
+     * @param focusOn What to focus on. Valid values are (CRASHES,LEADER,EXCITING,DRIVER). Default is DRIVER.
+     * @param carIdentifier (Optional) A car identifier as defined by {@link com.SIMRacingApps.Session#getCar(String)}. Default is REFERENCE.
+     * @return The camera name in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data setCameraFocus(String focusOn,String carIdentifier) {
+        return setCamera(getCamera().getString(),focusOn,carIdentifier);
+    }
+    public    Data setCameraFocus(String focusOn) {
+        return setCameraFocus(focusOn,"REFERENCE");
     }
     
     /**
@@ -939,7 +1023,7 @@ public class Session {
      *@return The text string sent to the drivers  in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setChat(String text) {
-        return new Data("Session/setChat",text);
+        return new Data("Session/setChat",text,"String");
     }
     
     /**

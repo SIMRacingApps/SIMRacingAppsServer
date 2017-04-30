@@ -1740,20 +1740,17 @@ public class Car {
      * Some SIM limit the camera you can choose based on if you are driving or spectating or watch a replay.
      * So, if the SIM doesn't allow the change, then this function will not really know. Therefore, there is not an error condition.
      * 
-     * <p>PATH = {@link #setCamera(String,String) /Car/(CARIDENTIFIER)/setCamera/Group/Camera}
+     * <p>PATH = {@link #setCamera(String) /Car/(CARIDENTIFIER)/setCamera/CameraName}
      *
-     *@param group (Optional) The name of the camera group to change to. Default use current group.
-     *@param camera (Optional) The name of the camera. The group is required if the camera is not blank. Default to current camera in the current group.
+     *@param cameraName (Optional) The name of the camera. Default to current camera.
      *@return The group/camera name in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data setCamera(String group, String camera) {
-        return new Data("Car/I"+Integer.toString(m_id)+"/setCamera","","String");
-    }
-    public    Data setCamera(String group) {
-        return setCamera(group,"");
+    public    Data setCamera(String cameraName) {
+        Data d = m_SIMPlugin.getSession().setCamera(cameraName,"DRIVER","I"+Integer.toString(m_id));
+        return new Data("Car/I"+Integer.toString(m_id)+"/setCamera",d.getString(),"String");
     }
     public    Data setCamera() {
-        return setCamera("","");
+        return setCamera(m_SIMPlugin.getSession().getCamera().getString());
     }
     
     /**
