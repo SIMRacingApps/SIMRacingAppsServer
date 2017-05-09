@@ -100,6 +100,10 @@ public class Session {
         public static final String BEST             = "BEST";
         /** the car with the fastest time of the previous lap. Cars more than 2 laps down are not considered */
         public static final String FASTEST          = "FASTEST";
+        /** the car that is crashing. Only valid during replay */
+        public static final String CRASHES          = "CRASHES";
+        /** the car that is most exciting. Only valid during replay */
+        public static final String EXCITING         = "EXCITING";
         
         //The following are a prefix and must be appended with more information on what to return.
         
@@ -132,6 +136,7 @@ public class Session {
      * 
      * <p>PATH = {@link #getCamera() /Session/Camera}
      * 
+     * @since 1.3
      * @return The name of the current camera in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getCamera() {
@@ -139,21 +144,11 @@ public class Session {
     }
     
     /**
-     * Returns the group name of the current camera.
-     * 
-     * <p>PATH = {@link #getCameraGroup() /Session/CameraGroup}
-     * 
-     * @return The name of the current camera group in a {@link com.SIMRacingApps.Data} container.
-     */
-    public Data getCameraGroup() {
-        return new Data("Session/CameraGroup","");
-    }
-    
-    /**
      * Returns the name of what the camera is focused on.
      * 
      * <p>PATH = {@link #getCameraFocus() /Session/CameraFocus}
      * 
+     * @since 1.3
      * @return The name of what the current camera is focused on in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getCameraFocus() {
@@ -167,30 +162,12 @@ public class Session {
      * 
      * <p>PATH = {@link #getCameras() /Session/Cameras}
      * 
-     * @param group (Optional) The name of the group to get the cameras from.
+     * @since 1.3
      * @return The camera names array in a {@link com.SIMRacingApps.Data} container.
      */
-    public Data getCameras(String group) {
-        ArrayList<String> a = new ArrayList<String>();
-        return new Data("Session/Cameras/"+group,a,"String");
-    }
     public Data getCameras() {
         ArrayList<String> a = new ArrayList<String>();
         return new Data("Session/Cameras",a,"String");
-    }
-    
-    /**
-     * Returns an array of the camera groups for this session.
-     * The camera groups are SIM specific and it is not recommended that you assume what 
-     * the names will be.
-     * 
-     * <p>PATH = {@link #getCameraGroups() /Session/CameraGroups}
-     * 
-     * @return The camera names array in a {@link com.SIMRacingApps.Data} container.
-     */
-    public Data getCameraGroups() {
-        ArrayList<String> a = new ArrayList<String>();
-        return new Data("Session/CameraGroups",a,"String");
     }
     
     /**
@@ -886,6 +863,63 @@ public class Session {
      */
     public    Data    setRadioScan(boolean flag)                 { /*boolean*/     return new Data("Session/setRadioScanable",flag,"boolean"); }
     public    Data    setRadioScan(String flag)                  { /*boolean*/     return setRadioScan((new Data("",flag)).getBoolean());}
+
+    
+    /**
+     * Returns the state of the current replay position.
+     * <dl>
+     * <dt>&gt;</dt><dd>Playing at Normal Speed</dd>
+     * <dt>&lt;&lt; {speed}x</dt><dd>Rewinding</dd>
+     * <dt>&gt;&gt; {speed}x</dt><dd>Fast Forwarding</dd>
+     * <dt>||</dt><dd>Paused</dd>
+     * </dl>
+     * 
+     * <p>PATH = {@link #getReplay() /Session/Replay}
+     * 
+     * @since 1.3
+     * @return A string representing the replay state in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getReplay()                                { /*String*/      return new Data("Session/Replay","","String"); }
+
+    /**
+     * Tells the replay system what to do. 
+     * Note, some SIMs require you to get out of the car first. 
+     * <dl>
+     * <dt>PLAY, &gt;</dt><dd>Start Playing at Normal Speed</dd>
+     * <dt>REWIND, RW, &lt;, &lt;&lt;</dt><dd>Start Rewinding. Multiple presses will go faster.</dd>
+     * <dt>FASTFORWARD, FF, &gt;&gt;</dt><dd>Start Fast Forwarding. Multiple presses will go faster.</dd>
+     * <dt>PAUSE, ||</dt><dd>Pause the replay</dd>
+     * <dt>SLOWMOTION, SM, |&gt;</dt><dd>Slow down the replay play back speed in the current direction. Multiple presses will go slower.</dd>
+     * </dl>
+     * <p>PATH = {@link #setReplay(String) /Session/setReplay/(COMMAND)}
+     * 
+     * @since 1.3
+     * @param command The command to execute. Defaults to PLAY.
+     * @return The speed the replay is currently playing at in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    setReplay(String command)                  { /*String*/      return new Data("Session/setReplay",command,"String"); }
+
+    /**
+     * Tells the replay system what position to start playing at. Here are the available commands.
+     * <dl>
+     * <dt>BEGINNING, START</dt><dd>Start Playing at the beginning</dd>
+     * <dt>ENDING, END</dt><dd>Go to end of replay. If in a session, should take you back to live.</dd>
+     * <dt>NEXTFRAME, NEXT</dt><dd>Go to the next frame</dd>
+     * <dt>PREVFRAME, PREV</dt><dd>Go to the previous frame</dd>
+     * <dt>NEXTLAP</dt><dd>Go to the next lap</dd>
+     * <dt>PREVLAP</dt><dd>Go to the previous lap</dd>
+     * <dt>NEXTCRASH</dt><dd>Go to the next crash</dd>
+     * <dt>PREVCRASH</dt><dd>Go to the previous crash</dd>
+     * <dt>NEXTSESSION</dt><dd>Go to the next session, Practice, Qualifying, Race</dd>
+     * <dt>PREVSESSION</dt><dd>Go to the previous session, Practice, Qualifying, Race</dd>
+     * </dl>
+     * <p>PATH = {@link #setReplayPosition(String) /Session/setReplayPosition/(COMMAND)}
+     * 
+     * @since 1.3
+     * @param command The position to go to.
+     * @return The speed the replay is currently playing at in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    setReplayPosition(String command)          { /*String*/      return new Data("Session/setReplayPosition",command,"String"); }
     
     /**
      * Returns the time the current session started as the number of seconds since Jan 1, 1970.
@@ -952,7 +986,7 @@ public class Session {
      * 
      * @return The reference car identifier in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getReferenceCar()                { /*car*/                                 return new Data("Session/ReferenceCar",m_referenceCar,"",Data.State.NORMAL); }
+    public    Data    getReferenceCar()                { /*car*/                                 return new Data("Session/ReferenceCar",getIsReplay().getBoolean() ? m_referenceCar : (m_referenceCar = "ME"),"",Data.State.NORMAL); }
 
     /**
      * Advance to next Session. 
@@ -977,6 +1011,7 @@ public class Session {
      * 
      * <p>PATH = {@link #setCamera(String,String,String) /Session/setCamera/(CAMERA)/(FOCUSON)/(CARIDENTIFIER)}
      *
+     * @since 1.3
      * @param cameraName The name of the camera. Can be the string CURRENT or blank to use the currently selected camera.
      * @param focusOn (Optional) What to focus on. Valid values are (CRASHES,LEADER,EXCITING,DRIVER). Default is DRIVER.
      * @param carIdentifier (Optional) A car identifier as defined by {@link com.SIMRacingApps.Session#getCar(String)}. Default is REFERENCE.
