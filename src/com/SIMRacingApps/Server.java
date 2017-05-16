@@ -594,7 +594,7 @@ public class Server {
 //            }
             DataService.stop();
             logStackTrace(Level.SEVERE,"Port: "+m_port,be);
-            System.err.print("\nTo solve this problem, see http://wiki.SIMRacingApps.com/Port-80-in-use-by-another-process\n");
+            System.err.print("\nTo solve this problem, see https://github.com/SIMRacingApps/SIMRacingApps/Port-80-in-use-by-another-process\n");
             System.err.print("Press ENTER to exit...");
             try { System.in.read(); } catch (IOException e) {}
             System.exit(1);
