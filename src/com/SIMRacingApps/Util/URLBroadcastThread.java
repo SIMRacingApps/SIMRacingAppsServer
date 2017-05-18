@@ -91,11 +91,11 @@ public class URLBroadcastThread {
                         socket.setBroadcast(true);
             
                         byte[] sendData = ("SRA=" + URL).getBytes();
+                        Server.logger().finest("Broadcasting URL: " + URL + " on port " + port);
                         while (m_stayalive) {
                             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length,InetAddress.getByName("255.255.255.255"),port);
                             socket.send(sendPacket);
             
-                            Server.logger().finest("Broadcasting URL: " + URL + " on port " + port);
                             try {
                                 Thread.sleep(2000);
                             } catch (InterruptedException e) {

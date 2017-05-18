@@ -912,6 +912,12 @@ public class Session {
      * <dt>PREVCRASH</dt><dd>Go to the previous crash</dd>
      * <dt>NEXTSESSION</dt><dd>Go to the next session, Practice, Qualifying, Race</dd>
      * <dt>PREVSESSION</dt><dd>Go to the previous session, Practice, Qualifying, Race</dd>
+     * <dt>FORWARD15</dt><dd>Go forward 15 seconds</dd>
+     * <dt>BACKWARD15</dt><dd>Go backwards 15 seconds</dd>
+     * <dt>FORWARD30</dt><dd>Go forward 30 seconds</dd>
+     * <dt>BACKWARD30</dt><dd>Go backwards 30 seconds</dd>
+     * <dt>FORWARD60</dt><dd>Go forward 60 seconds</dd>
+     * <dt>BACKWARD80</dt><dd>Go backwards 60 seconds</dd>
      * </dl>
      * <p>PATH = {@link #setReplayPosition(String) /Session/setReplayPosition/(COMMAND)}
      * 
