@@ -115,7 +115,9 @@ public class TeamSpeak {
      */
     public    Data    getWhispering() {
         try {
-            if (Integer.parseInt(_getTalker().get("is_whispering")) > 0)
+            if (Integer.parseInt(_getTalker().get("is_whispering")) > 0
+            &&  Integer.parseInt(_getTalker().get("is_talking")) > 0
+            )
                 return new Data("TeamSpeakWhispering","Whispering");
         }
         catch (NumberFormatException e) {}
@@ -143,12 +145,13 @@ public class TeamSpeak {
 
         synchronized(m_clientlist) {
             for ( Entry<String,Map<String,String>> client : m_clientlist.entrySet()) {
-                if (client.getValue().get("is_whispering").equals("1") 
+                if (client.getValue().get("is_whispering").equals("1")
+                &&  client.getValue().get("is_talking").equals("1")
                 &&  (Long.parseLong(client.getValue().get("timestamp")) + m_talkTimeout) > System.currentTimeMillis()
                 ) {
                     nickname      = new String(client.getValue().get("client_nickname"));
-                    is_talking    = new String(client.getValue().get("is_talking"));
-                    is_whispering = new String(client.getValue().get("is_whispering"));
+                    is_talking    = "1";
+                    is_whispering = "1";
                     break;
                 }
             }
@@ -158,8 +161,8 @@ public class TeamSpeak {
                     &&  (Long.parseLong(client.getValue().get("timestamp")) + m_talkTimeout) > System.currentTimeMillis()
                     ) {
                         nickname      = new String(client.getValue().get("client_nickname"));
-                        is_talking    = new String(client.getValue().get("is_talking"));
-                        is_whispering = new String(client.getValue().get("is_whispering"));
+                        is_talking    = "1";
+                        is_whispering = "0";
                         break;
                     }
                 }
