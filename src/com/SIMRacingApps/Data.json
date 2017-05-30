@@ -121,19 +121,22 @@
             }
         },
         "KM/H": {      
-            "Abbr":     "kph",       
+            "Abbr":     "km/h",       
             "Singular": "Kilometer Per Hour",       
             "Plural":   "Kilometers Per Hour", 
             "Metric":   "KM/H",
             "Imperial": "MILE/H", 
             "Conversions": {
+                "MPH":      0.62137119224,
+                "MILE/H":   0.62137119224,
+                "M/S":      0.27778
             }
         },
         "KPH": {      
-            "Abbr":     "kph",       
+            "Abbr":     "km/h",       
             "Singular": "Kilometer Per Hour",       
             "Plural":   "Kilometers Per Hour", 
-            "Metric":   "KPH",
+            "Metric":   "KM/H",
             "Imperial": "MPH", 
             "Conversions": {
                 "MPH":      0.62137119224,
