@@ -851,7 +851,10 @@ public class SIMPlugin {
                     }
                     else
                     if (name.equalsIgnoreCase("TEAMSPEAK")) {
-                        o = callMethod(m_teamspeak,String.join("/",args));
+                        if (m_teamspeak != null)
+                            o = callMethod(m_teamspeak,String.join("/",args));
+                        else
+                            o = new Data(path,"ERROR: ("+path+") TeamSpeak not loaded","String",State.ERROR);
                     }
                     else
                     if (name.equalsIgnoreCase("SIMPLUGINCALLBACK")) {
