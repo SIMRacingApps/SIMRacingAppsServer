@@ -226,6 +226,10 @@ public class FindFile {
      * @param dest The dest filename
      */
     public static void copy(FindFile src, File dest) {
+        copy(src.getInputStream(),src.getFile(),dest);
+    }
+    
+    public static void copy(InputStream is,File src,File dest) {
         byte[] buffer = new byte[1024];
         int bytesRead;
 
@@ -234,14 +238,14 @@ public class FindFile {
         try {
             fos = new FileOutputStream(dest);
             out = new BufferedOutputStream(fos);
-            while ((bytesRead = src.getInputStream().read(buffer)) != -1) {
+            while ((bytesRead = is.read(buffer)) != -1) {
                 out.write(buffer, 0, bytesRead);
             }
         }
         catch (FileNotFoundException e) {
             Server.logStackTrace(Level.WARNING, "Cannot open output file: "+ dest.toString(), e);
         } catch (IOException e) {
-            Server.logStackTrace(Level.WARNING, "IOExcetion while copying "+ src.getFileFound() + " to " + dest.toString(), e);
+            Server.logStackTrace(Level.WARNING, "IOExcetion while copying "+ src.toString() + " to " + dest.toString(), e);
         }
         finally {
             try {

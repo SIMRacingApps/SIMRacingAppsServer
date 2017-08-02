@@ -162,15 +162,17 @@ public class Track {
         if (is != null) {
             InputStreamReader in = new InputStreamReader( is );
             try {
-                m_trackmap = genson.deserialize(in, Map.class);
-                m_lastLoadTime = System.currentTimeMillis();
-//                m_distanceUOM = (String) m_trackmap.get("DistanceUOM");
-//                m_tempUOM = (String) m_trackmap.get("TempUOM");
-//                m_speedUOM = (String) m_trackmap.get("SpeedUOM");
-//                if (m_trackmap.get("North") != null)
-//                    m_north = (Double)m_trackmap.get("North");
-//                SIMPlugin.getTrackType().getString();
-                m_name  = trackname;
+                if (in != null) {
+                    m_trackmap = genson.deserialize(in, Map.class);
+                    m_lastLoadTime = System.currentTimeMillis();
+//                    m_distanceUOM = (String) m_trackmap.get("DistanceUOM");
+//                    m_tempUOM = (String) m_trackmap.get("TempUOM");
+//                    m_speedUOM = (String) m_trackmap.get("SpeedUOM");
+//                    if (m_trackmap.get("North") != null)
+//                        m_north = (Double)m_trackmap.get("North");
+//                    SIMPlugin.getTrackType().getString();
+                    m_name  = trackname;
+                }
             } catch (JsonStreamException e) {
                 Server.logStackTrace(Level.SEVERE,"JsonStreamException",e);
             } catch (JsonBindingException e) {
@@ -801,7 +803,7 @@ public class Track {
      * 
      * @return The name of the track in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getName()                          { /*String*/                              return new Data("Track/Name","Default","",Data.State.NORMAL); }
+    public    Data    getName()                          { /*String*/                              return new Data("Track/Name","default","",Data.State.NORMAL); }
 
     /**
      * Returns the degrees of where North points, where zero degrees is at 3 o'clock and rotates clockwise.

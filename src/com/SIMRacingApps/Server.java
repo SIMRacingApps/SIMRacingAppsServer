@@ -3,17 +3,27 @@
  */
 package com.SIMRacingApps;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.BindException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Formatter;
@@ -43,6 +53,7 @@ import com.SIMRacingApps.servlets.Data;
 import com.SIMRacingApps.servlets.settings;
 import com.SIMRacingApps.servlets.sendkeys;
 import com.SIMRacingApps.servlets.upload;
+import com.owlike.genson.Genson;
 
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer; 
 
@@ -62,6 +73,7 @@ public class Server {
     private static FileHandler _file = null;
     private static int m_port          = 80;
     private static Map<String,String> m_args = new HashMap<String,String>();
+    private static Genson m_genson = new Genson();
     
     public static String getLog() {
         return m_log + "-0.log.txt";
@@ -548,7 +560,7 @@ public class Server {
         logger().info(String.format("com.SIMRacingApps.main() using tmpdir = %s",tmpdir));
         
         try {
-            //since my package is also named Server, I have to sepecify the entire path to Jetty
+            //since my package is also named Server, I have to specify the entire path to Jetty
             org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(m_port);
             
             ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -586,6 +598,160 @@ public class Server {
             server.start();
             if (logger().getLevel().intValue() < Level.FINE.intValue())
                 server.dumpStdErr();
+            
+            //Check if electron can be installed. If so, check version and install it, if needed.
+            if (getArg("electron-autoupdate",false)) {
+ 
+                //Use the FindFile class to location the exe file
+                FindFile classFromJar = new FindFile("com/SIMRacingApps/default.settings.txt");
+                File jarFile = new File(URLDecoder.decode(classFromJar.getClass().getProtectionDomain().getCodeSource().getLocation().getPath(),StandardCharsets.UTF_8.name()));
+                
+                if (jarFile.isFile()) {
+                    String jarVersion = "", installedJarVersion="";
+                    
+                    //get the version in the jar
+                    InputStream is_p = classFromJar.getClass().getClassLoader().getResourceAsStream("electron-apps/package.json");
+                    if (is_p != null) {
+                        @SuppressWarnings("unchecked")
+                        Map<String,Object> packageJson = (Map<String, Object>) m_genson.deserialize(is_p, Map.class);
+                        jarVersion = (String) packageJson.get("version");
+                        is_p.close();
+                    }
+                    
+                    try {
+                        File installedPackageJsonFile = new File(FindFile.getUserPath()[0]+"/electron-apps/package.json");
+                        is_p = new FileInputStream(installedPackageJsonFile);
+                        if (is_p != null) {
+                            @SuppressWarnings("unchecked")
+                            Map<String,Object> packageJson = (Map<String, Object>) m_genson.deserialize(is_p, Map.class);
+                            installedJarVersion = (String) packageJson.get("version");
+                            is_p.close();
+                        }
+                    }
+                    catch (FileNotFoundException e) {}
+
+                    logger().info("Electron: Source Version = "+jarVersion+", Destination Version = "+installedJarVersion);
+
+                    //if the versions are not equal, we need to install
+                    if (!jarVersion.equals(installedJarVersion)) {
+                        JarFile jar = new JarFile(jarFile);
+                        String name = "";
+                        logger().info("Electron: Installing from " + jarFile.toString());
+                        
+                        try {
+                            Enumeration<JarEntry> entries = jar.entries();
+                            while (entries.hasMoreElements()) {
+                                name = entries.nextElement().getName();
+                                if (name.startsWith("electron-apps/")) {
+                                    if (name.endsWith("/")) {
+                                        new File(FindFile.getUserPath()[0]+"/"+name).mkdirs();
+                                    }
+                                    else {
+                                        is_p = classFromJar.getClass().getClassLoader().getResourceAsStream(name);
+                                        if (is_p != null) {
+                                            File dest = new File(FindFile.getUserPath()[0]+"/"+name);
+                                            Server.logger().info("Electron: Installing "+dest.toString());
+                                            FindFile.copy(is_p,new File(name),dest);
+                                            is_p.close();;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception e) {
+                            Server.logger().severe("Electron: Exception while installing: " + name + "\r\n" + e.getMessage());
+                        }
+                        finally {
+                            jar.close();
+                        }
+                    }
+                }
+            }
+            
+            if (getArg("electron-autostart",false)) {
+                try {
+                    File exe = new File(getArg("electron-path",FindFile.getUserPath()[0]+"/electron-apps/electron/electron.exe"));
+                    
+                    if (exe.canExecute()) {
+                        File dir = new File(FindFile.getUserPath()[0]+"/electron-apps");
+                        List<String> a = new ArrayList<String>();
+                        String s;
+                        
+                        logger().info("Electron: Starting " + exe.toString());
+                        Thread.sleep(getArg("electron-delay",5000)); //Give the server time to get started.
+                        
+                        a.add(exe.toString());
+                        if (!(s = getArg("electron-options","")).isEmpty()) {
+                            String[] sa = s.split(" ");
+                            for (int i=0; i < sa.length; i++)
+                                a.add(sa[i]);
+                        }
+                        
+                        if (getArg("electron-disable-gpu",true)) {
+                            a.add("--disable-gpu");  //prevents studdering on my machine
+                                                     //use to be require for transparency, that's no longer the case as of electron 1.6
+                        }
+                        
+                        a.add(".");
+                        
+                        //the host has to be the same computer, so force it.
+                        a.add("-hostname");
+                        a.add("localhost");
+                        
+                        //always pass the port in case Electron saved the wrong one
+                        a.add("-port");
+                        a.add(Integer.toString(m_port));
+                        
+                        //force electron to the same language as the server.
+                        s = System.getProperty("user.language")+"-"+System.getProperty("user.country");
+                        a.add("-lang");
+                        a.add(s.toLowerCase());
+                        
+                        if (!(s = getArg("electron-configuration","")).isEmpty()) {
+                            a.add("-configuration");
+                            a.add(s);
+                        }
+                        
+                        ProcessBuilder pb = new ProcessBuilder(a);
+                        Map<String,String> env = pb.environment();
+                        env.put("ELECTRON_NO_ATTACH_CONSOLE","true");
+                        pb.directory(dir);
+                        Process p = pb.start();
+                        logger().info("Electron: Started with " + a.toString() );
+                        while (p.isAlive()) {
+                            BufferedReader stdin = new BufferedReader(
+                                    new InputStreamReader(
+                                            p.getInputStream()
+                                    )
+                            );
+                            BufferedReader stderr = new BufferedReader(
+                                    new InputStreamReader(
+                                            p.getErrorStream()
+                                    )
+                            );
+                            
+                            String line;
+                            while ((line = stdin.readLine()) != null)
+                                logger().fine("Electron: "+line);
+                            while ((line = stderr.readLine()) != null)
+                                logger().warning("Electron: "+line);
+                            Thread.sleep(1000);
+                        }
+                        logger().info("Electron: Stopped" );
+                        DataService.stop();
+                        Thread.sleep(1000);
+                        logger().info("Server: Exiting");
+                        Thread.sleep(1000);
+                        System.exit(0);
+                    }
+                    else {
+                        logger().warning("Electron: " + exe.toString() + " not found");
+                    }
+                } catch (Exception e1) {
+                  logStackTrace(Level.WARNING,e1);
+              }
+            }
+            
             server.join();
         } catch (BindException be) {
 //            for (Thread t : Thread.getAllStackTraces().keySet()) {

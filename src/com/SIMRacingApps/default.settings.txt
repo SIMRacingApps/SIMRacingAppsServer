@@ -22,6 +22,26 @@ port = 80
 sim = iRacing
 
 #####################################################################
+### Electron is a non-browser HTML based client that can run on the 
+### same computer as the SIM. 
+###  - It can save multiple configurations and switch between them.
+###  - It runs apps in borderless windows that can also be transparent. 
+###  - It can even overlay on top of the SIM if the SIM can run in "windowed" mode. 
+###    Please go to the following link(s) to setup your SIM.
+###
+###    iRacing: https://github.com/SIMRacingApps/SIMRacingApps/wiki/How-to-setup-iRacing-in-Windowed-Mode
+###    ...more SIMs to come
+###
+### Options:
+### electron = "Y" will install Electron and keep it up to date. "N" you do it manually.
+### electron-autostart = If Electron is installed, "Y" will launch the menu for you, "N" you do it manually.
+### electron-configuration = {Name}, The name of the configuration to start up with. Defaults to last one used.
+#####################################################################
+electron-autoupdate = Y
+electron-autostart = N
+#electron-configuration = default
+
+#####################################################################
 ### To setup a sound device for SIMRacingApps to use
 ### that is not your default sound device, add the name of the device 
 ### to the "sound-device". The names of all of the enabled sound devices 
@@ -121,8 +141,8 @@ mspec-speeding = Y
 ### teamspeak-client = The host where TeamSpeak is running.
 ### teamspeak-carnumber = Does SRA prepend you car number to your alias.
 ### teamspeak-apikey = AAAA-BBBB-CCC-DDDD-EEEE-FFFF 
-###    Required since 3.1.3
-###    Get from your copy in Tools -> Options -> Addons -> ClientQuery -> Settings 
+###    Required since TeamSpeak version 3.1.3
+###    Get from your key from TeamSpeak -> Tools -> Options -> Addons -> ClientQuery -> Settings 
 #####################################################################
 teamspeak = Y
 teamspeak-client = localhost
@@ -158,8 +178,10 @@ pit-count-down-replay = false
 #####################################################################
 ### Some known patterns to spotter packs. Your version may vary. 
 ### Double backslashes are required for the directory separator.
+### Remove the hash(#) to uncomment the line to use 
 #####################################################################
-#pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\JJ Spotter Pack v6.51\\n%d.wav
+#pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\JJ Spotter Pack v6.70\\n%d.wav
+#pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\JJ Spotter-Cuss Pack v6.70\\n%d.wav
 #pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\Dale Jr Spotter Pack\\n%d_A1.wav
 
 #####################################################################
@@ -209,10 +231,10 @@ shift-replay = false
 ### If the text starts with a slash(/), then the car to send it to follows.
 ### You can override this by selecting a car first in the widget.
 #####################################################################
-chat-row1-col1-name = /[CAR]<br />PASS LEFT
-chat-row1-col1-text = /RL-1 [#[CARNUMBER]] Pass Left
-chat-row2-col1-name = /[CAR]<br />PASS RIGHT
-chat-row2-col1-text = /RL-1 [#[CARNUMBER]] Pass Right
+#chat-row1-col1-name = /[CAR]<br />PASS LEFT
+#chat-row1-col1-text = /RL-1 [#[CARNUMBER]] Pass Left
+#chat-row2-col1-name = /[CAR]<br />PASS RIGHT
+#chat-row2-col1-text = /RL-1 [#[CARNUMBER]] Pass Right
 
 #####################################################################
 ### Setup for DataPublisher

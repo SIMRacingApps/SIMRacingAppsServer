@@ -76,24 +76,30 @@ public class upload extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ServletOutputStream out = response.getOutputStream();
+        
         request.setAttribute(Request.__MULTIPART_CONFIG_ELEMENT, MULTI_PART_CONFIG);
         
         final Part filePart = request.getPart("file");
+        if (filePart == null) {
+            out.println("No filename found in the uploaded data. Press BACK and choose a .sra File first.");
+            return;
+        }
+        
         InputStream filecontent = null;
         String outputFolder = FindFile.getUserPath()[0]; //upload it the first directory in the userpath.
 //outputFolder = "C:/temp";
         
         String filename = getFileName(filePart);
         
-        ServletOutputStream out = response.getOutputStream();
         response.setContentType("text/plain");
         
         if (filename.isEmpty()) {
-            out.println("No filename found in the uploaded data. Press BACK and choose a ZIP File first.");
+            out.println("No filename found in the uploaded data. Press BACK and choose a .sra File first.");
             return;
         }
         
-        out.println("Please press the BACK button, then refresh the Main Page.\r\n\r\n");
+        out.println("Please close this window and restart server.\r\n\r\n");
 
         Server.logger().info("Uploading: " + filename);
         File name = new File("");
