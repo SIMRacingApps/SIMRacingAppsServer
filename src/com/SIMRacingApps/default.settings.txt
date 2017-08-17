@@ -38,7 +38,7 @@ sim = iRacing
 ### electron-configuration = {Name}, The name of the configuration to start up with. Defaults to last one used.
 #####################################################################
 electron-autoupdate = Y
-electron-autostart = N
+electron-autostart = Y
 #electron-configuration = default
 
 #####################################################################
