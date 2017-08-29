@@ -600,7 +600,10 @@ public class Server {
                 server.dumpStdErr();
             
             //Check if electron can be installed. If so, check version and install it, if needed.
-            if (getArg("electron-autoupdate",false)) {
+            //default to false here so existing users will not get a surprise.
+            //But, in the default settings.txt, I will have it set to true for new users.
+            
+            if (getArg("electron-autoupdate",false) || getArg("electron-force-update",false)) {
  
                 //Use the FindFile class to location the exe file
                 FindFile classFromJar = new FindFile("com/SIMRacingApps/default.settings.txt");
