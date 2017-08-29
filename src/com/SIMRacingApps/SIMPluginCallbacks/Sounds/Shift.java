@@ -145,7 +145,7 @@ public class Shift extends SIMPluginCallback {
             if (!m_replay && replay)
                 return true;
 
-            if (state.equals("SHIFT") 
+            if ((state.equals("SHIFT") || state.equals("SHIFTBLINK"))
             && (!gear.equals(m_gear) || (m_clip.getLastTimePlayed() + TIMETOPLAY) < System.currentTimeMillis()) 
             && !gear.equals("N")
             && !gear.equals(maxgear)
