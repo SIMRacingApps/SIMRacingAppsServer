@@ -256,3 +256,9 @@ DataPublisher-Post = N
 DataPublisher-Post-URL-{leagueID} = http://yourLeague/...
 DataPublisher-Post-Interval-{leagueID} = 5000
 DataPublisher-Post-Log = false
+
+#####################################################################
+### Misc. settings
+#####################################################################
+use-sim-colors = Y
+
