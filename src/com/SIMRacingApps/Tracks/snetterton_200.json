@@ -1,0 +1,27 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2017 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "COMMENT2":    "North is angle you want the track's north to point to, where 270 is straight up and 90 is down",
+    "North":       270.0,
+    "COMMENT3":    "Resolution is the number of meters per pixel. Considering the size is 800x480 pixels",
+    "Resolution":  4.0,
+    "COMMENT6":    "Images map to the Layer Name to show (MAP,OSM). Must have at least MAP",
+    "Images": {
+        "MAP":     "snetterton.png",
+        "SAT":     "snetterton.png"
+    },
+    "COMMENT7":    "The following units of measures should be in the track's country's native measurement system",
+    "DistanceUOM": "km",
+    "TempUOM":     "C",
+    "SpeedUOM":    "km/h",
+    "COMMENT8":    "FinishLine starts out at zero degrees, 3 o'clock. Use this to rotate it to line up with North's rotation",
+    "FinishLine":  80.0,
+    "COMMENT9":    "GPX is the file saved from http://www.gpxeditor.co.uk of the GPS coordinates.",
+    "COMMENT9a":   "Right Click, Draw New, Route. Draw the points starting at the finish line and ending at the finish line",
+    "COMMENT9b":   "Save as GPX file associated to the names here",
+    "COMMENT9c":   "ONTRACK should have at least one of the points named MergePoint. But you can have multiple, Bristol for example",
+    "GPX": {
+        "ONTRACK":   "snetterton_200-ONTRACK.gpx",
+        "ONPITROAD": "snetterton_200-ONPITROAD.gpx"        
+    }
+}
