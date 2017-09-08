@@ -58,18 +58,18 @@ electron-autostart = Y
 ### ...Sound Device[3] = [Realtek Digital Output(Optical) (2- Realtek High Definition Audio)]: com.SIMRacingApps.Util.Sound.loadMixers(Sound.java:263)[main]
 ### ...Sound Device[4] = [Realtek HD Audio 2nd output (2- Realtek High Definition Audio)]: com.SIMRacingApps.Util.Sound.loadMixers(Sound.java:263)[main]
 ###
-### You can also control the volume as a percentage, 0.0 - 1.0. 
+### You can also control the volume as a percentage, 0.0 - 100.0. 
 ### This acts like a maximum for all other sound volume settings for other plug-ins.
 ###
 ### Example: 
 ###   sound        = true
 ###   sound-device = Z300 (Turtle Beach Z300 with Dolby Headphone)
 ###   sound-device = 1
-###   sound-volume = .7
+###   sound-volume = 70
 ###
 ####################################################################
 sound = true
-sound-volume = 1
+sound-volume = 100
 #sound-device = 
 
 #####################################################################
@@ -170,7 +170,7 @@ minimum-speed-percentage   = 110
 #####################################################################
 Sounds-PitCountDown = Y
 #pit-count-down-device = 
-pit-count-down-volume = 1
+pit-count-down-volume = 100
 pit-count-down-play10 = Y
 pit-count-down-play0  = Y
 pit-count-down-start  = 5
@@ -192,7 +192,7 @@ pit-count-down-replay = false
 #####################################################################
 Sounds-PitSpeedLimit = Y
 #pit-speed-limit-device = 
-pit-speed-limit-volume = 1
+pit-speed-limit-volume = 100
 pit-speed-limit-beep-rate = 200
 pit-speed-limit-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/speeding_beep.wav
 pit-speed-limit-beep-rate-excessive = 100
@@ -206,7 +206,7 @@ pit-speed-limit-replay = false
 #####################################################################
 Sounds-Shift = Y
 #shift-device = 
-shift-volume = 1
+shift-volume = 100
 shift-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/shift_beep.wav
 shift-replay = false
 

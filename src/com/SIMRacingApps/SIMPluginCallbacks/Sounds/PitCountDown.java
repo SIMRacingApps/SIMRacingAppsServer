@@ -15,7 +15,7 @@ import com.SIMRacingApps.Util.Sound;
  * You can control its behavior with the following variables.
  * <pre>
  *    pit-count-down-device = A Sound Device
- *    pit-count-down-volume = 1.0
+ *    pit-count-down-volume = 100.0
  *    pit-count-down-start  = 5
  *    pit-count-down-play10 = Y
  *    pit-count-down-replay = N
@@ -27,10 +27,10 @@ import com.SIMRacingApps.Util.Sound;
  *    
  * #Also these global settings will be used if the specific settings above are not set.
  *    sound-device = A Sound Device Name
- *    sound-volume = 1.0
+ *    sound-volume = 100.0
  * </pre>
  * Setting the volume zero(0) will disable the sounds.
- * The volume is a percentage from 0.0 to 1.0.
+ * The volume is a percentage from 0.0 to 100.0.
  *
  * @author Jeffrey Gilliam
  * @since 1.0
@@ -109,7 +109,7 @@ public class PitCountDown extends SIMPluginCallback {
             if (m_clips.size() > 0)
                 volume = m_clips.get(0).getVolume();
         }
-        return new Data("", volume * 100.0,"%",Data.State.NORMAL);
+        return new Data("", volume,"%",Data.State.NORMAL);
     }
     
     /**
@@ -123,7 +123,7 @@ public class PitCountDown extends SIMPluginCallback {
     public Data setVolume(double percentage) {
         synchronized (m_clips) {
     		for (int i=0; i < m_clips.size(); i++) {
-    		    m_clips.get(i).setVolume(percentage / 100.0);
+    		    m_clips.get(i).setVolume(percentage);
             }
         }
         synchronized (m_volume) {

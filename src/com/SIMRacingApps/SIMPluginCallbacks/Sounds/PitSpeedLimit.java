@@ -14,7 +14,7 @@ import com.SIMRacingApps.Util.Sound;
  * You can control its behavior with the following variables.
  * <pre>
  *    pit-speed-limit-device = A Sound Device
- *    pit-speed-limit-volume = 1.0
+ *    pit-speed-limit-volume = 100.0
  *    pit-speed-limit-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/speeding_beep.wav
  *    pit-speed-limit-rate = 200
  *    pit-speed-limit-rate-excessive = 100
@@ -22,7 +22,7 @@ import com.SIMRacingApps.Util.Sound;
  *    
  * #Also these global settings will be used if the specific settings above are not set.
  *    sound-device = A Sound Device Name
- *    sound-volume = 1.0
+ *    sound-volume = 100.0
  * </pre>
  * Setting the volume zero(0) will disable the sounds.
  * The volume is a percentage from 0.0 to 1.0.
@@ -100,7 +100,7 @@ public class PitSpeedLimit extends SIMPluginCallback {
             synchronized (m_clip) {
                 volume = m_clip.getVolume();
             }
-        return new Data("", volume * 100.0,"%",Data.State.NORMAL);
+        return new Data("", volume,"%",Data.State.NORMAL);
     }
     
     /**
@@ -115,7 +115,7 @@ public class PitSpeedLimit extends SIMPluginCallback {
 
         if (m_clip != null)
             synchronized (m_clip) {
-    		    m_clip.setVolume(percentage / 100.0);
+    		    m_clip.setVolume(percentage);
             }
         synchronized (m_volume) {
             m_volume = percentage;

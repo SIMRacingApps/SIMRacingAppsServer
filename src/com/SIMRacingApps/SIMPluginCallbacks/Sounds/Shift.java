@@ -14,16 +14,16 @@ import com.SIMRacingApps.Util.Sound;
  * You can control its behavior with the following variables.
  * <pre>
  *    shift-device = A Sound Device
- *    shift-volume = 1.0
+ *    shift-volume = 100.0
  *    shift-replay = false
  *    shift-clip = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/shift_beep.wav
  *    
  * #Also these global settings will be used if the specific settings above are not set.
  *    sound-device = A Sound Device Name
- *    sound-volume = 1.0
+ *    sound-volume = 100.0
  * </pre>
  * Setting the volume zero(0) will disable the sounds.
- * The volume is a percentage from 0.0 to 1.0.
+ * The volume is a percentage from 0.0 to 100.0.
  *
  * @author Jeffrey Gilliam
  * @since 1.0
@@ -97,7 +97,7 @@ public class Shift extends SIMPluginCallback {
             synchronized (m_clip) {
                 volume = m_clip.getVolume();
             }
-        return new Data("", volume * 100.0,"%",Data.State.NORMAL);
+        return new Data("", volume,"%",Data.State.NORMAL);
     }
     
     /**
@@ -112,7 +112,7 @@ public class Shift extends SIMPluginCallback {
 
         if (m_clip != null)
             synchronized (m_clip) {
-    		    m_clip.setVolume(percentage / 100.0);
+    		    m_clip.setVolume(percentage);
             }
         synchronized (m_volume) {
             m_volume = percentage;

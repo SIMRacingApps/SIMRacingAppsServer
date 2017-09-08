@@ -36,7 +36,7 @@ public class Sound {
     private long m_minTimeBetweenPlays = 0L;
     private FloatControl m_volumeControl = null;
     private FloatControl m_balanceControl = null;
-    private double m_volumePercentage = 1.0;
+    private double m_volumePercentage = 100.0;
     static private double m_masterVolumePercentage = -1.0;
     static private Map<Sound,Sound> m_clips = new HashMap<Sound,Sound>();
     
@@ -65,10 +65,13 @@ public class Sound {
                 if(m_volumeControl == null && m_clip.isControlSupported(FloatControl.Type.VOLUME))
                     m_volumeControl = (FloatControl) m_clip.getControl(FloatControl.Type.VOLUME);
                 
-                if (m_masterVolumePercentage < 0.0)
-                    m_masterVolumePercentage = Server.getArg("volume",Server.getArg("sound-volume", 1.0));
+                if (m_masterVolumePercentage < 0.0) {
+                    m_masterVolumePercentage = Server.getArg("volume",Server.getArg("sound-volume", 100.0));
+                    if (m_masterVolumePercentage <= 1.0)
+                        m_masterVolumePercentage *= 100.0;
+                }
                 
-                setVolume(1.0); //will get constrained to the master level
+                setVolume(100.0); //will get constrained to the master level
                     
                 if (m_clip.isControlSupported(FloatControl.Type.BALANCE))
                     m_balanceControl = (FloatControl) m_clip.getControl(FloatControl.Type.BALANCE);
@@ -116,17 +119,21 @@ public class Sound {
     /**
      * Returns the master volume percentage
      * 
-     * @return The master volume as a percentage in the range between 0.0 to 1.0
+     * @return The master volume as a percentage in the range between 0.0 to 100.0
      */
     static public double getMasterVolume() { return m_masterVolumePercentage; }
     
     /**
      * Sets the master volume percentage. The current volume is adjusted to compensate.
-     * @param percentage The percentage in the range of 0.0 to 1.0
+     * @param percentage The percentage in the range of 0.0 to 1.0 or 0.0 to 100.0
      */
     static public void   setMasterVolume(double percentage) {
-        if (percentage >= 0.0 && percentage <= 1.0 && percentage != m_masterVolumePercentage) {
+        if (percentage <= 1.0)
+            percentage *= 100.0;
+        
+        if (percentage >= 0.0 && percentage <= 100.0 && percentage != m_masterVolumePercentage) {
             m_masterVolumePercentage = percentage;
+            Server.logger().finest(String.format("setMasterVolume(%f)",m_masterVolumePercentage));
             //reset the volume on all clips to the new master
             synchronized (m_clips) {
                 Iterator<Entry<Sound, Sound>> itr = m_clips.entrySet().iterator();
@@ -141,34 +148,44 @@ public class Sound {
     /**
      * Get the volume for this clip as a percentage of the volume range.
      * 
-     * @return The volume as a percentage in the range between 0.0 to 1.0
+     * @return The volume as a percentage in the range between 0.0 to 100.0
      */
     public double getVolume() {
-        if (m_volumeControl != null && m_masterVolumePercentage > 0) {
+        if (m_volumeControl != null && m_masterVolumePercentage > 0.0) {
             float max = m_volumeControl.getMaximum();
             float min = m_volumeControl.getMinimum();
             float range = max - min;
             float value = m_volumeControl.getValue();
             if (range > 0)
-                m_volumePercentage = ((value - min) / range) / m_masterVolumePercentage;
+                m_volumePercentage = (((value - min) / range) / (m_masterVolumePercentage / 100.0)) * 100.0;
         }
+        Server.logger().finest(String.format("getVolume(%.0f): %s",m_volumePercentage,this.m_file.toString()));
         return m_volumePercentage;
     }
     
     /**
      * Set the volume for this clip as a percentage of the volume range.
      * 
-     * @param percentage The percentage in the range of 0.0 to 1.0
+     * @param percentage The percentage in the range of 0.0 to 1.0 or 0.0 to 100.0
      */
     public void setVolume(double percentage) {
-        if (m_volumeControl != null && percentage >= 0.0 && percentage <= 1.0) {
+        if (percentage <= 1.0)
+            percentage *= 100.0;
+        
+        if (m_volumeControl != null && percentage >= 0.0 && percentage <= 100.0) {
             float max = m_volumeControl.getMaximum();
             float min = m_volumeControl.getMinimum();
             float range = max - min;
-            float value = min + (((float)m_masterVolumePercentage * range) * (float)percentage);
+            float value = min + (((float)(m_masterVolumePercentage/100.0) * range) * (float)(percentage/100.0));
             //Server.logger().fine("Sound.setVolume("+percentage+") = "+(((float)m_masterVolumePercentage) * (float)percentage));
+            
+            //keep within the boundaries in case of rounding issues
+            value = Math.max(min, value);
+            value = Math.min(max, value);
+            
             m_volumeControl.setValue( value );
             m_volumePercentage = percentage;
+            Server.logger().finest(String.format("setVolume(%.0f,%.0f): %s",m_volumePercentage, m_volumePercentage * (m_masterVolumePercentage/100.0),this.m_file.toString()));
         }
     }
     
@@ -177,14 +194,22 @@ public class Sound {
      * 
      * Note: If the source file is mono, you cannot change the balance.
      * Convert it to stereo.
-     * @param percentage The balance position as a percentage between 0.0 to 1.0.
+     * @param percentage The balance position as a percentage between 0.0 to 100.0.
      */
     public void setBalance(double percentage) {
-        if (m_balanceControl != null && percentage >= 0.0 && percentage <= 1.0) {
+        if (percentage <= 1.0)
+            percentage *= 100.0;
+        
+        if (m_balanceControl != null && percentage >= 0.0 && percentage <= 100.0) {
             float max = m_balanceControl.getMaximum();
             float min = m_balanceControl.getMinimum();
             float range = max - min;
-            float value = min + (range * (float)percentage);
+            float value = min + (range * (float)(percentage/100.0));
+            
+            //keep within the boundaries in case of rounding issues
+            value = Math.max(min, value);
+            value = Math.min(max, value);
+            
             m_balanceControl.setValue( value );
         }
     }
@@ -196,7 +221,7 @@ public class Sound {
         if ((m_lastTimePlayed + m_minTimeBetweenPlays) <= System.currentTimeMillis()) {
             stop();
             if (m_clip != null) {
-                Server.logger().fine("Playing "+m_file.getFileFound());
+                Server.logger().fine(String.format("Playing(%.0f=%.0f) %s",m_volumePercentage,getVolume(),m_file.getFileFound()));
                 setVolume(m_volumePercentage); //This will adjust the volume if the master has changed.
                 m_clip.setFramePosition(0);
                 m_clip.start();
