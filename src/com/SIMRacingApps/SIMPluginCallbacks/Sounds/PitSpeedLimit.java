@@ -130,10 +130,6 @@ public class PitSpeedLimit extends SIMPluginCallback {
         return getVolume();
     }
     
-    //These variables are only used by the background thread.
-    long m_lastTimePlayed = 0L;
-    boolean m_beenOnTrack = false;
-    
     @Override 
     public boolean ProcessData(SIMPlugin SIMPlugin, Map<String,Data> data) {
         if (data.isEmpty())
@@ -146,14 +142,6 @@ public class PitSpeedLimit extends SIMPluginCallback {
             //should we be playing in replay mode?
             if (!m_replay && replay)
                 return true;
-            
-            //set this flag to show we have left the pits
-            if (status.equals(Car.Status.ONTRACK) || status.equals(Car.Status.APPROACHINGPITS))
-                m_beenOnTrack = true;
-                
-            //upon existing the pit reset this flag so nothing will play unless we get on the track and pit again.
-            if (status.equals(Car.Status.LEAVINGPITS) || status.equals(Car.Status.INVALID))
-                m_beenOnTrack = false;
             
             if (status.equals(Car.Status.APPROACHINGPITS)
             ||  status.equals(Car.Status.ONPITROAD) 

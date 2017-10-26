@@ -140,7 +140,7 @@ public class Session {
      * @return The name of the current camera in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getCamera() {
-        return new Data("Session/Camera","");
+        return new Data("Session/Camera","",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -152,7 +152,7 @@ public class Session {
      * @return The name of what the current camera is focused on in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getCameraFocus() {
-        return new Data("Session/CameraFocus","","");
+        return new Data("Session/CameraFocus","","",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -167,7 +167,7 @@ public class Session {
      */
     public Data getCameras() {
         ArrayList<String> a = new ArrayList<String>();
-        return new Data("Session/Cameras",a,"String");
+        return new Data("Session/Cameras",a,"String",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -208,7 +208,7 @@ public class Session {
      * 
      * @return The number of cars in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getCars()                        { /*int*/                                 return new Data("Session/Cars",0); }
+    public    Data    getCars()                        { /*int*/                                 return new Data("Session/Cars",0,"",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns the number of caution laps.
@@ -217,7 +217,7 @@ public class Session {
      * 
      * @return The number of caution laps in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getCautionLaps()                 { /*int*/                                 return new Data("Session/CautionLaps",0,"lap"); }
+    public    Data    getCautionLaps()                 { /*int*/                                 return new Data("Session/CautionLaps",0,"lap",Data.State.NOTAVAILABLE); }
     
     /**
      * Returns the number of cautions as seen by the leader.
@@ -226,7 +226,7 @@ public class Session {
      * 
      * @return The number of cautions in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getCautions()                    { /*int*/                                 return new Data("Session/Cautions",0,"integer"); }
+    public    Data    getCautions()                    { /*int*/                                 return new Data("Session/Cautions",0,"integer",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns an array of the class names sorted fastest to slowest.
@@ -237,7 +237,7 @@ public class Session {
      */
     public Data getClassNames() {
         ArrayList<String> a = new ArrayList<String>();
-        return new Data("/Session/ClassNames",a,"String");
+        return new Data("/Session/ClassNames",a,"String",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -248,7 +248,7 @@ public class Session {
      * 
      * @return The version in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getDataVersion()                 { /*Long*/                                return new Data("Session/DataVersion",System.currentTimeMillis()); }
+    public    Data    getDataVersion()                 { /*Long*/                                return new Data("Session/DataVersion",System.currentTimeMillis(),"",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns the difference between 2 cars as either laps or seconds (if on the same lap).
@@ -267,9 +267,9 @@ public class Session {
      */
     public    Data    getDiffCars(String carIdentifier1, String carIdentifier2) {
         if (carIdentifier1 == null || carIdentifier2 == null)
-            return new Data("Session/DiffCars/null",0.0,"s");
+            return new Data("Session/DiffCars/null",0.0,"s",Data.State.NOTAVAILABLE);
         
-        Data seconds        = new Data("Session/DiffCars/"+carIdentifier1+"/"+carIdentifier2,0.0,"s");
+        Data seconds        = new Data("Session/DiffCars/"+carIdentifier1+"/"+carIdentifier2,0.0,"s",Data.State.NOTAVAILABLE);
         String cartoproject = carIdentifier2;
         Car _car2           = getCar(carIdentifier2);
         Car _car1           = getCar(carIdentifier1);
@@ -279,18 +279,18 @@ public class Session {
         ||  (_car2.getId().getInteger() == -1 && !carIdentifier2.equalsIgnoreCase("PITSTALL"))
         ||  (_car1.getId().getInteger() == -1 && !carIdentifier1.equalsIgnoreCase("PITSTALL"))
         )
-            return new Data("Session/DiffCars"+carIdentifier1+"/"+carIdentifier2,0.0,"s");
+            return new Data("Session/DiffCars"+carIdentifier1+"/"+carIdentifier2,0.0,"s",Data.State.NOTAVAILABLE);
 
         if (carIdentifier1.equalsIgnoreCase("PITSTALL")) {
             if (!_car1.getPitLocation().getState().equals(Data.State.NORMAL))
-                return new Data("Session/DiffCars"+carIdentifier1+"/"+carIdentifier2,0.0,"s");
+                return new Data("Session/DiffCars"+carIdentifier1+"/"+carIdentifier2,0.0,"s",Data.State.NOTAVAILABLE);
             else
                 _car1 = _car1;
         }
         
         if (carIdentifier2.equalsIgnoreCase("PITSTALL")) {
             if (!_car2.getPitLocation().getState().equals(Data.State.NORMAL))
-                return new Data("Session/DiffCars"+carIdentifier1+"/"+carIdentifier2,0.0,"s");
+                return new Data("Session/DiffCars"+carIdentifier1+"/"+carIdentifier2,0.0,"s",Data.State.NOTAVAILABLE);
             else
                 _car2 = _car2;
         }
@@ -422,7 +422,7 @@ public class Session {
         if ((_car2.getId().getInteger() == -1 && !carIdentifier2.equalsIgnoreCase("PITSTALL"))
         ||  (_car1.getId().getInteger() == -1 && !carIdentifier1.equalsIgnoreCase("PITSTALL"))
         )
-            return new Data("Session/DiffCarsRelative/"+carIdentifier1+"/"+carIdentifier2,"");
+            return new Data("Session/DiffCarsRelative/"+carIdentifier1+"/"+carIdentifier2,"","",Data.State.NOTAVAILABLE);
 
         Data pct2 = _car2.getLap(Car.LapType.COMPLETEDPERCENT);
         Data pct1 = _car1.getLap(Car.LapType.COMPLETEDPERCENT);
@@ -533,7 +533,7 @@ public class Session {
      * @since 1.2
      * @return The Id in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getId()                                          { /*string*/                                 return new Data("Session/Id","","",Data.State.OFF); } 
+    public    Data    getId()                                          { /*string*/                                 return new Data("Session/Id","","",Data.State.NOTAVAILABLE); } 
     
     /**
      * Returns the total number of incidents allowed for this session.
@@ -545,7 +545,7 @@ public class Session {
      *
      * @return The incident limit in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getIncidentLimit()                              { /*int*/                                  return new Data("Session/IncidentLimit",0,"x",Data.State.OFF); } 
+    public    Data    getIncidentLimit()                              { /*int*/                                  return new Data("Session/IncidentLimit",0,"x",Data.State.NOTAVAILABLE); } 
 
     /**
      * Returns true if the green flag is waving.
@@ -554,7 +554,7 @@ public class Session {
      * 
      * @return true if the green flag is out in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getIsGreenFlag()                 { /*Boolean*/                             return new Data("Session/IsGreenFlag",false,"boolean",Data.State.NORMAL); }
+    public    Data    getIsGreenFlag()                 { /*Boolean*/                             return new Data("Session/IsGreenFlag",false,"boolean",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns true if the caution flag is waving.
@@ -563,7 +563,7 @@ public class Session {
      * 
      * @return true if the caution flag is out in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getIsCautionFlag()               { /*Boolean*/                             return new Data("Session/IsCautionFlag",false,"boolean",Data.State.NORMAL); }
+    public    Data    getIsCautionFlag()               { /*Boolean*/                             return new Data("Session/IsCautionFlag",false,"boolean",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns true if the checkered flag is waving.
@@ -572,7 +572,7 @@ public class Session {
      * 
      * @return true if the checkered flag is out in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getIsCheckeredFlag()             { /*Boolean*/                             return new Data("Session/IsCheckeredFlag",false,"boolean",Data.State.NORMAL); }
+    public    Data    getIsCheckeredFlag()             { /*Boolean*/                             return new Data("Session/IsCheckeredFlag",false,"boolean",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns true if the crossed flag is waving. This generally means the leader has passed the halfway point.
@@ -581,7 +581,7 @@ public class Session {
      * 
      * @return true if the crossed flag is out in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getIsCrossedFlag()               { /*Boolean*/                             return new Data("Session/IsCrossedFlag",false,"boolean",Data.State.NORMAL); }
+    public    Data    getIsCrossedFlag()               { /*Boolean*/                             return new Data("Session/IsCrossedFlag",false,"boolean",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns true if the white flag is waving.
@@ -590,7 +590,7 @@ public class Session {
      * 
      * @return true if the white flag is out in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getIsWhiteFlag()                 { /*Boolean*/                             return new Data("Session/IsWhiteFlag",false,"boolean",Data.State.NORMAL); }
+    public    Data    getIsWhiteFlag()                 { /*Boolean*/                             return new Data("Session/IsWhiteFlag",false,"boolean",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns true if the red flag is waving.
@@ -599,7 +599,7 @@ public class Session {
      * 
      * @return true if the green flag is out in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getIsRedFlag()                   { /*Boolean*/                             return new Data("Session/IsRedFlag",false,"boolean",Data.State.NORMAL); }
+    public    Data    getIsRedFlag()                   { /*Boolean*/                             return new Data("Session/IsRedFlag",false,"boolean",Data.State.NOTAVAILABLE); }
     
     /**
      * Returns true if the session is in replay mode.
@@ -609,7 +609,7 @@ public class Session {
      * 
      * @return true if the green flag is out in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getIsReplay()                    { /*Boolean*/                             return new Data("Session/IsReplay",false,"boolean",Data.State.NORMAL); }
+    public    Data    getIsReplay()                    { /*Boolean*/                             return new Data("Session/IsReplay",false,"boolean",Data.State.NOTAVAILABLE); }
     
     /**
      * Returns the current lap of the race or REFERENCE car if in a different type of session.
@@ -621,7 +621,7 @@ public class Session {
      * 
      * @return The current lap in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getLap()                         { /*int*/                                 return new Data("Session/Lap",0,"lap"); }
+    public    Data    getLap()                         { /*int*/                                 return new Data("Session/Lap",0,"lap",Data.State.NOTAVAILABLE); }
     
     /**
      * Returns the total number of laps in the specified session.
@@ -635,7 +635,7 @@ public class Session {
      * @param sessionType The session type, {@link com.SIMRacingApps.Session.Type}, to get the laps from. Defaults to current session.
      * @return The number of laps in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getLaps(String sessionType)      { /*int*/                                 return new Data("Session/Laps",0,"lap"); }
+    public    Data    getLaps(String sessionType)      { /*int*/                                 return new Data("Session/Laps",0,"lap",Data.State.NOTAVAILABLE); }
     public    Data    getLaps()                        { /*int*/                                 return getLaps(""); } 
 
     /**
@@ -646,7 +646,7 @@ public class Session {
      * 
      * @return The number of laps to go in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getLapsToGo()                    { /*int*/                                 return new Data("Session/LapsToGo",0,"lap"); }
+    public    Data    getLapsToGo()                    { /*int*/                                 return new Data("Session/LapsToGo",0,"lap",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns a SIM specific League ID for the current session.
@@ -656,7 +656,7 @@ public class Session {
      * @since 1.2
      * @return The League Id in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getLeagueId()                     { /*string*/                                 return new Data("Session/LeagueId","","",Data.State.OFF); } 
+    public    Data    getLeagueId()                     { /*string*/                                 return new Data("Session/LeagueId","","",Data.State.NOTAVAILABLE); } 
 
     /**
      * This class enumerates the various messages that a SIM can raise that applies to all cars.
@@ -709,7 +709,7 @@ public class Session {
      * 
      * @return The number of radio channels available in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getRadioChannels()                         { /*int*/         return new Data("Session/RadioChannels",0); }
+    public    Data    getRadioChannels()                         { /*int*/         return new Data("Session/RadioChannels",0,"",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns the active radio channel.
@@ -718,7 +718,7 @@ public class Session {
      * 
      * @return The active channel in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getRadioChannelActive()                    { /*int*/         return new Data("Session/RadioChannelActive",-1); }
+    public    Data    getRadioChannelActive()                    { /*int*/         return new Data("Session/RadioChannelActive",-1,"",Data.State.NOTAVAILABLE); }
     
     /**
      * Returns if the radio channel can be deleted.
@@ -728,7 +728,7 @@ public class Session {
      * @param channel (Optional) The channel number. Defaults to the active channel.
      * @return Y if deleteable, N if not in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getRadioChannelIsDeleteable(int channel)    { /*boolean*/     return new Data("Session/RadioChannelIsDeletable",false,"boolean"); }
+    public    Data    getRadioChannelIsDeleteable(int channel)    { /*boolean*/     return new Data("Session/RadioChannelIsDeletable",false,"boolean",Data.State.NOTAVAILABLE); }
     public    Data    getRadioChannelIsDeleteable(String channel) { /*boolean*/     return getRadioChannelIsDeleteable(Integer.parseInt(channel)); }
     public    Data    getRadioChannelIsDeleteable()               { /*boolean*/     return getRadioChannelIsDeleteable(getRadioChannelActive().getInteger()); }
 
@@ -741,7 +741,7 @@ public class Session {
      * @param channel (Optional) The channel number. Defaults to the active channel.
      * @return Y if listen only, N if you can also transmit in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getRadioChannelIsListenOnly(int channel)   { /*boolean*/     return new Data("Session/RadioChannelIsListenOnly",true,"boolean"); }
+    public    Data    getRadioChannelIsListenOnly(int channel)   { /*boolean*/     return new Data("Session/RadioChannelIsListenOnly",true,"boolean",Data.State.NOTAVAILABLE); }
     public    Data    getRadioChannelIsListenOnly(String channel){ /*boolean*/     return getRadioChannelIsListenOnly(Integer.parseInt(channel)); }
     public    Data    getRadioChannelIsListenOnly()              { /*boolean*/     return getRadioChannelIsListenOnly(getRadioChannelActive().getInteger()); }
 
@@ -753,7 +753,7 @@ public class Session {
      * @param channel (Optional) The channel number. Default to the active channel.
      * @return Y if muteable, N if not in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getRadioChannelIsMutable(int channel)      { /*boolean*/     return new Data("Session/RadioChannelIsMutable",false,"boolean"); }
+    public    Data    getRadioChannelIsMutable(int channel)      { /*boolean*/     return new Data("Session/RadioChannelIsMutable",false,"boolean",Data.State.NOTAVAILABLE); }
     public    Data    getRadioChannelIsMutable(String channel)   { /*boolean*/     return getRadioChannelIsMutable(Integer.parseInt(channel)); }
     public    Data    getRadioChannelIsMutable()                 { /*boolean*/     return getRadioChannelIsMutable(getRadioChannelActive().getInteger()); }
 
@@ -765,7 +765,7 @@ public class Session {
      * @param channel (Optional) The channel number. Defaults to the active channel.
      * @return Y if muted, N if not in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getRadioChannelIsMuted(int channel)        { /*boolean*/     return new Data("Session/RadioChannelIsMuted",false,"boolean"); }
+    public    Data    getRadioChannelIsMuted(int channel)        { /*boolean*/     return new Data("Session/RadioChannelIsMuted",false,"boolean",Data.State.NOTAVAILABLE); }
     public    Data    getRadioChannelIsMuted(String channel)     { /*boolean*/     return getRadioChannelIsMuted(Integer.parseInt(channel)); }
     public    Data    getRadioChannelIsMuted()                   { /*boolean*/     return getRadioChannelIsMuted(getRadioChannelActive().getInteger()); }
 
@@ -777,7 +777,7 @@ public class Session {
      * @param channel (Optional) The channel number. Defaults to the active channel.
      * @return Y if scanable, N if not in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getRadioChannelIsScanable(int channel)     { /*boolean*/     return new Data("Session/RadioChannelIsScanable",true,"boolean"); }
+    public    Data    getRadioChannelIsScanable(int channel)     { /*boolean*/     return new Data("Session/RadioChannelIsScanable",true,"boolean",Data.State.NOTAVAILABLE); }
     public    Data    getRadioChannelIsScanable(String channel)  { /*boolean*/     return getRadioChannelIsScanable(Integer.parseInt(channel)); }
     public    Data    getRadioChannelIsScanable()                { /*boolean*/     return getRadioChannelIsScanable(getRadioChannelActive().getInteger()); }
 
@@ -789,7 +789,7 @@ public class Session {
      * @param channel (Optional) The channel number. Defaults to the active channel.
      * @return name of the radio channel in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getRadioChannelName(int channel)           { /*string*/      return new Data("Session/RadioChannelName",""); }
+    public    Data    getRadioChannelName(int channel)           { /*string*/      return new Data("Session/RadioChannelName","","",Data.State.NOTAVAILABLE); }
     public    Data    getRadioChannelName(String channel)        { /*string*/      return getRadioChannelName(Integer.parseInt(channel)); }
     public    Data    getRadioChannelName()                      { /*boolean*/     return getRadioChannelName(getRadioChannelActive().getInteger()); }
 
@@ -800,7 +800,7 @@ public class Session {
      * 
      * @return Y if radio is scanning, N if not in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getRadioScan()                             { /*boolean*/      return new Data("Session/RadioScan",false,"boolean"); }
+    public    Data    getRadioScan()                             { /*boolean*/      return new Data("Session/RadioScan",false,"boolean",Data.State.NOTAVAILABLE); }
 
     /**
      * Makes the specified radio channel the active channel to transmit on.
@@ -811,7 +811,7 @@ public class Session {
      * @param channel The channel number.
      * @return the active channel number in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    setRadioChannel(int channel)               { /*string*/      return new Data("Session/setRadioChannel",-1); }
+    public    Data    setRadioChannel(int channel)               { /*string*/      return new Data("Session/setRadioChannel",-1,"",Data.State.NOTAVAILABLE); }
     public    Data    setRadioChannel(String channel)            { /*string*/      return setRadioChannel(Integer.parseInt(channel)); }
 
     /**
@@ -822,7 +822,7 @@ public class Session {
      * @param channel The channel number.
      * @return the channel number deleted in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    setRadioChannelDelete(int channel)         { /*string*/      return new Data("Session/setRadioChannelDelete",channel); }
+    public    Data    setRadioChannelDelete(int channel)         { /*string*/      return new Data("Session/setRadioChannelDelete",channel,"",Data.State.NOTAVAILABLE); }
     public    Data    setRadioChannelDelete(String channel)      { /*string*/      return setRadioChannelDelete(Integer.parseInt(channel)); }
 
     /**
@@ -834,7 +834,7 @@ public class Session {
      * @param flag (Optional) Y to mute, N to unmute. Default is Y.
      * @return the channel number muted in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    setRadioChannelMute(int channel,boolean flag)    { /*string*/     return new Data("Session/setRadioChannelMute/"+Integer.toString(channel),flag); }
+    public    Data    setRadioChannelMute(int channel,boolean flag)    { /*string*/     return new Data("Session/setRadioChannelMute/"+Integer.toString(channel),flag,"",Data.State.NOTAVAILABLE); }
     public    Data    setRadioChannelMute(String channel, String flag) { /*string*/     return setRadioChannelMute(Integer.parseInt(channel),(new Data("",flag)).getBoolean()); }
     public    Data    setRadioChannelMute(String channel)              { /*string*/     return setRadioChannelMute(Integer.parseInt(channel),true); }
     public    Data    setRadioChannelMute()                            { /*string*/     return setRadioChannelMute(getRadioChannelActive().getInteger(),true); }
@@ -849,7 +849,7 @@ public class Session {
      * @param channelName The channel name, limited to 15 characters.
      * @return the channel name in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    setRadioChannelName(String channelName)    { /*string*/      return new Data("Session/setRadioChannelName",channelName); }
+    public    Data    setRadioChannelName(String channelName)    { /*string*/      return new Data("Session/setRadioChannelName",channelName,"",Data.State.NOTAVAILABLE); }
 
     
     /**
@@ -861,7 +861,7 @@ public class Session {
      * @param flag Y to enable scanning, N to disable scanning
      * @return flag in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    setRadioScan(boolean flag)                 { /*boolean*/     return new Data("Session/setRadioScanable",flag,"boolean"); }
+    public    Data    setRadioScan(boolean flag)                 { /*boolean*/     return new Data("Session/setRadioScanable",flag,"boolean",Data.State.NOTAVAILABLE); }
     public    Data    setRadioScan(String flag)                  { /*boolean*/     return setRadioScan((new Data("",flag)).getBoolean());}
 
     
@@ -879,7 +879,7 @@ public class Session {
      * @since 1.3
      * @return A string representing the replay state in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getReplay()                                { /*String*/      return new Data("Session/Replay","","String"); }
+    public    Data    getReplay()                                { /*String*/      return new Data("Session/Replay","","String",Data.State.NOTAVAILABLE); }
 
     /**
      * Tells the replay system what to do. 
@@ -897,7 +897,7 @@ public class Session {
      * @param command The command to execute. Defaults to PLAY.
      * @return The speed the replay is currently playing at in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    setReplay(String command)                  { /*String*/      return new Data("Session/setReplay",command,"String"); }
+    public    Data    setReplay(String command)                  { /*String*/      return new Data("Session/setReplay",command,"String",Data.State.NOTAVAILABLE); }
 
     /**
      * Tells the replay system what position to start playing at. Here are the available commands.
@@ -925,7 +925,7 @@ public class Session {
      * @param command The position to go to.
      * @return The speed the replay is currently playing at in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    setReplayPosition(String command)          { /*String*/      return new Data("Session/setReplayPosition",command,"String"); }
+    public    Data    setReplayPosition(String command)          { /*String*/      return new Data("Session/setReplayPosition",command,"String",Data.State.NOTAVAILABLE); }
     
     /**
      * Returns the time the current session started as the number of seconds since Jan 1, 1970.
@@ -934,7 +934,7 @@ public class Session {
      * 
      * @return The start time in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getStartTime()                   { /*double*/                              return new Data("Session/StartTime",(double)System.currentTimeMillis()/1000.0,"s"); }
+    public    Data    getStartTime()                   { /*double*/                              return new Data("Session/StartTime",(double)System.currentTimeMillis()/1000.0,"s",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns a String that is SIM specific that represents the strength of the field.
@@ -945,7 +945,7 @@ public class Session {
      * 
      * @return The strength of the field in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getStrengthOfField()             { /*String*/                              return new Data("Session/StrengthOfField",""); }
+    public    Data    getStrengthOfField()             { /*String*/                              return new Data("Session/StrengthOfField","",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns the number of seconds since the current session started.
@@ -954,7 +954,7 @@ public class Session {
      * 
      * @return The number of seconds in current session in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getTimeElapsed()                 { /*double*/                              return new Data("Session/TimeElapsed",0.0,"s"); }
+    public    Data    getTimeElapsed()                 { /*double*/                              return new Data("Session/TimeElapsed",0.0,"s",Data.State.NOTAVAILABLE); }
 
     /**
      * If the current session has a time restriction, this returns the number of seconds remaining.
@@ -966,7 +966,7 @@ public class Session {
      * 
      * @return The number of seconds remaining in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getTimeRemaining()               { /*double*/                              return new Data("Session/TimeRemaining",0.0,"s"); }
+    public    Data    getTimeRemaining()               { /*double*/                              return new Data("Session/TimeRemaining",0.0,"s",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns an instance to the Track in this session
@@ -982,7 +982,7 @@ public class Session {
      * 
      * @return The session type in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getType()                        { /*String*/                              return new Data("Session/Type",Type.UNKNOWN); }
+    public    Data    getType()                        { /*String*/                              return new Data("Session/Type",Type.UNKNOWN,"",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns the reference car identifier as defined by {@link com.SIMRacingApps.Session#getCar(String)}. 
@@ -1004,7 +1004,7 @@ public class Session {
      * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setAdvanceFlag() {
-        return new Data("Session/setAdvanceFlag","","String");
+        return new Data("Session/setAdvanceFlag","","String",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -1024,7 +1024,7 @@ public class Session {
      * @return The camera name in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setCamera(String cameraName,String focusOn,String carIdentifier) {
-        return new Data("Session/setCamera/"+cameraName+"/"+focusOn+"/"+carIdentifier,"","String");
+        return new Data("Session/setCamera/"+cameraName+"/"+focusOn+"/"+carIdentifier,"","String",Data.State.NOTAVAILABLE);
     }
     public    Data setCamera(String cameraName,String focusOn) {
         return setCamera(cameraName,focusOn,"REFERENCE");
@@ -1064,7 +1064,7 @@ public class Session {
      *@return The text string sent to the drivers  in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setChat(String text) {
-        return new Data("Session/setChat",text,"String");
+        return new Data("Session/setChat",text,"String",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -1077,7 +1077,7 @@ public class Session {
      *@return The text string sent to the drivers  in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setChatReply(String text) {
-        return new Data("Session/setChatReply",text);
+        return new Data("Session/setChatReply",text,"String",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -1090,7 +1090,7 @@ public class Session {
      * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setChatFlag(boolean onOffFlag) {
-        return new Data("Session/setChatFlag","","String");
+        return new Data("Session/setChatFlag","","String",Data.State.NOTAVAILABLE);
     }
     public    Data setChatFlag(String onOffFlag) {
         return setChatFlag((new Data("",onOffFlag)).getBoolean());
@@ -1125,6 +1125,6 @@ public class Session {
      * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setCautionFlag() {
-        return new Data("Session/setCautionFlag","","String");
+        return new Data("Session/setCautionFlag","","String",Data.State.NOTAVAILABLE);
     }
 }

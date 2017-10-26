@@ -42,6 +42,19 @@ public class State {
     }
 
     /**
+     * Copy constructor for creating a duplicate a state
+     * 
+     * @param state The state to duplicate
+     */
+    public State(State state) {
+        m_state             = state.m_state;
+        m_stateStartingTime = state.m_stateStartingTime;
+        m_prevState         = state.m_prevState;
+        m_prevStartingTime  = new HashMap<String,Double>(state.m_prevStartingTime);
+        m_prevTime          = new HashMap<String,Double>(state.m_prevTime);
+    }
+    
+    /**
      * Returns the current state.
      * @return The current state.
      */

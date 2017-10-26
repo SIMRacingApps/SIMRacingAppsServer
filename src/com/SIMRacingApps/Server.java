@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.ConsoleHandler;
@@ -503,6 +504,8 @@ public class Server {
      * @param args command line arguments
      */
     //@SuppressWarnings("deprecation")
+    private static Process electronProcess = null;
+    
     public static void main(String[] args) {
 
         //make sure the user's folders exists
@@ -675,6 +678,18 @@ public class Server {
                 try {
                     File exe = new File(getArg("electron-path",FindFile.getUserPath()[0]+"/electron-apps/electron/electron.exe"));
                     
+                    ProcessBuilder processBuilder = new ProcessBuilder("tasklist.exe");
+                    Process process = processBuilder.start();
+                    Scanner scanner = new Scanner(process.getInputStream(), "UTF-8");
+                    scanner.useDelimiter("\\A");
+                    String tasksList = scanner.hasNext() ? scanner.next() : "";
+                    scanner.close();
+                    boolean isRunning = tasksList.contains(exe.getName());
+                    
+                    if (isRunning) {
+                        logger().info("Electron: " + exe.getName() + " is already running");
+                    }
+                    else
                     if (exe.canExecute()) {
                         File dir = new File(FindFile.getUserPath()[0]+"/electron-apps");
                         List<String> a = new ArrayList<String>();
@@ -719,17 +734,17 @@ public class Server {
                         Map<String,String> env = pb.environment();
                         env.put("ELECTRON_NO_ATTACH_CONSOLE","true");
                         pb.directory(dir);
-                        Process p = pb.start();
+                        electronProcess = pb.start();
                         logger().info("Electron: Started with " + a.toString() );
-                        while (p.isAlive()) {
+                        while (electronProcess.isAlive()) {
                             BufferedReader stdin = new BufferedReader(
                                     new InputStreamReader(
-                                            p.getInputStream()
+                                            electronProcess.getInputStream()
                                     )
                             );
                             BufferedReader stderr = new BufferedReader(
                                     new InputStreamReader(
-                                            p.getErrorStream()
+                                            electronProcess.getErrorStream()
                                     )
                             );
                             
@@ -754,6 +769,19 @@ public class Server {
                   logStackTrace(Level.WARNING,e1);
               }
             }
+            
+            
+            //TODO: can't get this to work when the CMD window is closed
+            Runtime.getRuntime().addShutdownHook(new Thread()
+            {
+                @Override
+                public void run()
+                {
+                    if (electronProcess != null) {
+                        electronProcess.destroy();
+                    }
+                }
+            });
             
             server.join();
         } catch (BindException be) {

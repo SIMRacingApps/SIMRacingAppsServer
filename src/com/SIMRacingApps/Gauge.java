@@ -36,45 +36,23 @@ import com.SIMRacingApps.Data;
  * It has an increment that all values will be rounded to when changing it.
  * <p>
  * A gauge can also have "State", which is defined range(s) of values. 
- * Standard States are "OFF", "ERROR" and "NORMAL".
+ * Standard States are "NOTAVAILABLE", "OFF", "ERROR" and "NORMAL".
  * Clients can choose to display different colors, blink, or other visual effects based on the state.
  * Many gauges also have additional states. 
  * See {@link com.SIMRacingApps.Gauge.Type} for each gauges documentation for the states it supports.
  * @author Jeffrey Gilliam
- * @since 1.0
+ * @since 1.4
  * @copyright Copyright (C) 2015 - 2017 Jeffrey Gilliam
  * @license Apache License 2.0
  * 
  */
 
 public class Gauge {
-    
-
-    /**
-     * This defines when the SIMValue.get() function is called what it will return when.
-     * They are used internally to by the SIM to indicate what the SIM reader will return.
-     */
-    public enum SIMValueTypes {
-        /** return is unknown*/
-        Unknown,             
-        /** returns the real-time value the car is currently outputting */
-        ForCar,              
-        /** returns the value the car is currently outputting, but setupValue should be set to zero after pitting*/
-        ForCarZeroOnPit,     
-        /** this value is not updated until you pit. (ie. Tire Temps,Wear)*/
-        AfterPit,            
-        /** returns the current setup value that will be applied to the car when you pit*/
-        ForSetup,            
-        /** value is applied to the car and the setup at the same time (ie. brake bias)*/
-        ForCarAndSetup,      
-        /** SIM doesn't return a value and it should be zero on pit (ie. windshield tearoff)*/
-        ZeroOnPit            
-    };
-
     /**
      * This defines all the possible gauge types.
      * Gauges have predefined states based on ranges of values.
-     * All gauges support the standard states of 
+     * All gauges support the standard states of
+     * "NOTAVAILABLE" (This gauge doesn't exist in this car) 
      * "OFF" (The gauge is turned off), 
      * "NORMAL" (The gauge is on and outputting values)
      * "ERROR" (There's a problem reading the value of this gauge).
@@ -546,11 +524,11 @@ public class Gauge {
         /**
          * The starting value of the range, inclusive.
          */
-        public double start;
+        public Data start;
         /**
          * The ending value of the range, exclusive.
          */
-        public double end;
+        public Data end;
         /**
          * The name of the state.
          */
@@ -565,73 +543,153 @@ public class Gauge {
          * @param state The name of the state.
          * @param start The starting value.
          * @param end   The ending value.
+         * @param UOM   The UOM of these values.
          */
-        public StateRange(String state, double start, double end) {
+        public StateRange(String state, double start, double end, String UOM) {
             this.state = state;
-            this.start = start;
-            this.end   = end;
+            this.start = new Data("",start,UOM);
+            this.end   = new Data("",end,UOM);
         }
         /**
          * A constructor to be used when defining a state that transforms the return value.
          * @param state The name of the state.
          * @param start The starting value.
          * @param end   The ending value.
+         * @param UOM   The UOM of these values.
          * @param value The new value.
          */
-        public StateRange(String state, double start, double end, Data value) {
+        public StateRange(String state, double start, double end, String UOM, Data value) {
             this.state = state;
-            this.start = start;
-            this.end   = end;
+            this.start = new Data("",start,UOM);
+            this.end   = new Data("",end,UOM);
             this.value = value;
         }
     }
 
-    private String m_car;
-    private TreeMap<Double,StateRange> m_states = null;
+    protected Car m_car;
+    protected String m_carIdentifier;
+    protected String m_type;
+    protected String m_UOM;
+    protected String m_imperial;    //what to return if measurement system is imperial
+    protected String m_metric;      //what to return if measurement system is metric
+    protected String m_measurementSystem = "";  //either METRIC or IMPERIAL or none to leave alone
+    protected String m_name = "";
+    protected String m_typeName = "";
+    protected boolean m_stateAscending;
+    protected double m_multiplier;
+    protected Data m_minimum;
+    protected Data m_maximum;
+    protected Data m_majorIncrement;
+    protected Data m_minorIncrement;
+//    protected Data m_RPMPitRoadSpeed;
+    protected Data m_capacityMinimum;
+    protected Data m_capacityMaximum;
+    protected Data m_capacityIncrement;
+    protected boolean m_isFixed;
+    protected boolean m_isChangable;
+    protected boolean m_changeFlag;
+    protected boolean m_isDirty;
+    protected boolean m_onResetChange;
+    protected Map<String,TreeMap<Double,StateRange>> m_states = null;
+    protected String m_reader;
+    protected int m_lapChanged;
+    protected int m_usedCount;
     
-    private boolean m_state_ascending = false;
-    public boolean getStateAscending() { return m_state_ascending; }
-    public void setStateAscending(boolean state_ascending) { m_state_ascending = state_ascending; } 
-    
-    private String m_type;                
-    private String m_name;
-    private String m_typename;            
-    private String m_uom;
-    private String m_defaultUOM;
-    private double m_multiplier;          //Adjusts value for gauge major increments
-    private double m_minimum;             
-    private double m_maximum;
-    private double m_majorIncrement;      
-    private double m_minorIncrement;
-    private double m_capacityMaximum;     
-    private double m_capacityMinimum;
-    private double m_capacityIncrement;   
-    private int m_currentLap;               //the current lap update each tick by calling updateCurrentLap()
-    protected int    m_lapChanged;          //the lap when this gauge was changed because we pitted
-    protected int  m_count;
-//  protected int    m_lapChangedPrevious;  //the previous value of lapChanged whenever you have reset or pitted
+    @SuppressWarnings("unused")
+    private Gauge() {}
 
-//  private boolean m_isInCar;            //returns true if this gauge is a real gauge on the real car or it's virtual from the SIM
-    private boolean m_isFixed;              
-    private boolean m_isChangeable;          
-    private boolean m_onResetChange;
-    private boolean m_isDebug;              //returns true if this value setup value cannot be changed
-    private boolean m_isSentToSIM;        //returns true if the value has been sent to the SIM
-    
-    private Data SIMValue;
-    private Data m_SIMValue = null;
-    private SIMValueTypes SIMValueType;
+    /**
+     * Constructor for the Gauge class.
+     * Some gauges change depending on the track.
+     * 
+     * The UOM will be set my the SIM to either what is naturally displayed on this car at this track.
+     * Or, it could let the user switch between Imperial and Metric.
+     * 
+     * @param type The type of gauge as defined by {@link com.SIMRacingApps.Gauge.Type}
+     * @param car The car to associate this gauge with.
+     * @param track The track the car will be running on.
+     * @param simGaugesBefore A map that contains gauge data from the SIM to be applied first. The files can then override those values if needed.
+     * @param simGaugesAfter A map that contains gauge data from the SIM to be applied after the files are processed to override any values in them.
+     */
+    public Gauge(
+          String type
+        , Car car
+        , Track track
+        , Map<String, Map<String, Map<String, Object>>> simGaugesBefore
+        , Map<String, Map<String, Map<String, Object>>> simGaugesAfter
+    ) {
+        this.m_car = car;
+        this.m_carIdentifier = "I" + m_car.getId().getString();
+        this.m_type = type;
+        this.m_UOM = "";
+        this.m_stateAscending = true;
+        this.m_multiplier = 1.0;
+        this.m_isFixed = false;
+        this.m_isChangable = false;
+        this.m_changeFlag = false;
+        this.m_isDirty = false;
+        this.m_onResetChange = false;
+        this.m_minimum = new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Minimum",0.0,"",Data.State.NORMAL);
+        this.m_maximum = new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Maximum",100.0,"",Data.State.NORMAL);
+        this.m_majorIncrement = new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/MajorIncrement",10.0,"",Data.State.NORMAL);
+        this.m_minorIncrement = new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/MinorIncrement",2.0,"",Data.State.NORMAL);
+//        this.m_RPMPitRoadSpeed = new Data(0.0,Data.State.NORMAL);
+        this.m_capacityMinimum = new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/CapacityMinimum",0.0,"",Data.State.NORMAL);
+        this.m_capacityMaximum = new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/CapacityMaximum",100.0,"",Data.State.NORMAL);
+        this.m_capacityIncrement = new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/CapacityIncrement",1.0,"",Data.State.NORMAL);
+        this.m_states = new HashMap<String,TreeMap<Double,StateRange>>();
+        this.m_reader = "";
+        this.m_lapChanged = 1;
+        this.m_usedCount = 1;
 
-    //delay initialization so derived classes can change the defaults first
-    private Data value = null;
-    private Data beforePitValue = null;
-    private Data afterPitValue = null;
-    private Data afterPitLaps = null;
-    private Data setupValue = null;
-    private boolean m_changeFlag = false;
-    private boolean m_firstreset = true;
-    private Map<String,Gauge> m_group = new HashMap<String,Gauge>();
-
+        
+        //now read the json profiles, gauges passed in first, then default, then overrides from the SIM
+        ArrayList<Map<String, Map<String, Map<String, Object>>>> gaugesList = new ArrayList<Map<String, Map<String, Map<String, Object>>>>();
+        gaugesList.add(simGaugesBefore);
+        gaugesList.add(car._getDefaultGauges());
+        gaugesList.add(car._getSIMGauges());
+        gaugesList.add(simGaugesAfter);
+        
+        for (int i=0; i < gaugesList.size(); i++) {
+            Map<String, Map<String, Map<String, Object>>> gauges = gaugesList.get(i);
+            
+            if (gauges != null && gauges.get(type) != null) {
+                
+                Map<String, Map<String, Object>> gauge = gauges.get(type);
+                __loadGauge(gauge,"default","");
+                __loadGauge(gauge,track.getName().getString(),"");
+                
+                //now load gear specific gauges if they exist
+                //If they do exist in the .json file, then there has to be an entry for every gear position
+                if (type.equalsIgnoreCase(Gauge.Type.TACHOMETER)) {
+                    String [] gears = {"R","N","1","2","3","4","5","6","7","8"};
+                    for (String gear : gears) {
+                        __loadGauge(gauge,"default","-"+gear);
+                        __loadGauge(gauge,track.getName().getString(),"-"+gear);
+                    
+                        String [] powers = {"1","2","3","4","5","6","7","8"};
+                        for (String power : powers) {
+                            __loadGauge(gauge,"default","-"+gear+"-"+power);
+                            __loadGauge(gauge,track.getName().getString(),"-"+gear+"-"+power);
+                        }
+                    }
+                }
+            }
+        }
+        
+	    //if the .json profile does not specify the Imperial or Metric UOMs
+        //then use the default from the Data class
+        if (this.m_UOM.equalsIgnoreCase("kg") || this.m_UOM.equalsIgnoreCase("lb")) {
+            m_metric   = "kg"; 
+            m_imperial = "lb";
+        }
+        else {
+            if (m_imperial == null)
+                this.m_imperial = new Data("",0,this.m_UOM).convertUOM("IMPERIAL").getUOM();
+            if (m_metric == null)
+                this.m_metric = new Data("",0,this.m_UOM).convertUOM("METRIC").getUOM();
+        }
+    }
 
     /**
       * Returns the type of gauge as defined by {@link com.SIMRacingApps.Gauge.Type}
@@ -640,21 +698,15 @@ public class Gauge {
       * 
       * @return the type of gauge
       */
-    public Data getType()                 { return new Data("Car/"+m_car+"/Gauge/"+m_type+"/Type",m_type,"String",Data.State.NORMAL); }
+    public Data getType() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Type",m_type,"String",Data.State.NORMAL); }
 
     /**
-      * Returns the untranslated name of the gauge. (e.g. WATER)
+      * Returns the untranslated name to display on the gauge. (e.g. WATER)
       * 
       * <p>PATH = {@link #getName() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/Name}
       * @return The name of the gauge.
       */
-    public Data getName()                 { return new Data("Car/"+m_car+"/Gauge/"+m_type+"/Name",m_name,"String",Data.State.NORMAL); }
-    /**
-      * Sets the Name of the gauge.
-      * See {@link com.SIMRacingApps.Gauge#getName()}
-      * @param name The name of the gauge.
-      */
-    public void setName(String name)      { m_name = name; }
+    public Data getName() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Name",m_name,"String",Data.State.NORMAL); }
 
     /**
       * Returns farther explanation of the gauge (i.e. TEMP)
@@ -663,42 +715,17 @@ public class Gauge {
       * 
       * @return A additional explanation of the gauge.
       */
-    public Data getTypeName()             { return new Data("Car/"+m_car+"/Gauge/"+m_type+"/TypeName",m_typename,"String",Data.State.NORMAL); }
+    public Data getTypeName() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/TypeName",m_typeName,"String",Data.State.NORMAL); }
     
-    /**
-      * Sets the Type Name of the gauge.
-      * See {@link com.SIMRacingApps.Gauge#getTypeName()}
-      * @param typename The typename of the gauge.
-      */
-    public void setTypeName(String typename){ m_typename = typename;}
-
-    /**
+    /*
      * Returns the Default Unit of Measure for this gauge (i.e. "NATIVE")
      * 
      * <p>PATH = {@link #getDefaultUOM() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/DefaultUOM}
      * 
      * @return The Unit of Measure.
      */
-   public Data getDefaultUOM()            { return new Data("Car/"+m_car+"/Gauge/"+m_type+"/DefaultUOM",m_defaultUOM,"String",Data.State.NORMAL); }
+//   public Data getDefaultUOM() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/DefaultUOM","","String",Data.State.NORMAL); }
 
-   /**
-    * Sets the default unit of measure.
-    * See {@link com.SIMRacingApps.Gauge#getDefaultUOM()}
-    * @param uom The unit of measure.
-    */
-   public void setDefaultUOM(String uom)  { m_defaultUOM = uom; }
-   
-    /**
-      * Returns the Internal Unit of Measure for this gauge (i.e. "F")
-      * 
-      * <p>PATH = {@link #getInternalUOM() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/InternalUOM}
-      * 
-      * @return The Internal Unit of Measure.
-      */
-    public Data getInternalUOM()                  {
-        return new Data("Car/"+m_car+"/Gauge/"+m_type+"/InternalUOM",m_uom,"String",Data.State.NORMAL); 
-    }
-    
     /**
      * Returns the Unit of Measure for this gauge (i.e. "F") based on the users locale.
      * This may not be the same as the internal UOM that is what all the values are in.
@@ -708,44 +735,8 @@ public class Gauge {
      * 
      * @return The Unit of Measure.
      */
-   public Data getUOM()                  {
-       Data withUOM = new Data("",0.0,m_uom).convertUOM(m_defaultUOM);
-       return new Data("Car/"+m_car+"/Gauge/"+m_type+"/UOM",withUOM.getUOM(),"String",Data.State.NORMAL); 
-   }
-    /**
-      * Sets the unit of measure.
-      * See {@link com.SIMRacingApps.Gauge#getUOM()}
-      * @param uom The unit of measure.
-      */
-    public void setUOM(String uom)        {
-        if (m_uom.equalsIgnoreCase(uom))
-            return;
-        
-        m_minimum           = new Data("",m_minimum,          m_uom).addConversion(SIMValue).convertUOM(uom).getDouble();
-        m_maximum           = new Data("",m_maximum,          m_uom).addConversion(SIMValue).convertUOM(uom).getDouble();
-        m_majorIncrement    = new Data("",m_majorIncrement,   m_uom).addConversion(SIMValue).convertUOM(uom).getDouble();
-        m_minorIncrement    = new Data("",m_minorIncrement,   m_uom).addConversion(SIMValue).convertUOM(uom).getDouble();
-        m_capacityMaximum   = new Data("",m_capacityMaximum,  m_uom).addConversion(SIMValue).convertUOM(uom).getDouble();
-        m_capacityMinimum   = new Data("",m_capacityMinimum,  m_uom).addConversion(SIMValue).convertUOM(uom).getDouble();
-        m_capacityIncrement = new Data("",m_capacityIncrement,m_uom).addConversion(SIMValue).convertUOM(uom).getDouble();
-        
-        TreeMap<Double,StateRange> states = new TreeMap<Double,StateRange>();
-
-        Iterator<Entry<Double, StateRange>> itr = m_states.entrySet().iterator();
-        while (itr.hasNext()) {
-            StateRange state = itr.next().getValue();
-            StateRange newState = new StateRange(
-                                    state.state,
-                                    new Data("",state.start,m_uom).addConversion(SIMValue).convertUOM(uom).getDouble(),
-                                    new Data("",state.end,m_uom).addConversion(SIMValue).convertUOM(uom).getDouble()
-                                  );
-            if (state.value != null)
-                newState.value = state.value.addConversion(SIMValue).convertUOM(uom);
-        }
-        m_states = states;
-        m_uom = uom;
-    }
-
+    public Data getUOM() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/UOM",new Data("",0.0,m_UOM).convertUOM(m_measurementSystem).getUOM(),"String",Data.State.NORMAL); }
+   
     /**
       * Return a multiplier to be used when calculating the major and minor tick marks.
       * For example: the tachometer returns values in RPMs ranging from 0 to 11,000. The multiplier could be set to .001, so that
@@ -755,14 +746,8 @@ public class Gauge {
       * 
       * @return The multiplier value.
       */
-    public Data getMultiplier()           { return new Data("Car/"+m_car+"/Gauge/"+m_type+"/Multiplier",m_multiplier,"double",Data.State.NORMAL); }
-    /**
-      * Sets the multiplier for this gauge to use when calculating major and minor tick marks.
-      * See {@link com.SIMRacingApps.Gauge#getMultiplier()}
-      * @param multiplier The multiplier.
-      */
-    public void setMultiplier(double multiplier) { m_multiplier = multiplier; }
-
+    public Data getMultiplier() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Multiplier",m_multiplier,"double",Data.State.NORMAL); }
+    
     /**
       * Returns the minimum value of where this gauge should start with the first tick mark (i.e. 0)
       * Note: The value would be after the multiplier has been applied.
@@ -773,39 +758,9 @@ public class Gauge {
       *
       * @return The minimum value
       */
-    public Data getMinimum(String UOM)    { 
-        Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/Minimum",m_minimum,m_uom,Data.State.NORMAL);
-        d.addConversion(SIMValue);
-        d = d.convertUOM(UOM);
-        //now loop through the states and see if the value should be overridden with a constant.
-        Double v = d.getDouble();
-        Iterator<Entry<Double,StateRange>> itr = m_states.entrySet().iterator();
-
-        //pick the one with the highest start if the ranges overlap.
-        //all ranges overlap NORMAL
-        while (itr.hasNext()) {
-            StateRange range = itr.next().getValue();
-            if (v >= range.start && v < range.end)
-                if (range.value != null)
-                    d  = range.value;
-        }
-        return d;
-    }
-    public Data getMinimum()              { return getMinimum(m_defaultUOM); }
+    public Data getMinimum(String UOM) { return _getReturnValue(m_minimum,UOM); }
+    public Data getMinimum()           { return getMinimum(m_measurementSystem); }
     
-    /**
-      * Sets the minimum value for the first tick mark.
-      * See {@link com.SIMRacingApps.Gauge#getMinimum(String)}
-      * @param minimum The minimum value.
-      * @param UOM (Optional) The Unit of Measure of this value. Defaults to the gauges UOM.
-      */
-    public void setMinimum(double minimum, String UOM) {
-        Data d= new Data("",minimum,UOM);
-        d.addConversion(SIMValue);
-        m_minimum = d.convertUOM(m_uom).getDouble();
-    }
-    public void setMinimum(double minimum) { setMinimum(minimum,m_uom); }
-
     /**
       * Returns the maximum value of where this gauge should end with the last tick mark (i.e. 300).
       * Note: The value would be after the multiplier has been applied.
@@ -816,40 +771,9 @@ public class Gauge {
       *
       * @return The maximum value
       */
-    public Data getMaximum(String UOM)    { 
-        Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/Maximum",m_maximum,m_uom,Data.State.NORMAL);
-        d.addConversion(SIMValue);
-        d = d.convertUOM(UOM); 
-        //now loop through the states and see if the value should be overridden with a constant.
-        Double v = d.getDouble();
-        Iterator<Entry<Double,StateRange>> itr = m_states.entrySet().iterator();
-
-        //pick the one with the highest start if the ranges overlap.
-        //all ranges overlap NORMAL
-        while (itr.hasNext()) {
-            StateRange range = itr.next().getValue();
-            if (v >= range.start && v < range.end)
-                if (range.value != null)
-                    d  = range.value;
-        }
-        
-        return d;
-    }
-    public Data getMaximum()              { return getMaximum(m_defaultUOM); }
+    public Data getMaximum(String UOM) { return _getReturnValue(m_maximum,UOM); }
+    public Data getMaximum()           { return getMaximum(m_measurementSystem); }
     
-    /**
-      * Sets the maximum value for the last tick mark.
-      * See {@link com.SIMRacingApps.Gauge#getMaximum(String)}
-      * @param maximum The maximum value.
-      * @param UOM (Optional) The Unit of Measure of this value. Defaults to the gauges UOM.
-      */
-    public void setMaximum(double maximum, String UOM) {
-        Data d = new Data("",maximum,UOM);
-        d.addConversion(SIMValue);
-        m_maximum = d.convertUOM(m_uom).getDouble();
-    }
-    public void setMaximum(double maximum) { setMaximum(maximum,m_uom); }
-
     /**
       * Returns how often to show major tick marks between the minimum and the maximum.
       * Note: The value would be after the multiplier has been applied.
@@ -859,27 +783,8 @@ public class Gauge {
       * @param UOM (Optional) The UOM to convert the value to, defaults to the gauge's UOM.
       * @return The major increment value
       */
-    public Data getMajorIncrement(String UOM) { 
-        Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/MajorIncrement",m_majorIncrement,m_uom,Data.State.NORMAL);
-        d.addConversion(SIMValue);
-        d = d.convertUOM(UOM);
-        d.setValue(Math.abs(d.getDouble()));
-        return d;
-    }
-    public Data getMajorIncrement()       { return getMajorIncrement(m_defaultUOM); }
-
-    /**
-      * Sets the major increment value..
-      * See {@link com.SIMRacingApps.Gauge#getMajorIncrement(String)}
-      * @param majorIncrement The major increment value
-      * @param UOM (Optional) The Unit of Measure of this value. Defaults to the gauges UOM.
-      */
-    public void setMajorIncrement(double majorIncrement, String UOM) {
-        Data d = new Data("",majorIncrement,UOM);
-        d.addConversion(SIMValue);
-        m_majorIncrement = Math.abs(d.convertUOM(m_uom).getDouble()); 
-    }
-    public void setMajorIncrement(double majorIncrement) { setMajorIncrement(majorIncrement,m_uom); }
+    public Data getMajorIncrement(String UOM) { return m_majorIncrement.convertUOM(UOM); }
+    public Data getMajorIncrement()           { return getMajorIncrement(m_measurementSystem); }
 
     /**
       * Returns how often to show minor tick marks between the minimum and the maximum.
@@ -890,31 +795,11 @@ public class Gauge {
       * @param UOM (Optional) The UOM to convert the value to, defaults to the gauge's UOM.
       * @return The minor increment value
       */
-    public Data getMinorIncrement(String UOM) { 
-        Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/MinorIncrement",m_minorIncrement,m_uom,Data.State.NORMAL); 
-        d.addConversion(SIMValue);
-        d = d.convertUOM(UOM);
-        d.setValue(Math.abs(d.getDouble()));
-        return d;
-    }
-    public Data getMinorIncrement()       { return getMinorIncrement(m_defaultUOM); }
+    public Data getMinorIncrement(String UOM) { return m_minorIncrement.convertUOM(UOM); }
+    public Data getMinorIncrement()           { return getMinorIncrement(m_measurementSystem); }
 
     /**
-      * Sets the minor increment value..
-      * See {@link com.SIMRacingApps.Gauge#getMinorIncrement(String)}
-      * @param minorIncrement The minor increment value
-      * @param UOM (Optional) The Unit of Measure of this value. Defaults to the gauges UOM.
-      */
-    public void setMinorIncrement(double minorIncrement, String UOM) {
-        Data d = new Data("",minorIncrement,UOM);
-        d.addConversion(SIMValue);
-        m_minorIncrement = Math.abs(d.convertUOM(m_uom).getDouble());
-    }
-    public void setMinorIncrement(double minorIncrement) { setMinorIncrement(minorIncrement,m_uom); }
-
-    
-    /**
-      * Returns the maximum number that this gauge will accept when calling {@link com.SIMRacingApps.Gauge#setValueNext(Double,String)}
+      * Returns the maximum number that this gauge will accept when calling {@link com.SIMRacingApps.Gauge#setValueNext(double,String)}
       * or {@link com.SIMRacingApps.Gauge#incrementValueNext(String)}
       * 
       * <p>PATH = {@link #getCapacityMaximum(String) /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/CapacityMaximum/(UOM)}
@@ -922,41 +807,11 @@ public class Gauge {
       * @param UOM (Optional) The UOM to convert the value to, defaults to the gauge's UOM.
       * @return The maximum capacity.
       */
-    public Data getCapacityMaximum(String UOM) { 
-        Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/CapacityMaximum",m_capacityMaximum,m_uom,Data.State.NORMAL); 
-        d.addConversion(SIMValue);
-        d = d.convertUOM(UOM); 
-        //now loop through the states and see if the value should be overridden with a constant.
-        Double v = d.getDouble();
-        Iterator<Entry<Double,StateRange>> itr = m_states.entrySet().iterator();
-
-        //pick the one with the highest start if the ranges overlap.
-        //all ranges overlap NORMAL
-        while (itr.hasNext()) {
-            StateRange range = itr.next().getValue();
-            if (v >= range.start && v < range.end)
-                if (range.value != null)
-                    d  = range.value;
-        }
-        return d;
-    }
-    public Data getCapacityMaximum()      { return getCapacityMaximum(m_defaultUOM); }
+    public Data getCapacityMaximum(String UOM) { return _getReturnValue(m_capacityMaximum,UOM); }
+    public Data getCapacityMaximum()           { return getCapacityMaximum(m_measurementSystem); }
 
     /**
-      * Sets the maximum capacity value.
-      * See {@link com.SIMRacingApps.Gauge#getCapacityMaximum(String)}
-      * @param capacityMaximum The maximum capacity value
-      * @param UOM (Optional) The Unit of Measure of this value. Defaults to the gauges UOM.
-      */
-    public void setCapacityMaximum(double capacityMaximum, String UOM) {
-        Data d = new Data("",capacityMaximum,UOM);
-        d.addConversion(SIMValue);
-        m_capacityMaximum = d.convertUOM(m_uom).getDouble(); 
-    }
-    public void setCapacityMaximum(double capacityMaximum) { setCapacityMaximum(capacityMaximum,m_uom); }
-
-    /**
-      * Returns the minimum number that this gauge will accept when calling {@link com.SIMRacingApps.Gauge#setValueNext(Double,String)}
+      * Returns the minimum number that this gauge will accept when calling {@link com.SIMRacingApps.Gauge#setValueNext(double,String)}
       * or {@link com.SIMRacingApps.Gauge#decrementValueNext(String)}
       * 
       * <p>PATH = {@link #getCapacityMinimum(String) /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/CapacityMinimum/(UOM)}
@@ -964,43 +819,13 @@ public class Gauge {
       * @param UOM (Optional) The UOM to convert the value to, defaults to the gauge's UOM.
       * @return The minimum capacity.
       */
-    public Data getCapacityMinimum(String UOM){ 
-        Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/CapacityMinimum",m_capacityMinimum,m_uom,Data.State.NORMAL);
-        d.addConversion(SIMValue);
-        d = d.convertUOM(UOM); 
-        //now loop through the states and see if the value should be overridden with a constant.
-        Double v = d.getDouble();
-        Iterator<Entry<Double,StateRange>> itr = m_states.entrySet().iterator();
-
-        //pick the one with the highest start if the ranges overlap.
-        //all ranges overlap NORMAL
-        while (itr.hasNext()) {
-            StateRange range = itr.next().getValue();
-            if (v >= range.start && v < range.end)
-                if (range.value != null)
-                    d  = range.value;
-        }
-        return d;
-    }
-    public Data getCapacityMinimum()      { return getCapacityMinimum(m_defaultUOM); }
-
-    /**
-      * Sets the minimum capacity value..
-      * See {@link com.SIMRacingApps.Gauge#getCapacityMinimum(String)}
-      * @param capacityMinimum The minimum capacity value
-      * @param UOM (Optional) The Unit of Measure of this value. Defaults to the gauges UOM.
-      */
-    public void setCapacityMinimum(double capacityMinimum, String UOM) {
-        Data d = new Data("",capacityMinimum,UOM);
-        d.addConversion(SIMValue);
-        m_capacityMinimum = d.convertUOM(m_uom).getDouble(); 
-    }
-    public void setCapacityMinimum(double capacityMinimum) { setCapacityMinimum(capacityMinimum,m_uom); }
+    public Data getCapacityMinimum(String UOM) { return _getReturnValue(m_capacityMinimum,UOM); }
+    public Data getCapacityMinimum()           { return getCapacityMinimum(m_measurementSystem); }
 
     /**
       * Returns the increment value that the gauge uses when you call {@link com.SIMRacingApps.Gauge#incrementValueNext(String)} 
       * or {@link com.SIMRacingApps.Gauge#decrementValueNext(String)}.
-      * Also, all values passed to {@link com.SIMRacingApps.Gauge#setValueNext(Double,String)} are rounded up to the the
+      * Also, all values passed to {@link com.SIMRacingApps.Gauge#setValueNext(double,String)} are rounded up to the the
       * closest multiple of this value.
       * 
       * <p>PATH = {@link #getCapacityIncrement(String) /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/CapacityIncrement/(UOM)}
@@ -1008,40 +833,11 @@ public class Gauge {
       * @param UOM (Optional) The UOM to convert the value to, defaults to the gauge's UOM.
       * @return The incremental capacity.
       */
-    public Data getCapacityIncrement(String UOM){ 
-        Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/CapacityIncrement",m_capacityIncrement,m_uom,Data.State.NORMAL);
-        d.addConversion(SIMValue);
-        d = d.convertUOM(UOM);
-        d.setValue(Math.abs(d.getDouble()));
-        return d;
-    }
-    public Data getCapacityIncrement()    { return getCapacityIncrement(m_defaultUOM); }
+    public Data getCapacityIncrement(String UOM) { return m_capacityIncrement.convertUOM(UOM); }
+    public Data getCapacityIncrement()           { return getCapacityIncrement(m_measurementSystem); }
 
     /**
-      * Sets the increment capacity value..
-      * See {@link com.SIMRacingApps.Gauge#getCapacityIncrement(String)}
-      * @param capacityIncrement The incremental capacity value
-      * @param UOM (Optional) The Unit of Measure of this value. Defaults to the gauges UOM.
-      */
-    public void setCapacityIncrement(double capacityIncrement,String UOM) {
-        Data d = new Data("",capacityIncrement,UOM); 
-        d.addConversion(SIMValue);
-        m_capacityIncrement = Math.abs(d.convertUOM(m_uom).getDouble()); 
-    }
-    public void setCapacityIncrement(double capacityIncrement) { setCapacityIncrement(capacityIncrement,""); }
-
-    /**
-      * Updates the gauge with the current lap so functions that need the current lap can calculate their values.
-      * Obviously, this should be called when the current lap changes for the car this gauge is attached to.
-      * @param currentLap The current lap.
-      */
-    public void updateCurrentLap(int currentLap) { m_currentLap = currentLap; }
-    
-//    public Data isInCar()                 { return new Data("CarGaugeIsInCar/"+m_type,m_isInCar ? true : false,"boolean",Data.State.NORMAL); }
-//    public void setIsInCar(boolean isInCar) { m_isInCar = isInCar; }
-
-    /**
-      * Returns false if this gauge's next value can be changed via {@link com.SIMRacingApps.Gauge#setValueNext(Double,String)}, 
+      * Returns false if this gauge's next value can be changed via {@link com.SIMRacingApps.Gauge#setValueNext(double,String)}, 
       * {@link com.SIMRacingApps.Gauge#incrementValueNext(String)} or {@link com.SIMRacingApps.Gauge#decrementValueNext(String)}.
       * A client could use this value to grey out or hide the buttons for changing it.
       * 
@@ -1049,15 +845,8 @@ public class Gauge {
       * 
       * @return true if gauge is fixed, false of not.
       */
-    public Data getIsFixed() {              return new Data("Car/"+m_car+"/Gauge/"+m_type+"/IsFixed",m_isFixed,"boolean");}
+    public Data getIsFixed() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/IsFixed",m_isFixed,"boolean",Data.State.NORMAL);}
     
-    /**
-      * Sets the gauge's fixed attribute to indicate if the next value can be changed.
-      * See {@link com.SIMRacingApps.Gauge#getIsFixed()}
-      * @param isFixed true if fixed, false if not.
-      */
-    public void setIsFixed(boolean isFixed) { m_isFixed = isFixed; }
-
     /**
       * Returns true if this gauge represents an object that can be replaced/changed at the next pit stop (i.e. Tires, Tearoff usually)
       * 
@@ -1065,283 +854,74 @@ public class Gauge {
       * 
       * @return true if gauge is changeable, false of not.
       */
-    public Data getIsChangeable() {          return new Data("Car/"+m_car+"/Gauge/"+m_type+"/IsChangeable",m_isChangeable,"boolean");}
+    public Data getIsChangeable() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/IsChangeable",m_isChangable,"boolean",Data.State.NORMAL);}
 
     /**
-      * Sets the gauge's changeable attribute.
-      * See {@link com.SIMRacingApps.Gauge#getIsChangeable()}
-      * @param isChangeable true if changeable, false if not.
-      */
-    public void setIsChangable(boolean isChangeable) { m_isChangeable = isChangeable; }
-
-    /**
-      * Returns true if this gauge is changed on a reset.
-      * 
-      * <p>PATH = {@link #getOnResetChange() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/OnResetChange}
-      * 
-      * @return true if gauge is changed upon reset, false of not.
-      */
-    public Data getOnResetChange() {              return new Data("Car/"+m_car+"/Gauge/"+m_type+"/OnResetChange",m_onResetChange,"boolean");}
-    /**
-      * Sets the gauge's on reset change attribute.
-      * See {@link com.SIMRacingApps.Gauge#setOnResetChange(boolean)}
-      * @param onResetChange true if changed on reset, false if not.
-      */
-    public void setOnResetChange(boolean onResetChange) { m_onResetChange = onResetChange; }
-
-    /**
-     * Returns Y if this gauge is outputting debug information.
+     * Returns true if this gauge is changed on a reset. 
      * 
-     * <p>PATH = {@link #getIsDebug() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/IsDebug}
+     * <p>PATH = {@link #getOnResetChange() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/OnResetChange}
      * 
-     * @return true if gauge is in debug mode, false of not.
+     * @return true if gauge is changed on a reset, false of not.
      */
-    public Data getIsDebug() {              return new Data("Car/"+m_car+"/Gauge/"+m_type+"/IsDebug",m_isDebug,"boolean");}
-    /**
-     * Sets the debug flag for this gauge
-     * See {@link com.SIMRacingApps.Gauge#getIsDebug()}
-     * 
-     * <p>PATH = {@link #setIsDebug(boolean) /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/setIsDebug/(ISDEBUG)}
-     * 
-     * @param isDebug true to enable debugging
-     * @return true if gauge is changed upon reset, false of not.
+   public Data getOnResetChange() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/OnResetChange",m_onResetChange,"boolean",Data.State.NORMAL);}
+   
+    /*
+     * Rounds the value to the nearest increment and keeps between the min and max inclusively.
      */
-    public Data setIsDebug(boolean isDebug) { m_isDebug = isDebug; return getIsDebug(); }
-    public Data setIsDebug(String isDebug) { return setIsDebug(new Data("",isDebug).getBoolean()); }
-    public Data setIsDebug() { return setIsDebug(true); }
-
-    public boolean _getIsSentToSIM()      { return m_isSentToSIM; }
-    public void _setIsSentToSIM(boolean isSentToSIM) { 
-        m_isSentToSIM = isSentToSIM; 
-        //now set the flag on the whole group
-        Iterator<Entry<String,Gauge>> itr = m_group.entrySet().iterator();
-        while (itr.hasNext()) {
-            Gauge g = itr.next().getValue();
-            g._setIsSentToSIM(isSentToSIM);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    private Gauge() {}
-
-    /**
-     * Constructor for the Gauge class.
-     * It takes 2 required parameters that defines the car identifier and the type of gauge.
-     * 
-     * @param car  The car identifier as defined by {@link com.SIMRacingApps.Session#getCar(String)}
-     * @param type The type of gauge as defined by {@link com.SIMRacingApps.Gauge.Type}
-     */
-    public Gauge(String car, String type) {
-        this.m_car = car;
-        this.m_type = type;
-        m_name = "unknown";
-        m_typename = "unknown";
-        m_uom = "";
-        m_defaultUOM = "NATIVE";
-        m_multiplier = 1.0;
-        m_minimum = 0.0;
-        m_maximum = 100.0;
-        m_majorIncrement = 10.0;
-        m_minorIncrement = 2.0;
-        m_capacityMinimum = m_minimum;
-        m_capacityMaximum = m_maximum;
-        m_capacityIncrement = m_minorIncrement;
-        m_states = new TreeMap<Double,StateRange>();
-        m_lapChanged = 1;
-        m_count = 1;
-
-//        m_isInCar = false;
-        m_isFixed = true;
-        m_isChangeable = false;
-        m_isSentToSIM = false;
-
-        //the default is all false so no values will be read until the subclass initializes these
-        SIMValue           = null;
-        SIMValueType       = SIMValueTypes.Unknown;
-    }
-
-    /**
-     * Rounds the value to the nearest capacity increment.
-     * @param value The value to round.
-     * @return      The rounded value.
-     */
-    private double _roundToIncrement(double value) {
-        
-        //TODO: add a flag to indicate gauges that must round up. For now hardcoded for fuel level
-        if (this.m_type.equals(Gauge.Type.FUELLEVEL))
-            return _roundUpToIncrement(value);
+    protected double _roundToIncrement(double value,String UOM) {
         
         double d = value;
-        double floored_d = Math.floor(d / m_capacityIncrement) * m_capacityIncrement; //floor it to the closest increment
+        double increment = this.m_capacityIncrement.convertUOM(UOM).getDouble();
+        double minimum   = this.m_capacityMinimum.convertUOM(UOM).getDouble(); 
+        double maximum   = this.m_capacityMaximum.convertUOM(UOM).getDouble();
+        
+        double floored_d = Math.floor(d / increment) * increment; //floor it to the closest increment
 
-        if ((floored_d + (m_capacityIncrement/2.0)) <= d)
-            d = floored_d + m_capacityIncrement;
+        if ((floored_d + (increment/2.0)) <= d)
+            d = floored_d + increment;
         else
             d = floored_d;
 
         //don't let it round down below the max capacity, if it was originally above the max capacity
-        if (d < m_capacityMaximum && value >= m_capacityMaximum)
-            d = m_capacityMaximum;
+        if (d < maximum && value >= maximum)
+            d = maximum;
         
         //by the same rule if it rounds below the min capacity
-        if (d < m_capacityMinimum && value >= m_capacityMinimum)
-            d = m_capacityMinimum;
+        if (d < minimum && value >= minimum)
+            d = minimum;
         
         return d;
     }
 
-    /**
-     * Rounds the value up to the nearest capacity increment if not at an increment value already.
-     * @param value The value to round.
-     * @return      The rounded value.
+    /*
+     * Rounds the value up to the nearest capacity increment if not at an increment value already
+     * and keeps between the min and max inclusively.
      */
-    private double _roundUpToIncrement(double value) {
+    protected double _roundUpToIncrement(double value,String UOM) {
         double d = value;
-        double floored_d = Math.floor(d / m_capacityIncrement) * m_capacityIncrement; //floor it to the closest increment
+        double increment = this.m_capacityIncrement.convertUOM(UOM).getDouble();
+        double minimum   = this.m_capacityMinimum.convertUOM(UOM).getDouble(); 
+        double maximum   = this.m_capacityMaximum.convertUOM(UOM).getDouble();
+        
+        double floored_d = Math.floor(d / increment) * increment; //floor it to the closest increment
 
         //now add an increment if we are below the requested value
         if ((floored_d + 0.001) < d)
-            d = floored_d + m_capacityIncrement;
+            d = floored_d + increment;
         else
             d = floored_d;
 
         //don't let it round down below the max capacity, if it was originally above the max capacity
-        if (d < m_capacityMaximum && value >= m_capacityMaximum)
-            d = m_capacityMaximum;
+        if (d < maximum && value >= maximum)
+            d = maximum;
         
         //by the same rule if it rounds below the min capacity
-        if (d < m_capacityMinimum && value >= m_capacityMinimum)
-            d = m_capacityMinimum;
+        if (d < minimum && value >= minimum)
+            d = minimum;
         
         return d;
     }
     
-    private boolean _isDirty() {
-        if (value == null || setupValue == null)
-            return false;
-
-        double a = _roundToIncrement(value.getDouble());
-        double b = _roundToIncrement(setupValue.getDouble());
-
-        return a != b;
-    }
-
-    public String toString() {
-        String s =
-          "{\n"
-        + "    \"CarId\":             \"" + m_car + "\",\n"
-        + "    \"Name\":              \"" + m_name + "\",\n"
-        + "    \"TypeName\":          \"" + m_typename + "\",\n"
-        + "    \"UOM\":               \"" + m_uom + "\",\n"
-        + "    \"DefaultUOM\":        \"" + m_defaultUOM + "\",\n"
-        + "    \"Multiplier\":        " + m_multiplier + ",\n"
-        + "    \"Minimum\":           " + m_minimum + ",\n"
-        + "    \"Maximum\":           " + m_maximum + ",\n"
-        + "    \"MajorIncrement\":    " + m_majorIncrement + ",\n"
-        + "    \"MinorIncrement\":    " + m_minorIncrement + ",\n"
-        + "    \"CapacityMinimum\":   " + m_capacityMinimum + ",\n"
-        + "    \"CapacityMaximum\":   " + m_capacityMaximum + ",\n"
-        + "    \"CapacityIncrement\": " + m_capacityIncrement + ",\n"
-        + "    \"IsFixed\":           \"" + (m_isFixed ? "true" : "false") + "\",\n"
-        + "    \"IsChangable\":       \"" + (m_isChangeable ? "true" : "false") + "\",\n"
-        + "    \"OnResetChange\":     \"" + (m_onResetChange ? "true" : "false") + "\",\n"
-        + "    \"LapChanged\":        " + m_lapChanged + ",\n"
-        + "    \"Count\":             " + m_count + ",\n"
-        + "    \"Reader\":            \"" + (SIMValue == null ? "null" : SIMValue.getClass().getName()) + "\",\n"
-        + "    \"ValueCurrent\":        " + (value == null ? new Data(m_name,0.0,m_uom).toString(m_name) : value.toString(value.getName())) + ",\n"
-        + "    \"ValueNext\":           " + (setupValue == null ? new Data(m_name,0.0,m_uom).toString(m_name) : setupValue.toString(setupValue.getName())) + ",\n"
-        + "    \"ValueHistorical\":     " + (afterPitValue == null ? new Data(m_name,0.0,m_uom).toString(m_name) : afterPitValue.toString(afterPitValue.getName())) + ",\n";
-
-        s += "    \"States\": {\n";
-        Iterator<Entry<Double, StateRange>> itr = m_states.entrySet().iterator();
-        while (itr.hasNext()) {
-            StateRange state = itr.next().getValue();
-            s +=
-          "        \"" + state.state + "\": { \"Start\": " + (Double.isNaN(state.start) ? 0.0 : state.start) + ", \"End\": " + (Double.isNaN(state.end) ? 0.0 : state.end);
-            if (state.value != null)
-                s += ", \"Value\": \"" + state.value.getValueFormatted() + "\"";
-            s += " }" + (itr.hasNext() ? "," : "") + "\n";
-        }
-        s += "    }\n";
-        s += "}";
-        return s;
-    }
-
-    protected void _initValues() {
-        Data simValue = SIMValue != null ? SIMValue.convertUOM(m_uom) : new Data("Car/"+m_car+"/Gauge/"+m_type+"/ValueCurrent",0.0,m_uom,Data.State.NOTAVAILABLE);
-
-        if (value == null) {
-
-//if (m_car.isME() && m_type.equals(Type.TACHOMETER))
-//    value=value;
-
-            //if we can get the setup value or after pit value, initialize it with that
-            if (SIMValueType == SIMValueTypes.ForSetup
-            ||  SIMValueType == SIMValueTypes.ForCarAndSetup
-            ||  SIMValueType == SIMValueTypes.AfterPit
-            ) {
-                value = new Data("Car/"+m_car+"/Gauge/"+this.m_type+"/ValueCurrent",simValue.getDouble(),simValue.getUOM(),simValue.getState());
-            }
-            else {
-                value = new Data("Car/"+m_car+"/Gauge/"+this.m_type+"/ValueCurrent",0.0,m_uom,simValue.getState());
-            }
-            value.addConversion(simValue);
-        }
-
-//if (m_car.isME() && m_type.equals(Type.TACHOMETER))
-//    value=value;
-
-        //now update the value if it's from the car real-time
-        if (SIMValueType == SIMValueTypes.ForCar
-        ||  SIMValueType == SIMValueTypes.ForCarZeroOnPit
-        ||  SIMValueType == SIMValueTypes.ForCarAndSetup
-        ) {
-            value = new Data("Car/"+m_car+"/Gauge/"+this.m_type+"/ValueCurrent",simValue.getDouble(),simValue.getUOM(),simValue.getState());
-            value.addConversion(simValue);
-        }
-
-        if (setupValue == null) {
-
-            if (SIMValueType == SIMValueTypes.ForSetup
-            ||  SIMValueType == SIMValueTypes.ForCarAndSetup
-            ) {
-                setupValue = new Data("Car/"+m_car+"/Gauge/"+this.m_type+"/ValueNext",simValue.getDouble(),simValue.getUOM(),simValue.getState());
-                setupValue.addConversion(simValue);
-            }
-            else {
-                double d = 0.0;
-                if (SIMValueType != SIMValueTypes.ForCarZeroOnPit) {
-                    //the setup value should start with the value unless the SIM returns the setup value instead of the real-time value
-                    //round it off to the closest increment
-                    d = _roundToIncrement(value.getDouble());
-                }
-                setupValue = new Data("Car/"+m_car+"/Gauge/"+this.m_type+"/ValueNext",d,value.getUOM(),value.getState());
-                setupValue.addConversion(simValue);
-            }
-        }
-
-        //now update the setup value if the sim is returning it
-        if (SIMValueType == SIMValueTypes.ForSetup
-        ||  SIMValueType == SIMValueTypes.ForCarAndSetup
-        ) {
-            setupValue = new Data("Car/"+m_car+"/Gauge/"+this.m_type+"/ValueNext",simValue.getDouble(),simValue.getUOM(),simValue.getState());
-            setupValue.addConversion(simValue);
-        }
-
-        //This after pit values should default to zero until we pit or reset
-        if (afterPitValue == null) {
-            afterPitValue = new Data("Car/"+m_car+"/Gauge/"+this.m_type+"/ValueHistorical",0.0,m_uom,simValue.getState());
-            afterPitValue.addConversion(simValue);
-        }
-        if (afterPitLaps == null) {
-            afterPitLaps = new Data("Car/"+m_car+"/Gauge/"+this.m_type+"/LapsHistorical",0.0,"lap",simValue.getState());
-        }
-
-        //if the value is for the setup only, then set the change flag if it's dirty
-        if (SIMValueType == SIMValueTypes.ForSetup)
-            m_changeFlag = _isDirty();
-    }
-
     /**
      * Returns Y if the next value of the gauge is different from the current value.
      * 
@@ -1349,13 +929,7 @@ public class Gauge {
      * 
      * @return Y if dirty, N if not.
      */
-    public Data getIsDirty() {
-        if (value == null || setupValue == null)
-            return new Data("Car/"+m_car+"/Gauge/"+m_type+"/IsDirty",false,"boolean");
-
-        _initValues();
-        return new Data("Car/"+m_car+"/Gauge/"+m_type+"/IsDirty",_isDirty() ? true : false,"boolean");
-    }
+    public Data getIsDirty() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/IsDirty",m_isDirty,"boolean",Data.State.NORMAL); }
 
     /**
      * Returns the current value of the gauge. 
@@ -1365,49 +939,8 @@ public class Gauge {
      * @param UOM (Optional) The unit of measure to return, default to the gauges UOM.
      * @return The current value.
      */
-    public Data getValueCurrent(String UOM) {
-        Data d;
-        
-//if (m_car.isME() && m_type.equals(Type.TACHOMETER))
-//    value=value;
-
-        if (value == null || setupValue == null)
-            d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/ValueCurrent",0.0,m_uom,Data.State.NOTAVAILABLE);
-        else {
-            _initValues();
-            d = new Data(value).convertUOM(UOM); //make a copy to return
-            
-            //This is just for testing
-            double newvalue = Server.getArg("gauge."+m_type+".value", 0.0);
-            if (newvalue != 0.0) {
-                newvalue += d.getDouble();
-                d.setValue(Math.min(Math.max(newvalue,this.m_capacityMinimum),this.m_capacityMaximum));
-            }
-        }
-
-        //now loop through the states and see if the value should be overridden with a constant.
-        Double v = d.getDouble();
-        Iterator<Entry<Double,StateRange>> itr = m_states.entrySet().iterator();
-
-        //pick the one with the highest start if the ranges overlap.
-        //all ranges overlap NORMAL
-        while (itr.hasNext()) {
-            StateRange range = itr.next().getValue();
-            if (v >= range.start && v < range.end)
-                if (range.value != null)
-                    d  = range.value;
-        }
-
-        //now update the state. TODO: should I delegate the state logic to the Data class?
-        d.setState(getState());
-        d.setStatePercent(getStatePercent() * 100.0);
-        d = d.convertUOM(UOM);
-//        d.add("LapChangedPrevious",m_lapChangedPrevious,"lap");
-        d.add("LapChanged",m_lapChanged,"lap");
-        d.add("Count",m_count,"");
-        return d;
-    }
-    public Data getValueCurrent() { return getValueCurrent(m_defaultUOM); }
+    public Data getValueCurrent(String UOM) { return _getReturnValue(new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/ValueCurrent",0.0,"",Data.State.NOTAVAILABLE),""); }
+    public Data getValueCurrent()           { return getValueCurrent(m_measurementSystem); }
 
     /**
      * Returns the lap when the object for this gauge was changed.
@@ -1416,24 +949,17 @@ public class Gauge {
      * 
      * @return The lap it was changed.
      */
-    public Data getLapChanged() {
-        //_initValues();
-        return new Data("Car/"+m_car+"/Gauge/"+m_type+"/LapChanged",m_lapChanged,"lap",Data.State.NORMAL);
-    }
+    public Data getLapChanged() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/LapChanged",m_lapChanged,"lap",Data.State.NORMAL); }
 
     /**
-     * Returns the number of times this gauge was changed.
-     * The count starts at one, so the initial reading counts.
+     * Returns the number of times this gauge was used.
      * 
      * <p>PATH = {@link #getCount() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/Count} 1.2
      * 
      * @since 1.2
      * @return The number of times this gauge was changed.
      */
-    public Data getCount() {
-        //_initValues();
-        return new Data("Car/"+m_car+"/Gauge/"+m_type+"/Count",m_count,"",Data.State.NORMAL);
-    }
+    public Data getCount() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Count",m_usedCount,"",Data.State.NORMAL); }
     
     /**
      * Returns the number of laps since the object for this gauge was changed.
@@ -1443,185 +969,9 @@ public class Gauge {
      * @param currentLap (Optional) The lap you are currently on, defaults to current lap.
      * @return The number of laps.
      */
-    public Data getLaps(int currentLap) {
-        //_initValues();
-        return new Data("Car/"+m_car+"/Gauge/"+m_type+"/Laps",currentLap - m_lapChanged > 0 ? currentLap - m_lapChanged : 0,"lap",Data.State.NORMAL);
-    }
-    public Data getLaps(String currentLap) {
-        return getLaps(Integer.parseInt(currentLap));
-    }
-    public Data getLaps() {
-        return getLaps(m_currentLap);
-    }
-
-    /**
-     * Returns the State Name that matches the range based on the current value.
-     * @return The State Name.
-     */
-    protected String getState() {
-        if (value == null || setupValue == null)
-            return Data.State.NOTAVAILABLE;
-
-        _initValues();
-        String state = value.getState(); //default to the value's state.
-
-//if (this.m_type.equalsIgnoreCase(Type.TACHOMETER) && value.getDouble() > 8500.0)
-//    value = value;
-
-        if (!state.equals(Data.State.OFF) 
-        &&  !state.equals(Data.State.ERROR)
-        &&  !state.equals(Data.State.NOTAVAILABLE)
-        ) {
-            Iterator<Entry<Double,StateRange>> itr = m_state_ascending 
-                                                   ? m_states.entrySet().iterator()
-                                                   : m_states.descendingMap().entrySet().iterator();
-
-            //pick the one with the highest start if the ranges overlap.
-            //all ranges overlap NORMAL
-            Double v = value.getDouble();
-            while (itr.hasNext()) {
-                StateRange range = itr.next().getValue();
-                //if the value is within the range 
-                //or the reader has already set this state so it will override less important values
-                if ((v >= range.start && v < range.end) || state.equals(range.state))
-                    state = range.state;
-            }
-        }
-
-        return state;
-    }
-
-    /**
-     * Returns the state range of the requested state.
-     * 
-     * <p>PATH = {@link #getStateRange(String) /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/StateRange/(STATE)}
-     * 
-     * @param state (Optional) The state to return. Default CRITICAL state.
-     * @return The requested state as an JSON string { state: "xxx", start: -1.0, end: -1.0 }
-     */
-    public Data getStateRange(String state) {
-        Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/StateRange/"+state.toUpperCase(),new StateRange(state.toUpperCase(),-1.0,-1.0),m_uom,Data.State.ERROR);
-        Iterator<Entry<Double,StateRange>> itr = m_state_ascending 
-                ? m_states.entrySet().iterator()
-                : m_states.descendingMap().entrySet().iterator();
-
-        while (itr.hasNext()) {
-            StateRange range = itr.next().getValue();
-            if (range.state.equalsIgnoreCase(state))
-                d.setValue(range,"",Data.State.NORMAL);
-        }
-        return d;
-    }
-    public Data getStateRange() {
-        return getStateRange("CRITICAL");
-    }
-    
-    /**
-     * Returns all the states.
-     * 
-     * <p>PATH = {@link #getStates() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/States}
-     * 
-     * @return The states as an JSON string ["name": { state: "xxx", start: -1.0, end: -1.0 }]
-     */
-    public Data getStates() {
-        ArrayList<StateRange> a = new ArrayList<StateRange>();
-        Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/States",a,"ArrayList<StateRange>",Data.State.ERROR);
-        Iterator<Entry<Double,StateRange>> itr = m_state_ascending 
-                ? m_states.entrySet().iterator()
-                : m_states.descendingMap().entrySet().iterator();
-
-        while (itr.hasNext()) {
-            Entry<Double, StateRange> state = itr.next();
-            a.add(state.getValue());
-        }
-        d.setValue(a,"ArrayList<StateRange>",Data.State.NORMAL);
-        return d;
-    }
-    
-    /**
-     * Adds all the states from the passed in gauge to this gauge.
-     * @param gauge The gauge to copy the states from
-     */
-    public void addStateRange(Gauge gauge) {
-        Iterator<Entry<Double, StateRange>> itr = gauge.m_states.entrySet().iterator();
-        while (itr.hasNext()) {
-            StateRange state = itr.next().getValue();
-            removeStateRange(state.state);
-            addStateRange(state.state,state.start,state.end,state.value);
-        }
-    }
-    
-    /**
-     * Add a new state range to this gauge. 
-     * The values should be in the same UOM that getInternalUOM() returns.
-     * @param name  The name of the state.
-     * @param start The starting value, inclusive.
-     * @param end   The ending value, exclusive.
-     */
-    public void addStateRange(String name,double start,double end) {
-        removeStateRange(name);
-
-        m_states.put(start, new StateRange(name.toUpperCase(),start,end));
-    }
-
-    /**
-     * Add a new state range to this gauge that transforms the value.
-     * The values should be in the same UOM that getInternalUOM() returns.
-     * @param name  The name of the state.
-     * @param start The starting value, inclusive.
-     * @param end   The ending value, exclusive.
-     * @param d     The new value
-     */
-    public void addStateRange(String name,double start,double end, Data d) {
-        removeStateRange(name);
-
-        m_states.put(start, new StateRange(name.toUpperCase(),start,end,d));
-    }
-
-    /**
-     * Removes a state.
-     * 
-     * @param name The name of the state.
-     */
-    public void removeStateRange(String name) {
-        Iterator<Entry<Double,StateRange>> itr = m_states.entrySet().iterator();
-        //remove the name if it exists
-        while (itr.hasNext()) {
-            StateRange range = itr.next().getValue();
-            if (range.state.equals(name.toUpperCase()))
-                itr.remove();
-        }
-    }
-    
-    /**
-     * Returns a percentage that represents where the current value falls between the starting and ending value.
-     * @return The state percentage.
-     */
-    protected Double getStatePercent() {
-        if (value == null || setupValue == null)
-            return 0.0;
-
-        _initValues();
-        double d = value.getStatePercent(); //default to the value's percentage.
-        String state = value.getState();
-
-        //if the value.State is not OFF or ERROR, then lookup the state
-        if (!state.equals(Data.State.OFF) 
-        &&  !state.equals(Data.State.ERROR)
-        &&  !state.equals(Data.State.NOTAVAILABLE)
-        ) {
-            Iterator<Entry<Double,StateRange>> itr = m_states.entrySet().iterator();
-
-            while (itr.hasNext()) {
-                StateRange range = itr.next().getValue();
-                Double v = value.getDouble();
-                if (v >= range.start && v < range.end)
-                    d = (v - range.start) / (range.end - range.start);
-            }
-        }
-
-        return d;
-    }
+    public Data getLaps(int currentLap)    { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Laps",currentLap - getLapChanged().getInteger() > 0 ? currentLap - getLapChanged().getInteger() : 0,"lap",Data.State.NORMAL); }
+    public Data getLaps(String currentLap) { return getLaps(Integer.parseInt(currentLap)); }
+    public Data getLaps()                  { return getLaps(1); }
 
     /**
      * Returns the historical value of the gauge taken at the time it was changed.
@@ -1631,80 +981,29 @@ public class Gauge {
      * @param UOM (Optional) The unit of measure to return it in, defaults to the gauges UOM.
      * @return    The historical value.
      */
-    public Data getValueHistorical(String UOM) {
-        if (value == null || setupValue == null) {
-            Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/ValueHistorical",0.0,m_uom,Data.State.NOTAVAILABLE);
-            d.addConversion(SIMValue);
-            return d.convertUOM(UOM); 
-        }
-        _initValues();
-        Data d = new Data(afterPitValue);
-        return d.convertUOM(UOM);
-    }
-    public Data getValueHistorical() { return getValueHistorical(m_defaultUOM); }
+    public Data getValueHistorical(String UOM) { return _getReturnValue(new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/ValueHistorical",0.0,"",Data.State.NOTAVAILABLE),""); }
+    public Data getValueHistorical()           { return getValueHistorical(m_measurementSystem); }
 
     /**
-     * Returns the lap the historical value was taken.
+     * Returns the number of laps since the last change.
      * 
      * <p>PATH = {@link #getLapsHistorical() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/LapsHistorical}
      * 
-     * @return The lap the historical value was taken.
+     * @return The lap number of laps since the last change.
      */
-    public Data getLapsHistorical() {
-        if (value == null || setupValue == null)
-            return new Data("Car/"+m_car+"/Gauge/"+m_type+"/LapHistorical",0,"lap",Data.State.NOTAVAILABLE);
-
-        _initValues();
-        Data d = new Data(afterPitLaps);
-        return d;
-    }
+    public Data getLapsHistorical() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/LapHistorical",0,"lap",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns the value of the next value that the object will be at the next pit stop.
-     * 
+     * By default it returns the current value.
+     *
      * <p>PATH = {@link #getValueNext(String) /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/ValueNext/(UOM)}
      * 
      * @param UOM The unit of value to return.
      * @return The value if the next value.
      */
-    public Data getValueNext(String UOM) {
-//        _initValues();
-//        Data d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/ValueNext",setupValue.getDouble(),m_uom);
-//        return d;
-        Data d;
-        if (value == null || setupValue == null)
-            d = new Data("Car/"+m_car+"/Gauge/"+m_type+"/ValueNext",0.0,m_uom,Data.State.NOTAVAILABLE);
-        else {
-            _initValues();
-            d = new Data(setupValue); //make a copy to return
-        }
-
-        //now loop through the states and see if the value should be overridden with a constant.
-        Double v = d.getDouble();
-        Iterator<Entry<Double,StateRange>> itr = m_states.entrySet().iterator();
-
-        //pick the one with the highest start if the ranges overlap.
-        //all ranges overlap NORMAL
-        while (itr.hasNext()) {
-            StateRange range = itr.next().getValue();
-            if (v >= range.start && v < range.end)
-                if (range.value != null)
-                    d = range.value;
-        }
-
-        d.addConversion(SIMValue);
-        return d.convertUOM(UOM);
-    }
-    public Data getValueNext() { return getValueNext(m_defaultUOM); }
-
-    /**
-     * Add another gauge to this gauge to group them together.
-     * When the change flag is set this gauge, the entire group will also get called.
-     * @param gauge An instance of another gauge.
-     */
-    public void addGroup(Gauge gauge) {
-        m_group.put(gauge.getType().getString(), gauge);
-    }
+    public Data getValueNext(String UOM) { return getValueCurrent(); }
+    public Data getValueNext()           { return getValueNext(m_measurementSystem); }
 
     /**
      * Returns Y if the object for this gauge is flagged for changed on the next pit stop.
@@ -1713,38 +1012,23 @@ public class Gauge {
      * 
      * @return Y if flagged for changed, N if not.
      */
-    public Data getChangeFlag() {
-        //_initValues();
-        return new Data("Car/"+m_car+"/Gauge/"+m_type+"/ChangeFlag",m_changeFlag ? true : false,"boolean");
-    }
+    public Data getChangeFlag() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/ChangeFlag",m_changeFlag,"boolean",Data.State.NORMAL); }
 
     /**
      * Sets the change flag for this gauge and all the gauges grouped with it.
+     * By default, this will not all the change flag to be true.
+     * Therefore, each gauge that can be changed, must override this and set the flag.
      * 
      * <p>PATH = {@link #setChangeFlag(String) /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/setChangeFlag/(FLAG)}
      * 
      * @param flag Y or N to change or not to change
      * @return     The change flag
      */
-    public Data setChangeFlag(boolean flag) {
-        //_initValues();
-        if (m_isChangeable) {
-            m_changeFlag = flag;
-            m_isSentToSIM = false;
-
-            //now set the flag on the whole group
-            Iterator<Entry<String,Gauge>> itr = m_group.entrySet().iterator();
-            while (itr.hasNext()) {
-                Gauge g = itr.next().getValue();
-                g.setChangeFlag(flag);
-            }
-        }
-        return getChangeFlag();
-    }
-    public Data setChangeFlag(String flag) { return setChangeFlag(new Data("",flag).getBoolean()); }
+    public Data setChangeFlag(boolean flag) { return getChangeFlag(); }
+    public Data setChangeFlag(String flag)  { return setChangeFlag(new Data("",flag).getBoolean()); }
 
     /**
-     * Decrements the next value, to be applied at the next pit stop, according to the value set by {@link com.SIMRacingApps.Gauge#setCapacityIncrement(double)}. 
+     * Decrements the next value, to be applied at the next pit stop, according to the value set by {@link com.SIMRacingApps.Gauge#_setCapacityIncrement(double,String)}. 
      * If the gauge is fixed, then only the change flag will be set and the next value will not be changed. 
      * The change flag is set to Y even if the new value and the old value are the same.
      * 
@@ -1753,26 +1037,11 @@ public class Gauge {
      * @param UOM (Optional) The unit of measure to return the new value in. Default gauge's UOM.
      * @return    The new value.
      */
-    public Data decrementValueNext(String UOM) {
-        if (value == null || setupValue == null || !m_isChangeable)
-            return getValueNext(UOM);
-
-        _initValues();
-        if (!m_isFixed) {
-            double d = setupValue.getDouble();
-            d -= m_capacityIncrement;
-            if (d < m_capacityMinimum)
-                d = m_capacityMinimum;
-            setupValue.setValue(d);
-        }
-        setChangeFlag(true);
-        m_isSentToSIM = false;
-        return getValueNext(UOM);
-    }
-    public Data decrementValueNext() { return decrementValueNext(m_defaultUOM); }
+    public Data decrementValueNext(String UOM) { return getValueNext(UOM); }
+    public Data decrementValueNext()           { return decrementValueNext(m_measurementSystem); }
 
     /**
-     * Increments the next value, to be applied at the next pit stop, according to the value set by {@link com.SIMRacingApps.Gauge#setCapacityIncrement(double)}. 
+     * Increments the next value, to be applied at the next pit stop, according to the value set by {@link com.SIMRacingApps.Gauge#_setCapacityIncrement(double,String)}. 
      * If the gauge is fixed, then only the change flag will be set and the next value will not be changed. 
      * If increments above the maximum capacity, then it sets it to the maximum capacity. 
      * The change flag is set to Y even if the new value and the old value are the same.
@@ -1782,345 +1051,235 @@ public class Gauge {
      * @param UOM (Optional) The unit of measure to return the new value in. Default to gauge's UOM.
      * @return    The new value.
      */
-    public Data incrementValueNext(String UOM) {
-        if (value == null || setupValue == null || !m_isChangeable)
-            return getValueNext(UOM);
-
-        _initValues();
-        if (!m_isFixed) {
-            double d = setupValue.getDouble();
-            d += m_capacityIncrement;
-            if (d > m_capacityMaximum)
-                d = m_capacityMaximum;
-            setupValue.setValue(d);
-        }
-        setChangeFlag(true);
-        m_isSentToSIM = false;
-        return getValueNext(UOM);
-    }
-    public Data incrementValueNext() { return incrementValueNext(m_defaultUOM); }
+    public Data incrementValueNext(String UOM) { return getValueNext(UOM); }
+    public Data incrementValueNext()           { return incrementValueNext(m_measurementSystem); }
     
     /**
      * Sets the next value to be applied at the next pit stop.
      * If the gauge is fixed, then only the change flag will be set and the next value will not be changed. 
      * If below the minimum capacity, then it sets it to the minimum capacity.
      * If above the maximum capacity, then it sets it to the maximum capacity.
-     * The value is rounded to the nearest increment as defined by {@link com.SIMRacingApps.Gauge#setCapacityIncrement(double)}.
+     * The value is rounded to the nearest increment as defined by {@link com.SIMRacingApps.Gauge#_setCapacityIncrement(double,String)}.
      * The change flag is set to Y even if the new value and the old value are the same.
      * 
-     * <p>PATH = {@link #setValueNext(Double, String) /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/setValueNext/(VALUE)/(UOM)}
+     * <p>PATH = {@link #setValueNext(double, String) /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/setValueNext/(VALUE)/(UOM)}
      * 
      * @param value (Optional) The value to be set. Default 0. 
      * @param UOM   (Optional) The unit of measure the new measure to be set is in. Also affects return value. Default to gauge's UOM.
      * @return      The new value, possibly adjusted.
      */
-    public Data setValueNext(Double value, String UOM) {
-        if (value == null || setupValue == null || !m_isChangeable)
-            return getValueNext(UOM);
-
-        _initValues();
-        if (!m_isFixed) {
-            Data d = new Data("",value,UOM);
-            d.addConversion(SIMValue);
-            double u = d.convertUOM(m_uom).getDouble();
-            double v = _roundToIncrement(u);
-
-            if (v < m_capacityMinimum)
-                v = m_capacityMinimum;
-            else
-            if (v > m_capacityMaximum)
-                v = m_capacityMaximum;
-            setupValue.setValue(v);
-        }
-        setChangeFlag(true);
-        m_isSentToSIM = false;
-        return  getValueNext(UOM);
-    }
-    public Data setValueNext(String value, String UOM) {
-        return setValueNext(Double.parseDouble(value),UOM);
-    }
-    public Data setValueNext(String value) {
-        return setValueNext(value,"");
-    }
-    public Data setValueNext() {
-        return setValueNext("0");
-    }
+    public Data setValueNext(double value, String UOM) { return getValueNext(UOM); }
+    public Data setValueNext(String value, String UOM) { return setValueNext(Double.parseDouble(value),UOM); }
+    public Data setValueNext(String value)             { return setValueNext(value,m_UOM); }
+    public Data setValueNext()                         { return setValueNext("0"); }
 
     /**
-     * Resets the gauge to it's default values.
-     * The app_ini_autoResetPitBox flag determines if the change flag will be set to Y or N to match it.
-     * @param lap The lap the reset occurred on.
-     * @param app_ini_autoResetPitBox 1 to set the change flag to Y, 0 to not.
-     * @param app_ini_autoResetFastRepair 1 to set the change flag to Y, 0 to not.
+     * Adds all the states from the passed in gauge to this gauge.
+     * @param gauge The gauge to copy the states from
      */
-    public void reset(int lap,int app_ini_autoResetPitBox, int app_ini_autoResetFastRepair) {
-        boolean firsttime = value == null ? true : false;
-        _initValues();
-        Data simValue = SIMValue != null ? SIMValue.convertUOM(m_uom) : new Data("",0.0);
-
-        if (m_isDebug)
-            Server.logger().finer(String.format("%s.reset(%s) on lap %d, Current value=%f %s, Next value=%f %s, SIM value=%f %s"
-                , this.getClass().getName()
-                , m_type
-                , lap
-                , value.getDouble()
-                , value.getUOM()
-                , setupValue.getDouble()
-                , setupValue.getUOM()
-                , simValue.getDouble()
-                , simValue.getUOM()
-            ));
-
-        if (!firsttime || app_ini_autoResetPitBox == 1) {
-            if ((!m_firstreset && m_onResetChange) || app_ini_autoResetPitBox == 1) {
-                if (!m_type.equals(Type.FASTREPAIRS)) //we should never automatically select this to be changed.
-                    setChangeFlag(true);   //call this so groups will get called together
-                else
-                if (app_ini_autoResetFastRepair == 1)
-                    setChangeFlag(true);   //call this so groups will get called together
-
-                if (app_ini_autoResetPitBox == 1) {
-                    //on auto reset fill fuel to max
-                    if (m_type.equals(Type.FUELLEVEL)) //TODO: make a flag for gauges that need filling on reset.
-                        setupValue.setValue(this.m_capacityMaximum);
-                }
-        
-                //TODO: Need flag that says on reset, change setup value to the current sim value.
-                if (m_type.equals(Type.TIREPRESSURELF)
-                ||  m_type.equals(Type.TIREPRESSURELR)
-                ||  m_type.equals(Type.TIREPRESSURERR)
-                ||  m_type.equals(Type.TIREPRESSURERF)
-                ||  m_type.equals(Type.TAPE)
-                ||  m_type.equals(Type.RRWEDGEADJUSTMENT)
-                ||  m_type.equals(Type.LRWEDGEADJUSTMENT)
-                ||  m_type.equals(Type.FRONTWING)
-                ||  m_type.equals(Type.REARWING)
-                ||  m_type.equals(Type.ANTIROLLFRONT)
-                ||  m_type.equals(Type.ANTIROLLREAR)
-                ||  m_type.equals(Type.FUELMIXTURE)
-                ||  m_type.equals(Type.THROTTLESHAPE)
-                ||  m_type.equals(Type.TRACTIONCONTROL)
-                ||  m_type.equals(Type.WEIGHTJACKERLEFT)                
-                ||  m_type.equals(Type.WEIGHTJACKERRIGHT)
-                ||  m_type.equals(Type.FRONTFLAP)
-                ||  m_type.equals(Type.ENGINEBRAKING)
-                ||  m_type.equals(Type.DIFFENTRY)
-                ||  m_type.equals(Type.DIFFMIDDLE)
-                ||  m_type.equals(Type.DIFFEXIT)
-                ) {
-                    setupValue.setValue(simValue.getDouble());
-                }
-                
-                m_isSentToSIM = true; //The SIM knows it already changed it. This will prevent it from sending the command to change it again.
+    public void _addStateRange(Gauge gauge) {
+        Iterator<Entry<String, TreeMap<Double, StateRange>>> stateNamesItr = gauge.m_states.entrySet().iterator();
+        while (stateNamesItr.hasNext()) {
+            Entry<String, TreeMap<Double, StateRange>> stateNames = stateNamesItr.next();
+            String stateName = stateNames.getKey();
+            TreeMap<Double, StateRange> states = stateNames.getValue();
+            Iterator<Entry<Double, StateRange>> itr = states.entrySet().iterator();
+            while (itr.hasNext()) {
+                StateRange state = itr.next().getValue();
+                _removeStateRange(stateName,state.state);
+                _addStateRange(stateName,state.state,state.start.getDouble(),state.end.getDouble(),state.start.getUOM(),state.value);
             }
-        }
-        
-        m_firstreset = false;
-
-        beforePitting(lap);
-        
-//        //now do the whole group
-//        Iterator<Entry<String,Gauge>> itr = m_group.entrySet().iterator();
-//        while (itr.hasNext()) {
-//            Gauge g = itr.next().getValue();
-//            g.reset(lap,app_ini_autoResetPitBox);
-//        }
-
-    }
-
-    /**
-     * This method should be called before pitting to allow the current value to be saved historically before they are changed.
-     * @param lap The lap pitted.
-     */
-    public void beforePitting(int lap) {
-        boolean firsttime = value == null ? true : false;
-        _initValues();
-        Data simValue = SIMValue != null ? SIMValue.convertUOM(m_uom) : new Data("",0.0);
-
-        if (!m_changeFlag) {
-            if (m_isDebug)
-                Server.logger().finer(String.format("%s.beforePitting(%s) on lap %d, Current value=%f %s, Next value=%f %s, SIM value=%f %s"
-                    , this.getClass().getName()
-                    , m_type
-                    , lap
-                    , value.getDouble()
-                    , value.getUOM()
-                    , setupValue.getDouble()
-                    , setupValue.getUOM()
-                    , simValue.getDouble()
-                    , simValue.getUOM()
-                ));
-        }
-        else {
-            if (firsttime) {
-                //change where we start recording, but do record what we can't see.
-                m_lapChanged = lap;
-            }
-            else
-            if (lap - m_lapChanged > 0) {
-
-                //TODO: Save history of the changes, for now at least save the last one
-                if (SIMValueType == SIMValueTypes.ForCar
-                ||  SIMValueType == SIMValueTypes.ForCarAndSetup
-                ||  SIMValueType == SIMValueTypes.ForCarZeroOnPit
-                ) {
-                    beforePitValue = new Data(simValue);
-
-                    if (m_isDebug)
-                        Server.logger().finer(String.format("%s.beforePitting(%s). Saving Laps=%d, value=%f %s as Historical"
-                            , this.getClass().getName()
-                            , m_type
-                            , lap - m_lapChanged
-                            , beforePitValue.getDouble()
-                            , beforePitValue.getUOM()
-                        ));
-                }
-            }
-        }
-//        //now do the whole group
-//        Iterator<Entry<String,Gauge>> itr = m_group.entrySet().iterator();
-//        while (itr.hasNext()) {
-//            Gauge g = itr.next().getValue();
-//            g.beforePitting(lap);
-//        }
-    }
-
-    /**
-     * Call this method to get the gauge to take a reading and store it internally.
-     */
-    public void takeReading() {
-        _initValues();
-        m_SIMValue = SIMValue != null ? SIMValue.convertUOM(m_uom) : new Data("",0.0);
-        //now do the whole group
-        Iterator<Entry<String,Gauge>> itr = m_group.entrySet().iterator();
-        while (itr.hasNext()) {
-            Gauge g = itr.next().getValue();
-            g.takeReading();
         }
     }
-
-    /**
-     * Call this method after pitting to allow saving historical values that can only be read after you pit.
-     * @param lap The lap you pitted on.
+    
+    /*
+     * Add a new state range to this gauge. 
+     * The values should be in the same UOM that getInternalUOM() returns.
+     * @param name  The name of the state.
+     * @param start The starting value, inclusive.
+     * @param end   The ending value, exclusive.
      */
-    public void afterPitting(int lap) {
-        boolean firsttime = value == null ? true : false;
-        _initValues();
-        if (m_SIMValue == null)
-            takeReading();
+    public void _addStateRange(String stateName, String name,double start,double end,String UOM) {
+        _removeStateRange(stateName,name);
 
-        if (!m_changeFlag) {
-            if (m_isDebug)
-                Server.logger().finer(String.format("%s.afterPitting(%s) on lap %d, Current value=%f %s, Next value=%f %s, SIM value=%f %s"
-                    , this.getClass().getName()
-                    , m_type
-                    , lap
-                    , value.getDouble()
-                    , value.getUOM()
-                    , setupValue.getDouble()
-                    , setupValue.getUOM()
-                    , m_SIMValue.getDouble()
-                    , m_SIMValue.getUOM()
-                ));
-        }
-        else {
-            if (firsttime) {
-                //change where we start recording, but do record what we can't see.
-                m_lapChanged = lap;
-                if (m_isDebug)
-                    Server.logger().finer(String.format("%s.afterPitting(%s). First time, initializing m_lapChanged to %d"
-                        , this.getClass().getName()
-                        , m_type
-                        , m_lapChanged
-                    ));
-            }
-            else
-            if (lap - m_lapChanged > 0) {
+        TreeMap<Double,StateRange> states = m_states.get(stateName);
 
-                //TODO: Save history of the changes, for now at least save the last one
-                if (beforePitValue != null
-                || SIMValueType == SIMValueTypes.AfterPit
-                ) {
-                    afterPitLaps.setValue(lap - m_lapChanged);
-                    afterPitValue = beforePitValue != null ? beforePitValue : m_SIMValue;
-                    beforePitValue = null;
-                    m_lapChanged = lap;
-                    m_count++;
-
-                    if (m_isDebug)
-                        Server.logger().finer(String.format("%s.afterPitting(%s). Saving Laps=%d, value=%f %s as Historical"
-                            , this.getClass().getName()
-                            , m_type
-                            , afterPitLaps.getInteger()
-                            , afterPitValue.getDouble()
-                            , afterPitValue.getUOM()
-                        ));
-                }
-                else {
-                    if (m_isDebug)
-                        Server.logger().finer(String.format("%s.afterPitting(%s). with laps, nothing recorded, m_lapChanged=%d, lap=%d"
-                                , this.getClass().getName()
-                                , m_type
-                                , m_lapChanged
-                                , lap
-                            ));
-                }
-            }
-            else {
-                if (m_isDebug)
-                    Server.logger().finer(String.format("%s.afterPitting(%s). no laps recorded, m_lapChanged=%d, lap=%d"
-                        , this.getClass().getName()
-                        , m_type
-                        , m_lapChanged
-                        , lap
-                    ));
-            }
-
-            //Update the value with the setup value if the SIM is not giving it to us
-            if (SIMValueType != SIMValueTypes.ForCar
-            &&  SIMValueType != SIMValueTypes.ForCarZeroOnPit
-            ) {
-                value = new Data(setupValue);
-            }
-
-        //Reset the new Setup Value
-            //Need to set the setupValue to it's initial value
-            //fuel = 0.0, tearoff=0.0, tirepressure=nochange, wedge=nochange, brakebias=nochange, tape=nochange
-            if (SIMValueType == SIMValueTypes.ForSetup
-            ||  SIMValueType == SIMValueTypes.ForCarAndSetup
-            ) {
-                setupValue.setValue(m_SIMValue);
-            }
-            else
-            if (SIMValueType == SIMValueTypes.ZeroOnPit
-            ||  SIMValueType == SIMValueTypes.ForCarZeroOnPit
-            ) {
-                setupValue.setValue(0.0);
-            }
-
-            m_changeFlag = false;
-            m_isSentToSIM = false;
-        }
-
-        m_SIMValue = null;
+        if (states == null)
+            m_states.put(stateName, states = new TreeMap<Double,StateRange>());
         
-        //now do the whole group
-        Iterator<Entry<String,Gauge>> itr = m_group.entrySet().iterator();
-        while (itr.hasNext()) {
-            Gauge g = itr.next().getValue();
-            g.afterPitting(lap);
-        }
+        states.put(start, new StateRange(name.toUpperCase(),start,end,UOM));
+    }
+
+    /*
+     * Add a new state range to this gauge that transforms the value.
+     * The values should be in the same UOM that getInternalUOM() returns.
+     * @param name  The name of the state.
+     * @param start The starting value, inclusive.
+     * @param end   The ending value, exclusive.
+     * @param d     The new value
+     */
+    public void _addStateRange(String stateName,String name,double start,double end, String UOM, Data d) {
+        _removeStateRange(stateName,name);
+
+        TreeMap<Double,StateRange> states = m_states.get(stateName);
+
+        if (states == null)
+            m_states.put(stateName, states = new TreeMap<Double,StateRange>());
+        
+        states.put(start, new StateRange(name.toUpperCase(),start,end,UOM,d));
         
     }
 
-    /**
-     * Used internally to set the reader the gauge will use to get values from the SIM.
-     * @param d The data object that will return the value when getValue() is called on it.
-     * @param t The type of reader it is as defined by {@link com.SIMRacingApps.Gauge#SIMValueType} of what the reader will return.
+    /*
+     * Removes a state.
+     * 
+     * @param name The name of the state.
      */
-    public void setSIMValue(Data d, SIMValueTypes t ) {
-        SIMValue = d;
-        SIMValueType = t;
+    public void _removeStateRange(String stateName, String name) {
+        
+        TreeMap<Double,StateRange> states = m_states.get(stateName);
+        
+        if (states != null) {
+            Iterator<Entry<Double,StateRange>> itr = states.entrySet().iterator();
+            //remove the name if it exists
+            while (itr.hasNext()) {
+                StateRange range = itr.next().getValue();
+                if (range.state.equals(name.toUpperCase()))
+                    itr.remove();
+            }
+        }
     }
+    
+    /*
+     * Prepares a value to be returned. 
+     * It converts to the request UOM, sets the state and state percentage
+     * @return A data value prepared for the user.
+     */
+    protected Data _getReturnValue(Data d,String UOM,String gear, String power) {
+        //use the imperial and metric UOM from the json file instead of the global one.
+        //this allows each car/gauge to decide what UOM to use.
+        //was mainly done for the quart gauges. The global one would return gallons.
+        Data r = d.convertUOM(UOM.equalsIgnoreCase("METRIC") ? m_metric : UOM.equalsIgnoreCase("IMPERIAL") ? m_imperial : UOM);
+
+        TreeMap<Double, StateRange> states = null;
+        if (!gear.isEmpty() && !power.isEmpty()) 
+            states = m_states.get("-"+gear+"-"+power);
+        if (!gear.isEmpty() && states == null)
+            states = m_states.get("-"+gear);
+        if (states == null)
+            states = m_states.get("");
+
+        if (states != null 
+           //if state has not already been set, the look it up
+        && (  d.getState().equalsIgnoreCase(Data.State.NORMAL)
+           || d.getState().equalsIgnoreCase(Data.State.ERROR)
+           || d.getState().equalsIgnoreCase(Data.State.NOTAVAILABLE)
+           || d.getState().equalsIgnoreCase(Data.State.OFF)
+           )
+        ) {
+            //now translate the value if provided
+            Iterator<Entry<Double,StateRange>> itr = m_stateAscending 
+                                                   ? states.entrySet().iterator()
+                                                   : states.descendingMap().entrySet().iterator();
+    
+            //pick the one with the highest start if the ranges overlap.
+            //all ranges overlap NORMAL
+            double v = r.convertUOM(this.m_UOM).getDouble(); //must do the compares of the states in Gauges UOM 
+            while (itr.hasNext()) {
+                StateRange range = itr.next().getValue();
+                //if the value is within the range 
+                if ((v >= range.start.convertUOM(m_UOM).getDouble() && v < range.end.convertUOM(m_UOM).getDouble())) {
+                    //only if the original state was NORMAL, change the state
+                    if (d.getState().equalsIgnoreCase(Data.State.NORMAL)) {
+                        r.setState(range.state);
+                        r.setStatePercent(((v - range.start.convertUOM(m_UOM).getDouble()) / (range.end.convertUOM(m_UOM).getDouble() - range.start.convertUOM(m_UOM).getDouble())) * 100.0);
+                    }
+                    if (range.value != null)
+                        r.setValue(range.value.getValue(),range.value.getUOM());
+                }
+            }
+        }
+        
+        return r;
+    }
+    protected Data _getReturnValue(Data d,String UOM) { return _getReturnValue(d,UOM,"",""); }
+    
+    //This setters allows the gauges to be modified by the SIM after the JSON files have been loaded
+    public Data _setMinimum(double d, String uom) { return m_minimum.setValue(d,uom); }
+    public Data _setMaximum(double d, String uom) { return m_maximum.setValue(d,uom); }
+    public Data _setMajorIncrement(double d, String uom) { return m_majorIncrement.setValue(d,uom); }
+    public Data _setMinorIncrement(double d, String uom) { return m_minorIncrement.setValue(d,uom); }
+    public Data _setCapacityMinimum(double d, String uom) { return m_capacityMinimum.setValue(d,uom); }
+    public Data _setCapacityMaximum(double d, String uom) { return m_capacityMaximum.setValue(d,uom); }
+    public Data _setCapacityIncrement(double d, String uom) { return m_capacityIncrement.setValue(d,uom); }
+    public Data _setIsFixed(boolean b) { m_isFixed = b; return getIsFixed(); }
+    public Data _setIsChangable(boolean b) { m_isChangable = b; return getIsChangeable(); }
+    public Data _setIsDirty(boolean b) {  m_isDirty = b; return getIsDirty(); }
+    public Data _setOnResetChange(boolean b) { m_onResetChange = b; return getOnResetChange(); }
+    
+    /****************************************/
+    /****************************************/
+    /*********** PRIVATE ********************/
+    /****************************************/
+    /****************************************/
+    
+    private void __loadGauge(Map<String, Map<String,Object>> gaugemap,String trackName,String stateName) {
+        String s;
+        Double d;
+        Boolean b;
+        
+        Map<String,Object> trackmap = gaugemap.get(trackName+stateName);
+    
+        if (trackmap != null) {
+            if ((s = (String)trackmap.get("Name"))              != null) m_name = s;
+            if ((s = (String)trackmap.get("TypeName"))          != null) m_typeName = s;
+            if ((s = (String)trackmap.get("UOM"))               != null) m_UOM = s;
+            if ((s = (String)trackmap.get("imperial"))          != null) m_imperial = s;
+            if ((s = (String)trackmap.get("metric"))            != null) m_metric = s;
+            if ((b = (Boolean)trackmap.get("StateAscending"))   != null) m_stateAscending = b;
+            if ((d = (Double)trackmap.get("Multiplier"))        != null) m_multiplier = d;
+            if ((d = (Double)trackmap.get("Minimum"))           != null) _setMinimum(d,m_UOM);
+            if ((d = (Double)trackmap.get("Maximum"))           != null) _setMaximum(d,m_UOM);
+            if ((d = (Double)trackmap.get("MajorIncrement"))    != null) _setMajorIncrement(d,m_UOM);
+            if ((d = (Double)trackmap.get("MinorIncrement"))    != null) _setMinorIncrement(d,m_UOM);
+//            if ((d = (Double)trackmap.get("RPMPitRoadSpeed"))   != null) m_RPMPitRoadSpeed.setValue(d,m_UOM);
+            if ((d = (Double)trackmap.get("CapacityMinimum"))   != null) _setCapacityMinimum(d,m_UOM);
+            if ((d = (Double)trackmap.get("CapacityMaximum"))   != null) _setCapacityMaximum(d,m_UOM);
+            if ((d = (Double)trackmap.get("CapacityIncrement")) != null) _setCapacityIncrement(d,m_UOM);
+            if ((b = (Boolean)trackmap.get("IsFixed"))          != null) _setIsFixed(b);
+            if ((b = (Boolean)trackmap.get("IsChangable"))      != null) _setIsChangable(b);
+            if ((b = (Boolean)trackmap.get("OnResetChange"))    != null) _setOnResetChange(b);
+            if ((s = (String)trackmap.get("Reader"))            != null) m_reader = s;
+    
+            @SuppressWarnings("unchecked")
+            Map<String,Map<String,Object>> states = (Map<String,Map<String,Object>>)trackmap.get("States");
+            if (states != null) {
+                Iterator<Entry<String, Map<String, Object>>> itr = states.entrySet().iterator();
+                while (itr.hasNext()) {
+                    Entry<String, Map<String,Object>> state = itr.next();
+                    if (state.getValue().get("Value") != null) {
+                        _addStateRange(
+                            stateName,
+                            state.getKey(),
+                            (Double)state.getValue().get("Start"),
+                            (Double)state.getValue().get("End"),
+                            m_UOM,
+                            new Data((String)state.getValue().get("Name"),state.getValue().get("Value"),"String",Data.State.NORMAL)
+                        );
+                    }
+                    else {
+                        _addStateRange(
+                                stateName,
+                                state.getKey(),
+                                (Double)state.getValue().get("Start"),
+                                (Double)state.getValue().get("End"),
+                                m_UOM
+                        );
+                    }
+                }
+            }
+        }
+    }
+  
 }
 

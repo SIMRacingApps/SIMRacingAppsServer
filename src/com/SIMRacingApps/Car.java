@@ -31,17 +31,19 @@ public class Car {
 
     private static final int DEFAULT_LAPS_FUEL_MILAGE       = 0;    //zero means use worse lap, average means average
     private static final double FUELLEVELNEEDED_BUFFER_LAPS = 0.0;  //number of laps to add to the remaining laps as a buffer. TODO: GWC could generate the need to add 2 or more laps
-    protected int m_ME                                      = -1;
     protected SIMPlugin m_SIMPlugin                         = null;
     
     //just to make things a little easier, I will just make these protected instead of getters and setters
     //each derived class should update this as need to override the default behavior
     protected int m_id                                      = -1;
+    protected String m_carIdentifier                        = "";
     protected String m_name                                 = "unknown";
     protected String m_description                          = "An Unknown Car";
     protected String m_mfrLogo                              = "com/SIMRacingApps/Cars/default.png";
     protected double m_pitRoadSpeedRPM                      = -1;
-    
+    protected String m_carPath                              = "com/SIMRacingApps/Car.json";
+    protected Map<String,Gauge> m_gauges                    = new TreeMap<String,Gauge>();
+   
 
     /**
      * Defines an enumerated String class for where the car is.
@@ -196,7 +198,7 @@ public class Car {
      */
     public Car(SIMPlugin SIMPlugin) {
         m_SIMPlugin = SIMPlugin;
-        _initialize();
+        __loadCar();
     }
 
     /**
@@ -204,12 +206,16 @@ public class Car {
      * @param SIMPlugin An instance of SIMPlugin.
      * @param id        A numeric value used by the SIM to identify a car
      * @param name      The name of the car as returned by the SIM
+     * @param carPath   The relative path to the car's .json file provided by the SIM
      */
-    public Car(SIMPlugin SIMPlugin, Integer id, String name) {
+    public Car(SIMPlugin SIMPlugin, int id, String name, String carPath) {
         this.m_SIMPlugin = SIMPlugin;
         this.m_id        = id;
         this.m_name      = name;
-        _initialize();
+        this.m_carPath   = carPath;
+        this.m_carIdentifier = "I" + Integer.toString(m_id);
+        
+        __loadCar();
     }
 
     /**
@@ -217,8 +223,6 @@ public class Car {
      * @return true or false
      */
     public boolean isME() {
-        if (isValid())
-            return m_id == m_ME;
         return false;
     }
 
@@ -242,7 +246,7 @@ public class Car {
                         ? "ONPITROAD" 
                         : (status.getString().contains("TRACK") ? "ONTRACK" : "OFF");
         Data bearing = m_SIMPlugin.getSession().getTrack().getBearing(location,getLap(LapType.COMPLETEDPERCENT).getDouble(),UOM);
-        bearing.setName("Car/I"+Integer.toString(m_id)+"/Bearing");
+        bearing.setName("Car/"+m_carIdentifier+"/Bearing");
         return bearing;
     }
     public Data getBearing() { return getBearing(""); }
@@ -257,7 +261,7 @@ public class Car {
      * @return The number of cautions in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getCautions() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/Cautions",0,"integer",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/Cautions",0,"integer",Data.State.NORMAL);
     }
     
     /**
@@ -268,7 +272,7 @@ public class Car {
      * @return The name of the class in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getClassColor() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/ClassColor",0,"rgb",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/ClassColor",0,"rgb",Data.State.NORMAL);
     }
     
     /**
@@ -279,7 +283,7 @@ public class Car {
      * @return The name of the class in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getClassName() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/ClassName","","String",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/ClassName","","String",Data.State.NORMAL);
     }
     
     /**
@@ -290,7 +294,7 @@ public class Car {
      * @return The color of the car in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getColor() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/Color",0xdddddd,"RGB",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/Color",0xdddddd,"RGB",Data.State.NORMAL);
     }
 
     /**
@@ -301,7 +305,7 @@ public class Car {
      * @return The color of the car number in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getColorNumber() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/ColorNumber",0x000000,"RGB",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/ColorNumber",0x000000,"RGB",Data.State.NORMAL);
     }
 
     /**
@@ -312,7 +316,7 @@ public class Car {
      * @return The color of the car number's background in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getColorNumberBackground() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/ColorNumberBackground",0x333333,"RGB",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/ColorNumberBackground",0x333333,"RGB",Data.State.NORMAL);
     }
 
     /**
@@ -323,7 +327,7 @@ public class Car {
      * @return The color of the car number's outline in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getColorNumberOutline() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/ColorNumberOutline",0xff0000,"RGB",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/ColorNumberOutline",0xff0000,"RGB",Data.State.NORMAL);
     }
 
     /**
@@ -334,7 +338,7 @@ public class Car {
      * @return The description of the car in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getDescription() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/Description",m_description,"",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/Description",m_description,"",Data.State.NORMAL);
     }
     
     /**
@@ -345,7 +349,7 @@ public class Car {
      * @return The number of blinks in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getDiscontinuality() {
-    	return new Data("Car/I"+Integer.toString(m_id)+"/Discontinuality","0","integer");
+    	return new Data("Car/"+m_carIdentifier+"/Discontinuality","0","integer",Data.State.NORMAL);
     }
 
     /**
@@ -356,7 +360,7 @@ public class Car {
      * @return The club name in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getDriverClubName() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/DriverClubName","");
+        return new Data("Car/"+m_carIdentifier+"/DriverClubName","",Data.State.NORMAL);
     }
 
     /**
@@ -367,7 +371,7 @@ public class Car {
      * @return The division name in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getDriverDivisionName() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/DriverDivisionName","");
+        return new Data("Car/"+m_carIdentifier+"/DriverDivisionName","",Data.State.NORMAL);
     }
 
     /**
@@ -378,7 +382,7 @@ public class Car {
      * @return The initials in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getDriverInitials() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/DriverInitials","");
+        return new Data("Car/"+m_carIdentifier+"/DriverInitials","",Data.State.NORMAL);
     }
 
     /**
@@ -391,7 +395,7 @@ public class Car {
      * @return The license color in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getDriverLicenseColor() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/DriverLicenseColor",0xFF0000/*red*/,"RGB");
+        return new Data("Car/"+m_carIdentifier+"/DriverLicenseColor",0xFF0000/*red*/,"RGB",Data.State.NORMAL);
     }
 
     /**
@@ -404,7 +408,7 @@ public class Car {
      * @return The license color in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getDriverLicenseColorText() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/DriverLicenseColorText",0xffffff/*white*/,"RGB");
+        return new Data("Car/"+m_carIdentifier+"/DriverLicenseColorText",0xffffff/*white*/,"RGB",Data.State.NORMAL);
     }
 
     /**
@@ -415,7 +419,7 @@ public class Car {
      * @return The name in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getDriverName() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/DriverName","","text");
+        return new Data("Car/"+m_carIdentifier+"/DriverName","","text",Data.State.NORMAL);
     }
 
     /**
@@ -428,7 +432,7 @@ public class Car {
      * @return The drivers shortened name in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getDriverNameShort() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/DriverNameShort","","text");
+        return new Data("Car/"+m_carIdentifier+"/DriverNameShort","","text",Data.State.NORMAL);
     }
     
     /**
@@ -442,7 +446,7 @@ public class Car {
      * @return The rating in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getDriverRating() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/DriverRating","0","rating");
+        return new Data("Car/"+m_carIdentifier+"/DriverRating","0","rating");
     }
 
     /**
@@ -457,11 +461,11 @@ public class Car {
         Data fuel = _getGauge(Gauge.Type.FUELLEVEL).getValueCurrent().convertUOM("l");
         Data fuelperlap = getFuelLevelPerLap(lapsToAverage,"l");
         Data d;
-        if (fuelperlap.getDouble() > 0.0) {
-            d = new Data("Car/I"+Integer.toString(m_id)+"/FuelLaps", fuel.getDouble() / fuelperlap.getDouble(),"lap",Data.State.NORMAL);
+        if (fuelperlap.getState().equals(Data.State.NORMAL) && fuelperlap.getDouble() > 0.0) {
+            d = new Data("Car/"+m_carIdentifier+"/FuelLaps", fuel.getDouble() / fuelperlap.getDouble(),"lap",Data.State.NORMAL);
         }
         else
-            d = new Data("Car/I"+Integer.toString(m_id)+"/FuelLaps", 0,"lap");
+            d = new Data("Car/"+m_carIdentifier+"/FuelLaps", 0,"lap",Data.State.NOTAVAILABLE);
 
         return d;
     }
@@ -482,7 +486,7 @@ public class Car {
      * @return The number of laps in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getFuelLapsMaximum(int lapsToAverage) {
-//        Data d = new Data("Car/I"+Integer.toString(m_id)+"/FuelLapsMaximum",0.0,"laps");
+//        Data d = new Data("Car/"+m_carIdentifier+"/FuelLapsMaximum",0.0,"laps");
 //        if (isME()) {
 //            Data fuelperlap = getFuelLevelPerLap(lapsToAverage);
 //            if (fuelperlap.getDouble() > 0.0) {
@@ -495,11 +499,11 @@ public class Car {
         Data fuel = _getGauge(Gauge.Type.FUELLEVEL).getCapacityMaximum().convertUOM("l");
         Data fuelperlap = getFuelLevelPerLap(lapsToAverage,"l");
         Data d;
-        if (fuelperlap.getDouble() > 0.0) {
-            d = new Data("Car/I"+Integer.toString(m_id)+"/FuelLaps", fuel.getDouble() / fuelperlap.getDouble(),"lap",Data.State.NORMAL);
+        if (fuelperlap.getState().equals(Data.State.NORMAL) && fuelperlap.getDouble() > 0.0) {
+            d = new Data("Car/"+m_carIdentifier+"/FuelLaps", fuel.getDouble() / fuelperlap.getDouble(),"lap",Data.State.NORMAL);
         }
         else
-            d = new Data("Car/I"+Integer.toString(m_id)+"/FuelLaps", 0,"lap");
+            d = new Data("Car/"+m_carIdentifier+"/FuelLaps", 0,"lap",Data.State.NOTAVAILABLE);
 
         return d;
     }
@@ -519,7 +523,7 @@ public class Car {
      * @return The fuel level in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getFuelLevelAtStartFinish(String UOM) {
-        return new Data("Car/I"+Integer.toString(m_id)+"/FuelLevelAtStartFinish",0.0,_getGauge(Gauge.Type.FUELLEVEL).getUOM().getString()).convertUOM(UOM);
+        return new Data("Car/"+m_carIdentifier+"/FuelLevelAtStartFinish",0.0,_getGauge(Gauge.Type.FUELLEVEL).getUOM().getString(),Data.State.NOTAVAILABLE).convertUOM(UOM);
     }
     public Data getFuelLevelAtStartFinish() { return getFuelLevelAtStartFinish(""); }
 
@@ -537,7 +541,7 @@ public class Car {
      * @return The number of laps in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getFuelLevelToFinish(int lapsToAverage,double laps, String UOM) {
-        Data fuelneeded = new Data("Car/I"+Integer.toString(m_id)+"/FuelLevelToFinish",0.0,_getGauge(Gauge.Type.FUELLEVEL).getUOM().getString());
+        Data fuelneeded = new Data("Car/"+m_carIdentifier+"/FuelLevelToFinish",0.0,_getGauge(Gauge.Type.FUELLEVEL).getUOM().getString(),Data.State.NOTAVAILABLE);
         if (isME()) {
             Data fuelperlap = getFuelLevelPerLap(lapsToAverage,"");
 
@@ -599,7 +603,7 @@ public class Car {
      * @return              The number of laps in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getFuelLevelNeeded(int lapsToAverage,double laps,String UOM) {
-        Data fuelneeded = new Data("Car/I"+Integer.toString(m_id)+"/FuelLevelNeeded",0.0,_getGauge(Gauge.Type.FUELLEVEL).getUOM().getString());
+        Data fuelneeded = new Data("Car/"+m_carIdentifier+"/FuelLevelNeeded",0.0,_getGauge(Gauge.Type.FUELLEVEL).getUOM().getString(),Data.State.NOTAVAILABLE);
         if (isME()) {
 
             Data fuelToFinish = getFuelLevelToFinish(lapsToAverage,laps,UOM);
@@ -610,6 +614,8 @@ public class Car {
                 fuelneeded.setValue(fueltoadd > 0.0 ? fueltoadd : 0.0);
                 fuelneeded.setState(Data.State.NORMAL);
             }
+            else
+                fuelneeded.setState(Data.State.OFF);
         }
         return fuelneeded.convertUOM(UOM);
     }
@@ -636,7 +642,7 @@ public class Car {
      * @return The number of laps in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getFuelLevelPerLap(int lapsToAverage,String UOM) {
-        return new Data("Car/I"+Integer.toString(m_id)+"/FuelPerLap",0.0,"l").convertUOM(UOM);
+        return new Data("Car/"+m_carIdentifier+"/FuelPerLap",0.0,"l",Data.State.NORMAL).convertUOM(UOM);
     }
     public Data getFuelLevelPerLap(String lapsToAverage,String UOM) {
         return getFuelLevelPerLap(Integer.parseInt(lapsToAverage),UOM);
@@ -654,19 +660,21 @@ public class Car {
      * @param gaugeType One of the enumerated types defined by {@link com.SIMRacingApps.Gauge.Type}
      * @return          A Gauge defined by {@link com.SIMRacingApps.Gauge}
      */
-    private Gauge m_genericGauge = null;
     public Gauge _getGauge(String gaugeType) {
-        if (gaugeType.toLowerCase().equals("generic")) {
-            if (m_genericGauge == null) m_genericGauge = new Gauge("I"+Integer.toString(m_id),Gauge.Type.GENERIC);
-            return m_genericGauge;
-        }
+        Gauge gauge = m_gauges.get(gaugeType.toLowerCase());
+        if (gauge != null)
+            return gauge;
+        
+//        if (!gaugeType.toLowerCase().equals("generic"))
+//            Server.logger().warning(String.format("Car._getGauge(%s) not a valid Gauge.Type, returning Generic", gaugeType));
 
-        if (m_gauges.containsKey(gaugeType.toLowerCase()))
-            return m_gauges.get(gaugeType.toLowerCase());
-
-        Server.logger().warning(String.format("Car._getGauge(%s) not a valid Gauge.Type, returning Generic", gaugeType));
-        if (m_genericGauge == null) m_genericGauge = new Gauge("I"+Integer.toString(m_id),Gauge.Type.GENERIC);
-        return m_genericGauge;
+        //TODO: Need to validate gaugeType is supported, else return a generic gauge.
+        return new Gauge(
+                gaugeType,
+                this,
+                m_SIMPlugin.getSession().getTrack(),
+                null,null
+        );
     }
 
     /**
@@ -679,7 +687,7 @@ public class Car {
      * @return          A Gauge defined by {@link com.SIMRacingApps.Gauge}
      */
     public Data getGauge(String gaugeType) {
-        return new Data("Car/I"+Integer.toString(m_id)+"/Gauge/"+gaugeType,_getGauge(gaugeType).toString());
+        return new Data("Car/"+m_carIdentifier+"/Gauge/"+gaugeType,_getGauge(gaugeType).toString());
     }
     public Data getGauge() {
         int count = 0;
@@ -697,15 +705,95 @@ public class Car {
             json.append(gauge.toString());
         }
         json.append("}");
-        return new Data("Car/I"+Integer.toString(m_id)+"/Gauge",json.toString(),"JSON",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/Gauge",json.toString(),"JSON",Data.State.NORMAL);
     }
     
+    private boolean m_shiftLightsLoaded = false;
     /**
      * Assigns a gauge instance to this car.
      * If one already exists, it is replaced
      * @param gauge A instance of a Gauge defined by {@link com.SIMRacingApps.Gauge}
      */
-    public void setGauge(Gauge gauge) {
+    protected void _setGauge(Gauge gauge) {
+        
+        if (gauge.getType().getString().equalsIgnoreCase(Gauge.Type.SPEEDOMETER))
+        {
+            //convert the track UOM to the gauges UOM
+            //I used to floor it and round it, but that produced problems with accuracy.
+            //This code cannot make any assumptions about the error the track code may return.
+            //In my test file, the speed limit is a published 45mph, but the track code returns 44.7.
+            //My point is, the track code should round it up or floor it, not this code.
+            double PitRoadSpeedLimit = m_SIMPlugin.getSession().getTrack().getPitSpeedLimit(gauge.getUOM().getString()).getDouble();
+
+            //double WayOverPitSpeed     = 1.10;
+            double WayOverPitSpeed     = (PitRoadSpeedLimit + (gauge.getUOM().equals("mph") ? 15.0 : 25.0)) / PitRoadSpeedLimit;
+            double OverPitSpeed        = (PitRoadSpeedLimit + (gauge.getUOM().equals("mph") ? 0.8  : 1.29)) / PitRoadSpeedLimit;
+            double PitSpeed            = (PitRoadSpeedLimit - (gauge.getUOM().equals("mph") ? 0.5  : 0.8))  / PitRoadSpeedLimit;
+            double ApproachingPitSpeed = PitSpeed - (7*.012) - (7*.006);
+
+            gauge._addStateRange("","WAYOVERLIMIT",     PitRoadSpeedLimit * WayOverPitSpeed,     Double.MAX_VALUE,                    gauge.getUOM().getString());
+            gauge._addStateRange("","OVERLIMIT",        PitRoadSpeedLimit * OverPitSpeed,        PitRoadSpeedLimit * WayOverPitSpeed, gauge.getUOM().getString());
+            gauge._addStateRange("","LIMIT",            PitRoadSpeedLimit * PitSpeed,            PitRoadSpeedLimit * OverPitSpeed,    gauge.getUOM().getString());
+            gauge._addStateRange("","APPROACHINGLIMIT", PitRoadSpeedLimit * ApproachingPitSpeed, PitRoadSpeedLimit * PitSpeed,        gauge.getUOM().getString());
+
+        }
+
+        if (!m_shiftLightsLoaded) {
+            try {
+                Gauge tachometer = _getGauge(Gauge.Type.TACHOMETER);
+                Gauge gear  = _getGauge(Gauge.Type.GEAR);
+                Gauge power = _getGauge(Gauge.Type.ENGINEPOWER);
+                
+                if (tachometer != null && gear != null && power != null) {
+                    String car  = getName().getString().replace(" ", "_");
+                    String track= m_SIMPlugin.getSession().getTrack().getName().getString().replace(" ", "_");
+        
+                    //allow the user to override the shift light RPM values
+                    //example:
+                    //
+                    //stockcars_chevyss-ShiftLightStart = 6000
+                    //stockcars_chevyss-ShiftLightShift = 7000
+                    //stockcars_chevyss-ShiftLightBlink = 8000
+                    
+                    double DriverCarSLFirstRPM = Server.getArg(
+                                                    String.format(              "%s-%s-ShiftLightStart-%s-%d", track,car,gear.getValueCurrent().getString(),power.getValueCurrent().getInteger()),
+                                                    Server.getArg(String.format("%s-%s-ShiftLightStart-%s",    track,car,gear.getValueCurrent().getString()),
+                                                    Server.getArg(String.format("%s-%s-ShiftLightStart",       track,car),
+                                                    Server.getArg(String.format("%s-ShiftLightStart-%s-%d",          car,gear.getValueCurrent().getString(),power.getValueCurrent().getInteger()),
+                                                    Server.getArg(String.format("%s-ShiftLightStart-%s",             car,gear.getValueCurrent().getString()),
+                                                    Server.getArg(String.format("%s-ShiftLightStart",                car),      -1.0)
+                                                 )))));
+                    double DriverCarSLShiftRPM = Server.getArg(
+                                                    String.format(              "%s-%s-ShiftLightShift-%s-%d", track,car,gear.getValueCurrent().getString(),power.getValueCurrent().getInteger()),
+                                                    Server.getArg(String.format("%s-%s-ShiftLightShift-%s",    track,car,gear.getValueCurrent().getString()),
+                                                    Server.getArg(String.format("%s-%s-ShiftLightShift",       track,car),
+                                                    Server.getArg(String.format("%s-ShiftLightShift-%s-%d",          car,gear.getValueCurrent().getString(),power.getValueCurrent().getInteger()),
+                                                    Server.getArg(String.format("%s-ShiftLightShift-%s",             car,gear.getValueCurrent().getString()),
+                                                    Server.getArg(String.format("%s-ShiftLightShift",                car),      -1.0)
+                                                 )))));
+                    double DriverCarSLBlinkRPM = Server.getArg(
+                                                    String.format(              "%s-%s-ShiftLightBlink-%s-%d", track,car,gear.getValueCurrent().getString(),power.getValueCurrent().getInteger()),
+                                                    Server.getArg(String.format("%s-%s-ShiftLightBlink-%s",    track,car,gear.getValueCurrent().getString()),
+                                                    Server.getArg(String.format("%s-%s-ShiftLightBlink",       track,car),
+                                                    Server.getArg(String.format("%s-ShiftLightBlink-%s-%d",          car,gear.getValueCurrent().getString(),power.getValueCurrent().getInteger()),
+                                                    Server.getArg(String.format("%s-ShiftLightBlink-%s",             car,gear.getValueCurrent().getString()),
+                                                    Server.getArg(String.format("%s-ShiftLightBlink",                car),      -1.0)
+                                                 )))));
+                    
+                    if (DriverCarSLFirstRPM > 0.0 && DriverCarSLShiftRPM > 0.0 && DriverCarSLBlinkRPM > 0.0) {
+                        gauge._addStateRange("","SHIFTLIGHTS",            DriverCarSLFirstRPM,                  DriverCarSLShiftRPM, "rev/min");
+                        gauge._addStateRange("","SHIFT",                  DriverCarSLShiftRPM,                  DriverCarSLBlinkRPM, "rev/min");
+                        gauge._addStateRange("","SHIFTBLINK",             DriverCarSLBlinkRPM,                  999999.0,            "rev/min");
+        
+                        Server.logger().info(String.format("Shift Point from user: First=%.0f, Shift=%.0f, Blink=%.0f",
+                                DriverCarSLFirstRPM,DriverCarSLShiftRPM,DriverCarSLBlinkRPM));
+                    }
+                }
+            }
+            catch (NumberFormatException e) {}
+            m_shiftLightsLoaded = true; 
+        }
+        
         m_gauges.put(gauge.getType().getString().toLowerCase(), gauge);
     }
 
@@ -719,7 +807,7 @@ public class Car {
      * @return true or false in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getHasAutomaticPitCommands() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/HasAutoMaticPitCommands",false,"Boolean");
+        return new Data("Car/"+m_carIdentifier+"/HasAutoMaticPitCommands",false,"Boolean",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -730,7 +818,7 @@ public class Car {
      * @return Id in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getId() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/Id",m_id,"id");
+        return new Data("Car/"+m_carIdentifier+"/Id",m_id,"id",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -746,7 +834,7 @@ public class Car {
      * @return URL to image of this car
      */
     public Data getImageUrl() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/ImageUrl","Resource/com/SIMRacingApps/Car.png","URL");
+        return new Data("Car/"+m_carIdentifier+"/ImageUrl","Resource/com/SIMRacingApps/Car.png","URL",Data.State.NORMAL);
     }
     
     /**
@@ -759,7 +847,7 @@ public class Car {
      * @return The number of incidents for the driver of this car in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getIncidents() {
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/Incidents",0,"x");
+        Data d = new Data("Car/"+m_carIdentifier+"/Incidents",0,"x",Data.State.NOTAVAILABLE);
         return d;
     }
     
@@ -774,7 +862,7 @@ public class Car {
      * @return The number of incidents for this car's team in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getIncidentsTeam() {
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/IncidentsTeam",0,"x");
+        Data d = new Data("Car/"+m_carIdentifier+"/IncidentsTeam",0,"x",Data.State.NOTAVAILABLE);
         return d;
     }
     
@@ -803,7 +891,7 @@ public class Car {
      * @return true or false in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getIsBelowMinimumSpeed() {
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/IsBelowMinimumSpeed",false,"boolean",Data.State.NORMAL);
+        Data d = new Data("Car/"+m_carIdentifier+"/IsBelowMinimumSpeed",false,"boolean",Data.State.NORMAL);
         //if not the leader of your class and you're on the track
         if (!getIsEqual("PC1").getBoolean() && getStatus().getString().contains("TRACK")) {
             int laps                             = Server.getArg("minimum-speed-laps",3);
@@ -889,7 +977,7 @@ public class Car {
      * @return true or false in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getIsBlackFlag() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/IsBlackFlag",false,"boolean",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/IsBlackFlag",false,"boolean",Data.State.NORMAL);
     }
     
     /**
@@ -900,7 +988,7 @@ public class Car {
      * @return true or false in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getIsBlueFlag() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/IsBlueFlag",false,"boolean",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/IsBlueFlag",false,"boolean",Data.State.NORMAL);
     }
     
     /**
@@ -911,7 +999,7 @@ public class Car {
      * @return true or false in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getIsDisqualifyFlag() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/IsDisqualifyFlag",false,"boolean",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/IsDisqualifyFlag",false,"boolean",Data.State.NORMAL);
     }
     
     /**
@@ -924,7 +1012,7 @@ public class Car {
      * @return true or false in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getIsDriving() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/IsDriving",false,"boolean");
+        return new Data("Car/"+m_carIdentifier+"/IsDriving",false,"boolean",Data.State.NORMAL);
     }
     
     /**
@@ -935,7 +1023,7 @@ public class Car {
      * @return true or false in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getIsEqual(String carIdentifier) {
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/IsEqual/"+carIdentifier,false,"boolean");
+        Data d = new Data("Car/"+m_carIdentifier+"/IsEqual/"+carIdentifier,false,"boolean",Data.State.NORMAL);
         Car car1 = m_SIMPlugin.getSession().getCar(carIdentifier);
         if (car1 != null && car1.isValid() && this.isValid() && car1.getId().getInteger() == m_id)
             d.setValue(true,"boolean",Data.State.NORMAL);
@@ -953,7 +1041,7 @@ public class Car {
      * @return true or false in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getIsFixedSetup() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/IsFixedSetup",false,"boolean");
+        return new Data("Car/"+m_carIdentifier+"/IsFixedSetup",false,"boolean",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -969,7 +1057,7 @@ public class Car {
      *         </dl>
      */
     public Data getIsOverSpeedLimit() {
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/IsOverSpeedLimit",false,"boolean");
+        Data d = new Data("Car/"+m_carIdentifier+"/IsOverSpeedLimit",false,"boolean");
         String state = _getGauge(Gauge.Type.SPEEDOMETER).getValueCurrent().getState();
         if (state.equals("OVERLIMIT")
         ||  state.equals("WAYOVERLIMIT")
@@ -977,7 +1065,7 @@ public class Car {
 
         d.setState(Data.State.NORMAL);
         return d;
-//        return new Data("Car/I"+Integer.toString(m_id)+"/IsOverPitSpeedLimit",false,"boolean");
+//        return new Data("Car/"+m_carIdentifier+"/IsOverPitSpeedLimit",false,"boolean");
     }
 
     /**
@@ -988,7 +1076,7 @@ public class Car {
      * @return true or false in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getIsPitSpeedLimiter() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/IsPitSpeedLimiter",false,"boolean");
+        return new Data("Car/"+m_carIdentifier+"/IsPitSpeedLimiter",false,"boolean",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -999,7 +1087,7 @@ public class Car {
      * @return true or false in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getIsPaceCar() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/IsPaceCar",false,"boolean");
+        return new Data("Car/"+m_carIdentifier+"/IsPaceCar",false,"boolean",Data.State.NORMAL);
     }
 
     /**
@@ -1010,7 +1098,7 @@ public class Car {
      * @return true or false in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getIsSpectator() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/IsSpectator",false,"boolean");
+        return new Data("Car/"+m_carIdentifier+"/IsSpectator",false,"boolean",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1025,13 +1113,13 @@ public class Car {
      *         </dl>
      */
     public Data getIsUnderSpeedLimit() {
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/IsUnderPitSpeedLimit",false,"boolean");
+        Data d = new Data("Car/"+m_carIdentifier+"/IsUnderPitSpeedLimit",false,"boolean");
         String state = _getGauge(Gauge.Type.SPEEDOMETER).getValueCurrent().getState();
         if (state.equals("APPROACHINGLIMIT"))
             d.setValue(true);
         d.setState(Data.State.NORMAL);
         return d;
-//      return new Data("Car/I"+Integer.toString(m_id)+"/IsUnderPitSpeedLimit",false,"boolean");
+//      return new Data("Car/"+m_carIdentifier+"/IsUnderPitSpeedLimit",false,"boolean");
     }
 
     /**
@@ -1043,7 +1131,7 @@ public class Car {
      * @return true or false in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getIsYellowFlag() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/IsYellowFlag",false,"boolean",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/IsYellowFlag",false,"boolean",Data.State.NORMAL);
     }
     
     /**
@@ -1059,7 +1147,7 @@ public class Car {
      */
     public Data getLap(String lapType) {
         String s = LapType.getReference(lapType);
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/Lap/"+lapType,0,"lap");
+        Data d = new Data("Car/"+m_carIdentifier+"/Lap/"+lapType,0,"lap",Data.State.NORMAL);
         d.add("reference",s);
         return d;
     }
@@ -1078,7 +1166,7 @@ public class Car {
      * @return The number of laps remaining in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getLapsToGo() {
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/LapsToGo",0,"lap");
+        Data d = new Data("Car/"+m_carIdentifier+"/LapsToGo",0,"lap",Data.State.NOTAVAILABLE);
         return d;
     }
     
@@ -1095,7 +1183,7 @@ public class Car {
      */
     public Data getLapTime(String lapType) {
         String s = LapType.getReference(lapType);
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/LapTime/"+lapType,0.0,"s");
+        Data d = new Data("Car/"+m_carIdentifier+"/LapTime/"+lapType,0.0,"s",Data.State.NOTAVAILABLE);
         d.add("reference",s);
         return d;
     }
@@ -1116,7 +1204,7 @@ public class Car {
      */
     public Data getLapTimeDelta(String lapType) {
         String s = LapType.getReference(lapType);
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/LapTimeDelta/"+lapType,0.0,"s");
+        Data d = new Data("Car/"+m_carIdentifier+"/LapTimeDelta/"+lapType,0.0,"s",Data.State.NOTAVAILABLE);
         d.add("reference",s);
         return d;
     }
@@ -1137,7 +1225,7 @@ public class Car {
      */
     public Data getLapTimeDeltaPercent(String lapType) {
         String s = LapType.getReference(lapType);
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/LapTimeDeltaPercent/"+lapType,0.0,"s");
+        Data d = new Data("Car/"+m_carIdentifier+"/LapTimeDeltaPercent/"+lapType,0.0,"s",Data.State.NOTAVAILABLE);
         d.add("reference",s);
         return d;
     }
@@ -1159,7 +1247,7 @@ public class Car {
      */
     public Data getLapTimeDeltaReference(String lapType) {
         String s = LapType.getReference(lapType);
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/LapTimeDeltaReference/"+lapType,0.0,"s");
+        Data d = new Data("Car/"+m_carIdentifier+"/LapTimeDeltaReference/"+lapType,0.0,"s",Data.State.NOTAVAILABLE);
         d.add("reference",s);
         return d;
     }
@@ -1194,7 +1282,7 @@ public class Car {
                 timeProjection  = remainingTime + getLapTime(Car.LapType.CURRENT).getDouble();
         }
 
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/LapTimeProjected",timeProjection,"s");
+        Data d = new Data("Car/"+m_carIdentifier+"/LapTimeProjected",timeProjection,"s");
         d.setState(State.NORMAL);
         return d;
     }
@@ -1210,7 +1298,7 @@ public class Car {
      */
     public Data getLapTimes() {
         ArrayList<Double> a = new ArrayList<Double>();
-        return new Data("Car/I"+Integer.toString(m_id)+"/LapTimes",a,"lap");
+        return new Data("Car/"+m_carIdentifier+"/LapTimes",a,"lap",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -1227,7 +1315,7 @@ public class Car {
      */
     public Data getLapInvalidFlags() {
         ArrayList<Boolean> a = new ArrayList<Boolean>();
-        return new Data("Car/I"+Integer.toString(m_id)+"/LapInvalidFlags",a,"boolean");
+        return new Data("Car/"+m_carIdentifier+"/LapInvalidFlags",a,"boolean",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -1244,7 +1332,7 @@ public class Car {
                         ? "ONPITROAD" 
                         : (status.getString().contains("TRACK") ? "ONTRACK" : "OFF");
         Data lat = m_SIMPlugin.getSession().getTrack().getLatitude(location,getLap(LapType.COMPLETEDPERCENT).getDouble(),UOM);
-        lat.setName("Car/I"+Integer.toString(m_id)+"/Latitude");
+        lat.setName("Car/"+m_carIdentifier+"/Latitude");
         return lat;
     }
     public Data getLatitude() { return getLatitude(""); }
@@ -1263,7 +1351,7 @@ public class Car {
                         ? "ONPITROAD" 
                         : (status.getString().contains("TRACK") ? "ONTRACK" : "OFF");
         Data lng = m_SIMPlugin.getSession().getTrack().getLongitude(location,getLap(LapType.COMPLETEDPERCENT).getDouble(),UOM);
-        lng.setName("Car/I"+Integer.toString(m_id)+"/Longitude");
+        lng.setName("Car/"+m_carIdentifier+"/Longitude");
         return lng;
     }
     public Data getLongitude() { return getLongitude(""); }
@@ -1277,7 +1365,7 @@ public class Car {
      * @return The filename of the manufacturer's logo.
      */
     public Data getManufacturerLogo() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/ManufacturerLogo",m_mfrLogo,"",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/ManufacturerLogo",m_mfrLogo,"",Data.State.NORMAL);
     }
     
     /**
@@ -1294,7 +1382,7 @@ public class Car {
      * @return The maximum number of tire sets.
      */
     public Data getMaxTires() {
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/MaxTires",99);
+        Data d = new Data("Car/"+m_carIdentifier+"/MaxTires",99,Data.State.NOTAVAILABLE);
         SIMPluginCallback callback = this.m_SIMPlugin.getCallback("DataPublisher.Post");
         if (callback != null) {
             Data max = ((com.SIMRacingApps.SIMPluginCallbacks.DataPublisher.Post)callback).getMaxTires();
@@ -1311,7 +1399,7 @@ public class Car {
      * @return The merge point.
      */
     public Data getMergePoint() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/MergePoint",0.0,"%");
+        return new Data("Car/"+m_carIdentifier+"/MergePoint",0.0,"%",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1338,7 +1426,7 @@ public class Car {
      * @return A list of messages in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data    getMessages() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/Messages","","String");
+        return new Data("Car/"+m_carIdentifier+"/Messages","","String",Data.State.NOTAVAILABLE);
     };    
 
     /**
@@ -1349,7 +1437,7 @@ public class Car {
      * @return The name of the car in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getName() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/Name",m_name,"String");
+        return new Data("Car/"+m_carIdentifier+"/Name",m_name,"String",Data.State.NORMAL);
     }
 
     /**
@@ -1361,7 +1449,7 @@ public class Car {
      * @return The car number in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getNumber() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/Number","","String");
+        return new Data("Car/"+m_carIdentifier+"/Number","","String",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1372,7 +1460,7 @@ public class Car {
      * @return The slant in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getNumberFont() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/NumberFont","Arial","String");
+        return new Data("Car/"+m_carIdentifier+"/NumberFont","Arial","String",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1384,7 +1472,7 @@ public class Car {
      * @return The slant in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getNumberSlant() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/NumberSlant","backwards","String");
+        return new Data("Car/"+m_carIdentifier+"/NumberSlant","backwards","String",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -1395,7 +1483,7 @@ public class Car {
      * @return The pit location. State is OFF if not known.
      */
     public Data getPitLocation() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/PitLocation",0.0,"%");
+        return new Data("Car/"+m_carIdentifier+"/PitLocation",0.0,"%",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -1425,10 +1513,10 @@ public class Car {
      * @return The number of pit stops remaining in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getPitStopsRemaining(int lapstoaverage) {
-        Data d = new Data("Car/I"+Integer.toString(m_id)+"/PitStops",0,"");
+        Data d = new Data("Car/"+m_carIdentifier+"/PitStops",0,"",Data.State.NOTAVAILABLE);
         Data fuelLevelNeeded = getFuelLevelNeeded(lapstoaverage,0,"");
         
-        if (fuelLevelNeeded.getDouble() > 0.0) {
+        if (fuelLevelNeeded.getState().equals(Data.State.NORMAL) && fuelLevelNeeded.getDouble() > 0.0) {
             Gauge fuellevel = _getGauge(Gauge.Type.FUELLEVEL);
             double maxfuel    = fuellevel.getCapacityMaximum(fuelLevelNeeded.getUOM()).getDouble();
             double adding     = Math.min(fuellevel.getValueNext(fuelLevelNeeded.getUOM()).getDouble(), maxfuel); //only what will fit
@@ -1458,7 +1546,7 @@ public class Car {
      * @return The pit stop time in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getPitTime() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/PitTime",0.0,"s");
+        return new Data("Car/"+m_carIdentifier+"/PitTime",0.0,"s",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1470,7 +1558,7 @@ public class Car {
      */
     public Data getPitTimes() {
         ArrayList<Double> a = new ArrayList<Double>();
-        return new Data("Car/I"+Integer.toString(m_id)+"/PitTimes",a,"s");
+        return new Data("Car/"+m_carIdentifier+"/PitTimes",a,"s",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -1482,7 +1570,7 @@ public class Car {
      * @return The position in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getPosition() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/Position",0,"integer");
+        return new Data("Car/"+m_carIdentifier+"/Position",0,"integer",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1514,7 +1602,7 @@ public class Car {
             else
                 delta = qual - positions.get(positions.size()-1);
         }            
-        return new Data("Car/I"+Integer.toString(m_id)+"/PositionDelta",delta,"integer",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/PositionDelta",delta,"integer",Data.State.NORMAL);
     }
     
     /**
@@ -1528,7 +1616,7 @@ public class Car {
      */
     public Data getPositions() {
         ArrayList<Integer> a = new ArrayList<Integer>();
-        return new Data("Car/I"+Integer.toString(m_id)+"/Positions",a,"integer");
+        return new Data("Car/"+m_carIdentifier+"/Positions",a,"integer",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -1542,7 +1630,7 @@ public class Car {
      */
     public Data getPositionsClass() {
         ArrayList<Integer> a = new ArrayList<Integer>();
-        return new Data("Car/I"+Integer.toString(m_id)+"/PositionsClass",a,"integer");
+        return new Data("Car/"+m_carIdentifier+"/PositionsClass",a,"integer",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1554,7 +1642,7 @@ public class Car {
      * @return The position in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getPositionClass() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/PositionClass",0,"integer");
+        return new Data("Car/"+m_carIdentifier+"/PositionClass",0,"integer",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1586,7 +1674,7 @@ public class Car {
             else
                 delta = qual - positions.get(positions.size()-1);
         }            
-        return new Data("Car/I"+Integer.toString(m_id)+"/PositionClassDelta",delta,"integer",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/PositionClassDelta",delta,"integer",Data.State.NORMAL);
     }
     
     /**
@@ -1598,7 +1686,7 @@ public class Car {
      * @return The qualifying position in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getPositionQualifying() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/PositionQualifying",0);
+        return new Data("Car/"+m_carIdentifier+"/PositionQualifying",0,Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1610,7 +1698,7 @@ public class Car {
      * @return The qualifying position in your class in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getPositionClassQualifying() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/PositionClassQualifying",0);
+        return new Data("Car/"+m_carIdentifier+"/PositionClassQualifying",0,Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1621,7 +1709,7 @@ public class Car {
      * @return The radio channel number in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getRadioChannel() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/RadioChannel",0);
+        return new Data("Car/"+m_carIdentifier+"/RadioChannel",0,Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1632,7 +1720,7 @@ public class Car {
      * @return The radio channel in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getRadioChannelName() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/RadioChannelName","");
+        return new Data("Car/"+m_carIdentifier+"/RadioChannelName","",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -1643,7 +1731,7 @@ public class Car {
      * @return The repair time in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getRepairTime() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/RepairTime",0.0,"s");
+        return new Data("Car/"+m_carIdentifier+"/RepairTime",0.0,"s",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1654,7 +1742,7 @@ public class Car {
      * @return The optional repair time in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getRepairTimeOptional() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/RepairTime",0.0,"s");
+        return new Data("Car/"+m_carIdentifier+"/RepairTime",0.0,"s",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1665,7 +1753,7 @@ public class Car {
      * @return The RPM in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getRPMPitRoadSpeed() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/RPMPitRoadSpeed",m_pitRoadSpeedRPM,"rev/min",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/RPMPitRoadSpeed",m_pitRoadSpeedRPM,"rev/min",Data.State.NORMAL);
     }
 
     /**
@@ -1677,7 +1765,7 @@ public class Car {
      */
     public Data getStartFinishTimes() {
         ArrayList<Double> a = new ArrayList<Double>();
-        return new Data("Car/I"+Integer.toString(m_id)+"/StartFinishTimes",a,"s");
+        return new Data("Car/"+m_carIdentifier+"/StartFinishTimes",a,"s",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -1688,7 +1776,7 @@ public class Car {
      * @return The team name. Blank if session does not have teams 
      */
     public Data getTeamName() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/TeamName","","",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/TeamName","","",Data.State.NORMAL);
     }
     
     /**
@@ -1701,7 +1789,7 @@ public class Car {
      * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
      */
     public Data setAdminFlag(boolean onOffFlag) {
-        return new Data("Car/I"+Integer.toString(m_id)+"/setAdminFlag","","String");
+        return new Data("Car/"+m_carIdentifier+"/setAdminFlag","","String",Data.State.NOTAVAILABLE);
     }
     public    Data setAdminFlag(String onOffFlag) {
         return setAdminFlag((new Data("",onOffFlag)).getBoolean());
@@ -1720,7 +1808,7 @@ public class Car {
      * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
      */
     public Data setBlackFlag(int quantity,String uom) {
-        return new Data("Car/I"+Integer.toString(m_id)+"/setBlackFlag","","String");
+        return new Data("Car/"+m_carIdentifier+"/setBlackFlag","","String",Data.State.NOTAVAILABLE);
     }
     public    Data setBlackFlag(String quantity, String uom) {
         return setBlackFlag(Integer.parseInt(quantity),uom);
@@ -1746,8 +1834,8 @@ public class Car {
      *@return The group/camera name in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setCamera(String cameraName) {
-        Data d = m_SIMPlugin.getSession().setCamera(cameraName,"DRIVER","I"+Integer.toString(m_id));
-        return new Data("Car/I"+Integer.toString(m_id)+"/setCamera",d.getString(),"String");
+        Data d = m_SIMPlugin.getSession().setCamera(cameraName,"DRIVER",""+m_carIdentifier);
+        return new Data("Car/"+m_carIdentifier+"/setCamera",d.getString(),"String",d.getState());
     }
     public    Data setCamera() {
         return setCamera(m_SIMPlugin.getSession().getCamera().getString());
@@ -1763,7 +1851,7 @@ public class Car {
      *@return The text string sent to the driver  in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setChat(String text) {
-        return new Data("Car/I"+Integer.toString(m_id)+"/setChat",text,"String");
+        return new Data("Car/"+m_carIdentifier+"/setChat",text,"String",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -1776,7 +1864,7 @@ public class Car {
      * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
      */
     public Data setChatFlag(boolean onOffFlag) {
-        return new Data("Car/I"+Integer.toString(m_id)+"/setChatFlag","","String");
+        return new Data("Car/"+m_carIdentifier+"/setChatFlag","","String",Data.State.NOTAVAILABLE);
     }
     public    Data setChatFlag(String onOffFlag) {
         return setChatFlag((new Data("",onOffFlag)).getBoolean());
@@ -1792,7 +1880,7 @@ public class Car {
      * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setDisqualifyFlag() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/setDisqualifyFlag","","String");
+        return new Data("Car/"+m_carIdentifier+"/setDisqualifyFlag","","String",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1804,7 +1892,7 @@ public class Car {
      * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setEndOfLineFlag() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/setEndOfLineFlag","","String");
+        return new Data("Car/"+m_carIdentifier+"/setEndOfLineFlag","","String",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1816,7 +1904,7 @@ public class Car {
      * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setClearPenaltiesFlag() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/setClearPenaltiesFlag","","String");
+        return new Data("Car/"+m_carIdentifier+"/setClearPenaltiesFlag","","String",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1828,7 +1916,7 @@ public class Car {
      * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setRemoveFlag() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/setRemoveFlag","","String");
+        return new Data("Car/"+m_carIdentifier+"/setRemoveFlag","","String",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1840,7 +1928,7 @@ public class Car {
      * @return The requested setting in a {@link com.SIMRacingApps.Data} container.
      */
     public    Data setWaveAroundFlag() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/setWaveAroundFlag",false,"boolean");
+        return new Data("Car/"+m_carIdentifier+"/setWaveAroundFlag",false,"boolean",Data.State.NOTAVAILABLE);
     }
 
     /**
@@ -1871,10 +1959,10 @@ public class Car {
 //        double ApproachingPitSpeed = PitSpeed - (7*.04) - (7*.02);
         double ApproachingPitSpeed = PitSpeed - (range / m_pitRoadSpeedRPM) - ((range / m_pitRoadSpeedRPM)*2);
 
-        gauge.addStateRange("WAYOVERLIMIT",     m_pitRoadSpeedRPM * WayOverPitSpeed,     Double.MAX_VALUE);
-        gauge.addStateRange("OVERLIMIT",        m_pitRoadSpeedRPM * OverPitSpeed,        m_pitRoadSpeedRPM * WayOverPitSpeed);
-        gauge.addStateRange("LIMIT",            m_pitRoadSpeedRPM * PitSpeed,            m_pitRoadSpeedRPM * OverPitSpeed);
-        gauge.addStateRange("APPROACHINGLIMIT", m_pitRoadSpeedRPM * ApproachingPitSpeed, m_pitRoadSpeedRPM * PitSpeed);
+        gauge._addStateRange("","WAYOVERLIMIT",     m_pitRoadSpeedRPM * WayOverPitSpeed,     Double.MAX_VALUE,                    "rev/min");
+        gauge._addStateRange("","OVERLIMIT",        m_pitRoadSpeedRPM * OverPitSpeed,        m_pitRoadSpeedRPM * WayOverPitSpeed, "rev/min");
+        gauge._addStateRange("","LIMIT",            m_pitRoadSpeedRPM * PitSpeed,            m_pitRoadSpeedRPM * OverPitSpeed,    "rev/min");
+        gauge._addStateRange("","APPROACHINGLIMIT", m_pitRoadSpeedRPM * ApproachingPitSpeed, m_pitRoadSpeedRPM * PitSpeed,        "rev/min");
         return getRPMPitRoadSpeed();
     }
 
@@ -1886,7 +1974,7 @@ public class Car {
      * @return The current status in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getStatus() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/Status",Car.Status.INVALID,"Car.Status");
+        return new Data("Car/"+m_carIdentifier+"/Status",Car.Status.INVALID,"Car.Status",Data.State.NOTAVAILABLE);
     }
     
     /**
@@ -1906,7 +1994,7 @@ public class Car {
         String s = "";
     
         if (m_name.equalsIgnoreCase("PITSTALL"))
-            return new Data("Car/I"+Integer.toString(m_id)+"/StatusClass","INPITSTALL-PITSTALL");
+            return new Data("Car/"+m_carIdentifier+"/StatusClass","INPITSTALL-PITSTALL");
     
         if (thiscar.getInteger() == -1)
             s = "";
@@ -1938,7 +2026,7 @@ public class Car {
             }
         }
         
-        return new Data("Car/I"+Integer.toString(m_id)+"/StatusClass",status.getString()+s);
+        return new Data("Car/"+m_carIdentifier+"/StatusClass",status.getString()+s,"",status.getState());
     }
 
     /**
@@ -1976,105 +2064,118 @@ public class Car {
      * @return A list of warnings in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getWarnings() {
-        return new Data("Car/I"+Integer.toString(m_id)+"/Warnings","","text");
+        return new Data("Car/"+m_carIdentifier+"/Warnings","","text",Data.State.NOTAVAILABLE);
     }
 
-/****************************Private******************************/
+    static private Map<String,Object> s_profiles = null;
     
-    private void _initialize() {
-        _loadCar("com/SIMRacingApps/Car.json");
-    }
-
     @SuppressWarnings("unchecked")
-    protected Map<String,Object> _loadCar(String filepath) {
-
-        FindFile file = null;
-        try {
-            file = new FindFile(filepath);
-        }
-        catch (FileNotFoundException e) {
-            Server.logger().warning(String.format("(%s) cannot open",filepath));
-            return new HashMap<String,Object>();
-        }
-        if (m_id != -1)
-            Server.logger().info(String.format("(%s) for (%d) - %s",filepath,m_id,m_name));
+    private void __loadCar() {
+        //initialize the definitions cache, if needed
+        if (s_profiles == null)
+            s_profiles = new HashMap<String,Object>();
         
-        String description = (String)file.getJSON().get("Description");
+        FindFile file = null;
+        String filepath = "com/SIMRacingApps/Car.json";
+        Map<String,Object> carMap = null;
+        String description = null;
+        String logo = null;
+        
+        //if the default car has not been loaded, 
+        //then load it and cache it in the m_cars map
+        carMap = (Map<String, Object>) s_profiles.get(filepath);
+        if (carMap == null) {
+            
+            try {
+                file = new FindFile(filepath);
+                carMap = file.getJSON();
+                s_profiles.put(filepath, carMap);
+            }
+            catch (FileNotFoundException e) {
+                Server.logger().severe(String.format("(%s) cannot open",filepath));
+                s_profiles.put(filepath, carMap = new HashMap<String, Object>() );
+            }
+        }
+        
+        description = (String) carMap.get("Description");
+        logo        = (String) carMap.get("MfrLogo");
+
+        //if the SIM's car has not been loaded, 
+        //then load it and cache it in the m_cars map
+        if (m_carPath != null && !m_carPath.isEmpty()) {
+            
+            carMap = (Map<String, Object>) s_profiles.get(m_carPath);
+            if (carMap == null) {
+                try {
+                    file = new FindFile(m_carPath);
+                    carMap = file.getJSON();
+                    s_profiles.put(m_carPath, carMap);
+                    description = (String) carMap.get("Description");
+                    logo        = (String) carMap.get("MfrLogo");
+                }
+                catch (FileNotFoundException e) {
+                    Server.logger().warning(String.format("(%s) not found",m_carPath));
+                    s_profiles.put(m_carPath, carMap = new HashMap<String, Object>());
+                }
+            }
+            if (carMap.containsKey("Description"))
+                description = (String) carMap.get("Description");
+            if (carMap.containsKey("MfrLogo"))
+                logo        = (String) carMap.get("MfrLogo");
+        }
+
         if (description != null) {
             m_description = description;
         }
         
-        String logo = (String)file.getJSON().get("MfrLogo");
         if (logo != null) {
             m_mfrLogo = logo;
         }
+        
+        if (m_id != -1)
+            Server.logger().info(String.format("(%s) for id(%d) - %s (%s)",m_carPath,m_id,m_name,m_description));
+        
 
-        //first load the gauges from the default car for the default track
-        Map<String,Map<String,Object>> gauges = (Map<String, Map<String, Object>>) file.getJSON().get("Gauges");
-        if (gauges != null) {
-            Iterator<Entry<String, Map<String, Object>>> itr = gauges.entrySet().iterator();
-            while (itr.hasNext()) {
-                Entry<String, Map<String,Object>> gauge = itr.next();
-                _loadGauge(gauge.getKey(),gauge.getValue(),"default");
-                _loadGauge(gauge.getKey(),gauge.getValue(),m_SIMPlugin.getSession().getTrack().getName().getString());
-                
-                //now load gear specific gauges if they exist
-                //If they do exist in the .json file, then there has to be an entry for every gear position
-                if (gauge.getKey().equalsIgnoreCase(Gauge.Type.TACHOMETER)) {
-                    String [] gears = {"R","N","1","2","3","4","5","6","7","8"};
-                    for (String gear : gears) {
-                        _loadGauge(gauge.getKey()+"-"+gear,gauge.getValue(),"default"+"-"+gear);
-                        _loadGauge(gauge.getKey()+"-"+gear,gauge.getValue(),m_SIMPlugin.getSession().getTrack().getName().getString()+"-"+gear);
-                    
-                        String [] powers = {"1","2","3","4","5","6","7","8"};
-                        for (String power : powers) {
-                            _loadGauge(gauge.getKey()+"-"+gear+"-"+power,gauge.getValue(),"default"+"-"+gear+"-"+power);
-                            _loadGauge(gauge.getKey()+"-"+gear+"-"+power,gauge.getValue(),m_SIMPlugin.getSession().getTrack().getName().getString()+"-"+gear+"-"+power);
-                        }
-                    }
-                }
-            }
+        return;
+    }
+
+    /**
+     * Returns a map to the default gauges found in the Car.json file.
+     * 
+     * @return A map of the gauges or null if not found
+     */
+    public Map<String,Map<String,Map<String,Object>>> _getDefaultGauges() {
+        @SuppressWarnings("unchecked")
+        Map<String,Map<String,Map<String,Map<String,Object>>>> map = (Map<String, Map<String,Map<String,Map<String,Object>>>>) s_profiles.get("com/SIMRacingApps/Car.json");
+        return map.get("Gauges");
+    }
+    
+    /**
+     * Returns a map to the default gauges found in the SIM's .json file.
+     * 
+     * @return A map of the gauges or null if not found
+     */
+    public Map<String,Map<String,Map<String,Object>>> _getSIMGauges() {
+        @SuppressWarnings("unchecked")
+        Map<String,Map<String,Map<String,Map<String,Object>>>> map = (Map<String, Map<String,Map<String,Map<String,Object>>>>) s_profiles.get(m_carPath);
+        return map.get("Gauges");
+    }
+    
+    public void _dumpGauges() {
+        Iterator<Entry<String,Gauge>> itr = m_gauges.entrySet().iterator();
+        while (itr.hasNext()) {
+            Gauge gauge = itr.next().getValue();
+            Server.logger().fine(gauge.toString());
         }
+    }
 
-        //now create the gauge groups
-        Map<String,ArrayList<String>> groups = (Map<String, ArrayList<String>>) file.getJSON().get("Groups");
-        if (groups != null) {
-            Iterator<Entry<String, ArrayList<String>>> itr = groups.entrySet().iterator();
-            while (itr.hasNext()) {
-                Entry<String, ArrayList<String>> group = itr.next();
-                ArrayList<String> g = group.getValue();
-                for (int i=0; i < g.size(); i++) {
-                    Gauge gauge = _getGauge(group.getKey());
-                    if (gauge != null)
-                        gauge.addGroup(_getGauge(g.get(i)));
-                }
-            }
-        }
-
-        {
-            //now set the speedometer states based on pit road speed limit
-            Gauge gauge = _getGauge(Gauge.Type.SPEEDOMETER);
-
-            //convert the track UOM to the gauges UOM
-            //I used to floor it and round it, but that produced problems with accuracy.
-            //This code cannot make any assumptions about the error the track code may return.
-            //In my test file, the speed limit is a published 45mph, but the track code returns 44.7.
-            //My point is, the track code should round it up or floor it, not this code.
-            double PitRoadSpeedLimit = m_SIMPlugin.getSession().getTrack().getPitSpeedLimit(gauge.getInternalUOM().getString()).getDouble();
-
-            //double WayOverPitSpeed     = 1.10;
-            double WayOverPitSpeed     = (PitRoadSpeedLimit + (gauge.getUOM().equals("mph") ? 15.0 : 25.0)) / PitRoadSpeedLimit;
-            double OverPitSpeed        = (PitRoadSpeedLimit + 0.8) / PitRoadSpeedLimit;
-            double PitSpeed            = (PitRoadSpeedLimit - 0.5) / PitRoadSpeedLimit;
-            double ApproachingPitSpeed = PitSpeed - (7*.012) - (7*.006);
-
-            gauge.addStateRange("WAYOVERLIMIT",     PitRoadSpeedLimit * WayOverPitSpeed,     Double.MAX_VALUE);
-            gauge.addStateRange("OVERLIMIT",        PitRoadSpeedLimit * OverPitSpeed,        PitRoadSpeedLimit * WayOverPitSpeed);
-            gauge.addStateRange("LIMIT",            PitRoadSpeedLimit * PitSpeed,            PitRoadSpeedLimit * OverPitSpeed);
-            gauge.addStateRange("APPROACHINGLIMIT", PitRoadSpeedLimit * ApproachingPitSpeed, PitRoadSpeedLimit * PitSpeed);
-
-        }
-
+    /**
+     * Each SIM that subclasses Car, should call this at the end of the constructor
+     * to allow global functionality to be added to the car.
+     * 
+     * One, update the shift states from the settings so users can override them.
+     */
+    public void _postInitialization() {
         try {
             Gauge gauge = _getGauge(Gauge.Type.TACHOMETER);
             Gauge gear  = _getGauge(Gauge.Type.GEAR);
@@ -2115,86 +2216,14 @@ public class Car {
                                          )))));
             
             if (DriverCarSLFirstRPM > 0.0 && DriverCarSLShiftRPM > 0.0 && DriverCarSLBlinkRPM > 0.0) {
-                gauge.addStateRange("SHIFTLIGHTS",            DriverCarSLFirstRPM,                  DriverCarSLShiftRPM);
-                gauge.addStateRange("SHIFT",                  DriverCarSLShiftRPM,                  DriverCarSLBlinkRPM);
-                gauge.addStateRange("SHIFTBLINK",             DriverCarSLBlinkRPM,                  999999.0);
+                gauge._addStateRange("","SHIFTLIGHTS",            DriverCarSLFirstRPM,                  DriverCarSLShiftRPM, "rev/min");
+                gauge._addStateRange("","SHIFT",                  DriverCarSLShiftRPM,                  DriverCarSLBlinkRPM, "rev/min");
+                gauge._addStateRange("","SHIFTBLINK",             DriverCarSLBlinkRPM,                  999999.0,            "rev/min");
 
                 Server.logger().info(String.format("Shift Point from user: First=%.0f, Shift=%.0f, Blink=%.0f",
                         DriverCarSLFirstRPM,DriverCarSLShiftRPM,DriverCarSLBlinkRPM));
             }
         }
         catch (NumberFormatException e) {}
-        
-//this.dumpGauges();
-        return file.getJSON();
-    }
-    
-    protected Map<String,Gauge> m_gauges = new TreeMap<String,Gauge>();
-
-    public void dumpGauges() {
-        Iterator<Entry<String,Gauge>> itr = m_gauges.entrySet().iterator();
-        while (itr.hasNext()) {
-            Gauge gauge = itr.next().getValue();
-            Server.logger().fine(gauge.toString());
-        }
-    }
-
-    private void _loadGauge(String gaugeType,Map<String,Object> gaugemap,String trackName) {
-        @SuppressWarnings("unchecked")
-        Map<String,Object> trackmap = (Map<String,Object>)gaugemap.get(trackName);
-        String s;
-        Double d;
-        Boolean b;
-        if (trackmap != null) {
-            Gauge gauge;
-            if (!m_gauges.containsKey(gaugeType.toLowerCase())) {
-                gauge = new Gauge("I"+Integer.toString(m_id),gaugeType);
-                setGauge(gauge);
-            }
-            else {
-                gauge = m_gauges.get(gaugeType.toLowerCase());
-            }
-
-            if ((s = (String)trackmap.get("Name"))              != null) gauge.setName(s);
-            if ((s = (String)trackmap.get("TypeName"))          != null) gauge.setTypeName(s);
-            if ((s = (String)trackmap.get("UOM"))               != null) gauge.setUOM(s);
-            if ((b = (Boolean)trackmap.get("StateAscending"))   != null) gauge.setStateAscending(b);
-            if ((d = (Double)trackmap.get("Multiplier"))        != null) gauge.setMultiplier(d);
-            if ((d = (Double)trackmap.get("Minimum"))           != null) gauge.setMinimum(d);
-            if ((d = (Double)trackmap.get("Maximum"))           != null) gauge.setMaximum(d);
-            if ((d = (Double)trackmap.get("MajorIncrement"))    != null) gauge.setMajorIncrement(d);
-            if ((d = (Double)trackmap.get("MinorIncrement"))    != null) gauge.setMinorIncrement(d);
-            if ((d = (Double)trackmap.get("RPMPitRoadSpeed"))   != null) setRPMPitRoadSpeed(d);
-            if ((d = (Double)trackmap.get("CapacityMinimum"))   != null) gauge.setCapacityMinimum(d);
-            if ((d = (Double)trackmap.get("CapacityMaximum"))   != null) gauge.setCapacityMaximum(d);
-            if ((d = (Double)trackmap.get("CapacityIncrement")) != null) gauge.setCapacityIncrement(d);
-            if ((b = (Boolean)trackmap.get("IsFixed"))          != null) gauge.setIsFixed(b);
-            if ((b = (Boolean)trackmap.get("IsChangable"))      != null) gauge.setIsChangable(b);
-            if ((b = (Boolean)trackmap.get("OnResetChange"))    != null) gauge.setOnResetChange(b);
-
-            @SuppressWarnings("unchecked")
-            Map<String,Map<String,Object>> states = (Map<String,Map<String,Object>>)trackmap.get("States");
-            if (states != null) {
-                Iterator<Entry<String, Map<String, Object>>> itr = states.entrySet().iterator();
-                while (itr.hasNext()) {
-                    Entry<String, Map<String,Object>> state = itr.next();
-                    if (state.getValue().get("Value") != null) {
-                        gauge.addStateRange(
-                            state.getKey(),
-                            (Double)state.getValue().get("Start"),
-                            (Double)state.getValue().get("End"),
-                            new Data((String)state.getValue().get("Name"),state.getValue().get("Value"),"String",Data.State.NORMAL)
-                        );
-                    }
-                    else {
-                        gauge.addStateRange(
-                                state.getKey(),
-                                (Double)state.getValue().get("Start"),
-                                (Double)state.getValue().get("End")
-                        );
-                    }
-                }
-            }
-        }
     }
 }

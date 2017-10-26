@@ -710,7 +710,8 @@ public class SIMPlugin {
         String s[] = path.split("[/]"); 
         Data o = null;
         String name = null;
-        ArrayList<String> args = new ArrayList<String>(); 
+        ArrayList<String> args = new ArrayList<String>();
+        String methodCalled = "";
 
         //copy non blank requests to the args array
         for (int index=0; index < s.length; index++) {
@@ -790,7 +791,8 @@ public class SIMPlugin {
                     
                     Method method = methods.getValue().get(0); //get the default method
                     if (method != null) {
-                        if (method.getName().startsWith("get")) { 
+                        if (method.getName().startsWith("get")) {
+                            methodCalled = method.getName();
                             o = (Data) method.invoke(classInstance,args.toArray());
                             if (o != null) {
                                 if (count++ > 0)
@@ -903,6 +905,7 @@ public class SIMPlugin {
                             Integer count = args.size();
                             if (m_dataMethods.get(className).get(name).containsKey(count)) {
                                 Method method = m_dataMethods.get(className).get(name).get(count);
+                                methodCalled = method.getName();
                                 o = (Data) method.invoke(classInstance,args.toArray());
                                 //now if it was a set, increment, or decrement operation, 
                                 //let the caller know by setting the SET variable to true
@@ -929,7 +932,7 @@ public class SIMPlugin {
         }
         catch (NumberFormatException e) {
             e.printStackTrace();
-            String error = String.format("SIMPlugin.getData(%s,%s),  NumberFormatException: %s\n",className,path,e.toString());
+            String error = String.format("SIMPlugin.getData(%s,%s).%s,  NumberFormatException: %s\n",className,path,methodCalled,e.toString());
             Server.logStackTrace(Level.WARNING,error,e);
             Server.logger().info(this.getSIMData().toString());
             SIMPluginException ce = new SIMPluginException(error);
@@ -938,7 +941,7 @@ public class SIMPlugin {
         }
         catch (IllegalAccessException e) {
             e.printStackTrace();
-            String error = String.format("SIMPlugin.getData(%s,%s),  IllegalAccessException: %s\n",className,path,e.toString());
+            String error = String.format("SIMPlugin.getData(%s,%s).%s,  IllegalAccessException: %s\n",className,path,methodCalled,e.toString());
             Server.logStackTrace(Level.WARNING,error,e);
             Server.logger().info(this.getSIMData().toString());
             SIMPluginException ce = new SIMPluginException(error);
@@ -949,7 +952,7 @@ public class SIMPlugin {
             Throwable t = e.getCause();
             if (t != null)
                 t.printStackTrace();
-            String error = String.format("SIMPlugin.getData(%s,%s),  InvocationTargetException: %s\n",className,path,t == null ? "" : t.toString());
+            String error = String.format("SIMPlugin.getData(%s,%s).%s,  InvocationTargetException: %s\n",className,path,methodCalled,t == null ? "" : t.toString());
             Server.logStackTrace(Level.WARNING,error,t);
             Server.logger().info(this.getSIMData().toString());
             SIMPluginException ce = new SIMPluginException(error);
@@ -958,7 +961,7 @@ public class SIMPlugin {
         }
         catch (Exception e) {
             e.printStackTrace();
-            String error = String.format("SIMPlugin.getData(%s,%s),  Exception: %s\n",className,path,e.toString());
+            String error = String.format("SIMPlugin.getData(%s,%s).%s,  Exception: %s\n",className,path,methodCalled,e.toString());
             Server.logStackTrace(Level.WARNING,error,e);
             Server.logger().info(this.getSIMData().toString());
             SIMPluginException ce = new SIMPluginException(error);

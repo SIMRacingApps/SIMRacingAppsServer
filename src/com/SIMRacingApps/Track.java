@@ -93,6 +93,9 @@ public class Track {
             return false;
 
         String trackname = getName().getString();
+        
+        if (trackname.isEmpty())
+            trackname = "default";
 
         if (m_trackmap != null && trackname.equals(m_name)) //if the track hasn't changed, just return
             return false;
@@ -574,7 +577,7 @@ public class Track {
      * 
      * @return The category in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getCategory()                      { /*String*/                              return new Data("Track/Category",Category.UNKNOWN); }
+    public    Data    getCategory()                      { /*String*/                              return new Data("Track/Category",Category.UNKNOWN,"",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns the city of where the track is as reported by the SIM SIMPlugin.
@@ -583,7 +586,7 @@ public class Track {
      * 
      * @return The city in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getCity()                          { /*String*/                              return new Data("Track/City","{City}","",Data.State.NORMAL); }
+    public    Data    getCity()                          { /*String*/                              return new Data("Track/City","{City}","",Data.State.NOTAVAILABLE); }
     
     /**
      * Returns the track configuration as reported by the SIM SIMPlugin.
@@ -592,7 +595,7 @@ public class Track {
      * 
      * @return The configuration in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getConfiguration()                 { /*String*/                              return new Data("Track/Configuration","{Configuration}","",Data.State.NORMAL); }
+    public    Data    getConfiguration()                 { /*String*/                              return new Data("Track/Configuration","{Configuration}","",Data.State.NOTAVAILABLE); }
     
     /**
      * Returns the country code of where the track is as reported by the SIM SIMPlugin.
@@ -601,7 +604,7 @@ public class Track {
      * 
      * @return The country code in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getCountry()                       { /*String*/                              return new Data("Track/Country","{Country}","",Data.State.NORMAL); }
+    public    Data    getCountry()                       { /*String*/                              return new Data("Track/Country","{Country}","",Data.State.NOTAVAILABLE); }
     
     /**
      * Returns the description of the track. 
@@ -611,7 +614,7 @@ public class Track {
      * 
      * @return The description of the track in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getDescription()                   { /*String*/                              return new Data("Track/Description","{TrackDescription}","",Data.State.NORMAL); }
+    public    Data    getDescription()                   { /*String*/                              return new Data("Track/Description","{TrackDescription}","",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns the degrees to rotate the finish line.
@@ -628,7 +631,7 @@ public class Track {
     public    Data    getFinishLineRotation(String UOM) { /*double*/
         _loadTrack();
         Double rotate = m_trackmap != null ? (Double)m_trackmap.get("FinishLine") : null;
-        return new Data("Track/FinishLineRotation",rotate == null ? 0.0 : rotate,"deg",Data.State.NORMAL).convertUOM(UOM); 
+        return new Data("Track/FinishLineRotation",rotate == null ? 0.0 : rotate,"deg",rotate == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL).convertUOM(UOM); 
     }
     public    Data    getFinishLineRotation() { return getFinishLineRotation(""); }
     
@@ -659,7 +662,7 @@ public class Track {
         if (m_images != null) {
             image = (String)m_images.get(type.toUpperCase());
         }
-        return new Data("Track/Image",image == null || image.isEmpty() ? "" : "com/SIMRacingApps/Tracks/"+image,"",Data.State.NORMAL); 
+        return new Data("Track/Image",image == null || image.isEmpty() ? "" : "com/SIMRacingApps/Tracks/"+image,"",image == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL); 
     }
     public    Data    getImage() { return getImage("sat"); }
 
@@ -705,7 +708,7 @@ public class Track {
             }
         }
 
-        return new Data("Track/Latitude",lat == null ? 0.0 : lat,"deg",Data.State.NORMAL).convertUOM(UOM); 
+        return new Data("Track/Latitude",lat == null ? 0.0 : lat,"deg",lat == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL).convertUOM(UOM); 
     }
     public    Data    getLatitude(String location, String percentage, String UOM) { return getLatitude(location,Double.parseDouble(percentage),UOM); }
     public    Data    getLatitude(String location, String percentage) { return getLatitude(location,Double.parseDouble(percentage),"deg"); }
@@ -784,7 +787,7 @@ public class Track {
             }
         }
         
-        return new Data("Track/Longitude",lng == null ? 0.0 : lng,"deg",Data.State.NORMAL).convertUOM(UOM); 
+        return new Data("Track/Longitude",lng == null ? 0.0 : lng,"deg",lng == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL).convertUOM(UOM); 
     }
     public    Data    getLongitude(String location, String percentage, String UOM) { return getLongitude(location,Double.parseDouble(percentage),UOM); }
     public    Data    getLongitude(String location, String percentage) { return getLongitude(location,Double.parseDouble(percentage),"deg"); }
@@ -803,7 +806,7 @@ public class Track {
      * 
      * @return The name of the track in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getName()                          { /*String*/                              return new Data("Track/Name","default","",Data.State.NORMAL); }
+    public    Data    getName()                          { /*String*/                              return new Data("Track/Name","default","",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns the degrees of where North points, where zero degrees is at 3 o'clock and rotates clockwise.
@@ -828,7 +831,7 @@ public class Track {
                 north = ((Long)o).doubleValue();
         }
         
-        return new Data("Track/North",north,"deg",Data.State.NORMAL).convertUOM(UOM); 
+        return new Data("Track/North",north,"deg",m_trackmap == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL).convertUOM(UOM); 
     }
     public    Data    getNorth()                         { return getNorth(""); }
     
@@ -934,7 +937,7 @@ public class Track {
             }
         }
         
-        return new Data("Track/Path/"+location, path, UOM,Data.State.NORMAL);
+        return new Data("Track/Path/"+location, path, UOM,m_trackmap == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL);
     }
     public    Data    getPath(String location)           { return getPath(location,""); }
     public    Data    getPath()                          { return getPath("ONTRACK"); }
@@ -961,7 +964,7 @@ public class Track {
             else
                 speedUOM = "kph";
         }
-        return new Data("TrackPitSpeedLimit",0.0,speedUOM).convertUOM(UOM); 
+        return new Data("TrackPitSpeedLimit",0.0,speedUOM,m_trackmap == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL).convertUOM(UOM); 
     }
     public    Data    getPitSpeedLimit()                 { return getPitSpeedLimit(""); }
     
@@ -976,7 +979,7 @@ public class Track {
     public    Data    getResolution(String UOM) {
         _loadTrack();
         Double resolution = m_trackmap != null ? (Double)m_trackmap.get("Resolution") : null;
-        return (new Data("Track/Resolution",resolution == null ? 1.9 : resolution,"m",Data.State.NORMAL)).convertUOM(UOM);
+        return (new Data("Track/Resolution",resolution == null ? 1.9 : resolution,"m",m_trackmap == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL)).convertUOM(UOM);
     }
     public    Data    getResolution() { return getResolution(""); }
 
@@ -1006,7 +1009,7 @@ public class Track {
                 tempUOM = "C";
         }
 
-        return new Data("Track/Temp",0.0,tempUOM).convertUOM(UOM); 
+        return new Data("Track/Temp",0.0,tempUOM,m_trackmap == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL).convertUOM(UOM); 
     }
     public    Data    getTemp()                   { return getTemp(""); }
     
@@ -1017,7 +1020,7 @@ public class Track {
      * 
      * @return The type in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getType()                          { /*TrackType*/                           return new Data("Track/Type","{TrackType}"); }
+    public    Data    getType()                          { /*TrackType*/                           return new Data("Track/Type","{TrackType}","",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns the fog level as a percentage.
@@ -1026,7 +1029,7 @@ public class Track {
      * 
      * @return The fog level in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getWeatherFogLevel()               { /*double*/                              return new Data("Track/WeatherFogLevel",0.0,"%"); }
+    public    Data    getWeatherFogLevel()               { /*double*/                              return new Data("Track/WeatherFogLevel",0.0,"%",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns the relative humidity as a percentage.
@@ -1035,7 +1038,7 @@ public class Track {
      * 
      * @return The relative humidity in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getWeatherRelativeHumidity()       { /*double*/                              return new Data("TrackWeatherRelativeHumidity",0.0,"%"); }
+    public    Data    getWeatherRelativeHumidity()       { /*double*/                              return new Data("TrackWeatherRelativeHumidity",0.0,"%",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns the condition of the skies, like "Partly Cloudy".
@@ -1044,7 +1047,7 @@ public class Track {
      * 
      * @return The sky condition in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getWeatherSkies()                  { /*String*/                              return new Data("Track/WeatherSkies","{Skies}"); }
+    public    Data    getWeatherSkies()                  { /*String*/                              return new Data("Track/WeatherSkies","{Skies}",Data.State.NOTAVAILABLE); }
 
     /**
      * Returns the current ambient temperature at the track.
@@ -1058,7 +1061,7 @@ public class Track {
     public    Data    getWeatherTemp(String UOM) { /*double*/
         Data temp = getTemp();  //To get the track's UOM.
         
-        return new Data("Track/WeatherTemp",0.0,temp.getUOM()).convertUOM(UOM); 
+        return new Data("Track/WeatherTemp",0.0,temp.getUOM(),Data.State.NOTAVAILABLE).convertUOM(UOM); 
     }
     public    Data    getWeatherTemp()                   { return getWeatherTemp(""); }
     
@@ -1075,7 +1078,7 @@ public class Track {
     public    Data    getWeatherWindDirection(String UOM){ /*Double*/
         return new Data("Track/WeatherWindDirection",
                         UOM.equalsIgnoreCase("TEXT") ? "E" : 0.0,
-                        UOM.equalsIgnoreCase("TEXT") ? "" : "deg"
+                        UOM.equalsIgnoreCase("TEXT") ? "" : "deg",m_trackmap == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL
                ).convertUOM(UOM); 
     }
     public    Data    getWeatherWindDirection()          { return getWeatherWindDirection(""); }
@@ -1091,7 +1094,7 @@ public class Track {
      */
     public    Data    getWeatherWindSpeed(String UOM) { /*double*/
         Data speed = getPitSpeedLimit();    //to get the UOM
-        return new Data("Track/WeatherWindSpeed",0.0,speed.getUOM()).convertUOM(UOM); 
+        return new Data("Track/WeatherWindSpeed",0.0,speed.getUOM(),m_trackmap == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL).convertUOM(UOM); 
     }
     
     public    Data    getWeatherWindSpeed()              { return getWeatherWindSpeed(""); }
