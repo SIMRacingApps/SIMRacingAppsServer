@@ -712,6 +712,12 @@ public class Server {
                         
                         a.add(".");
                         
+                        if (!(s = getArg("electron-client-options","")).isEmpty()) {
+                            String[] sa = s.split(" ");
+                            for (int i=0; i < sa.length; i++)
+                                a.add(sa[i]);
+                        }
+                        
                         //the host has to be the same computer, so force it.
                         a.add("-hostname");
                         a.add("localhost");
