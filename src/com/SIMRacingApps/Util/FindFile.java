@@ -54,21 +54,33 @@ public class FindFile {
      * @throws FileNotFoundException When the file cannot be found.
      */
     public FindFile(String pathname) throws FileNotFoundException {
-        try {
-            m_file = new File(pathname);
-            m_is = new FileInputStream(m_pathnameFound = m_pathname = pathname);
-            m_url = new URL("file:///"+m_pathnameFound);
-        }
-        catch (FileNotFoundException | MalformedURLException e) {
+
+//for the purposes of SRA, I do not want it looking in the current folder first.
+//all my files will either be in documents\SIMRacingApps or the user path passed in.
+//had an issue with there begin a settins.txt file in the downloads with the exe and it was not using the 
+//one in documents
+//        try {
+//            m_file = new File(pathname);
+//            Server.logger().info("FindFile searching in: " + m_file.getAbsolutePath());
+//            m_is = new FileInputStream(m_pathnameFound = m_pathname = m_file.getAbsolutePath());
+//            m_url = new URL("file:///"+m_pathnameFound);
+//            if (m_url != null)
+//                Server.logger().finest("FindFile URL found: "+m_url.toExternalForm());
+//        }
+//        catch (FileNotFoundException | MalformedURLException e) {
         
             //first look in the user's path
             for (int pathIndex=0; pathIndex < getUserPath().length; pathIndex++) {
-                m_file = new File(m_pathnameFound = getUserPath()[pathIndex] + "/" + m_pathname);
+                m_file = new File(getUserPath()[pathIndex] + "/" + pathname);
+                Server.logger().finest("FindFile searching in user path: " + m_file.toString());
                 
                 try {
                     m_is = new FileInputStream(m_file);
+                    m_pathnameFound = m_file.toString();
                     m_url = new URL("file:///"+m_pathnameFound);
                     m_bis = new BufferedInputStream(m_is);
+                    if (m_url != null)
+                        Server.logger().finest("FindFile URL found: "+m_url.toExternalForm());
                     return;
                 }
                 catch (FileNotFoundException e1) {} 
@@ -78,14 +90,29 @@ public class FindFile {
             }
             
             //now look down the classpath
-            m_file = new File(pathname);
-            m_is = com.SIMRacingApps.Util.FindFile.class.getClassLoader().getResourceAsStream(m_pathnameFound = m_pathname);
+            m_file = new File(m_pathnameFound = pathname);
+            Server.logger().finest("FindFile searching in classpath: " + m_pathnameFound);
+            m_is = com.SIMRacingApps.Util.FindFile.class.getClassLoader().getResourceAsStream(m_pathnameFound);
             if (m_is == null) {
                 m_pathnameFound = "";
-                throw new FileNotFoundException(m_pathname);
+                Server.logger().finest("FindFile not found in classpath: " + m_pathnameFound);
+                throw new FileNotFoundException(m_pathnameFound);
             }
-            m_url = com.SIMRacingApps.Util.FindFile.class.getClass().getResource(m_pathnameFound);
-        }
+            //for getResource to work, the path needs to start with a slash
+            m_url = com.SIMRacingApps.Util.FindFile.class.getClass().getResource("/"+m_pathnameFound);
+            if (m_url != null)
+                Server.logger().finest("FindFile URL found: "+m_url.toExternalForm());
+            else {
+                try {
+                    Server.logger().finest("FindFile URL found: file:///"+m_pathnameFound);
+                    m_url = new URL("file:///"+m_pathnameFound);
+                    //wish this would work
+                    //m_url = new URL("rsrc:"+m_pathnameFound);
+                } catch (MalformedURLException e) {
+                    Server.logStackTrace(e);
+                }
+            }
+//        }
         m_bis = new BufferedInputStream(m_is);
     }
 

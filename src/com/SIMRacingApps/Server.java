@@ -402,8 +402,9 @@ public class Server {
         InputStream is = null;
         try {
             Properties userProperties = new Properties();
-            
-            userProperties.load(is = new FindFile(settings).getInputStream());
+            FindFile settingsFile = new FindFile(settings);
+            Server.logger().info("Reading settings from: "+settingsFile.toString());
+            userProperties.load(is = settingsFile.getInputStream());
             Iterator<Entry<Object, Object>> itr = userProperties.entrySet().iterator();
             while (itr.hasNext()) {
                 Entry<Object, Object> entry = itr.next();
@@ -437,8 +438,10 @@ public class Server {
             is = null;
             try {
                 Properties userProperties = new Properties();
+                FindFile settingsFile = new FindFile(sim+"."+settings);
+                Server.logger().info("Reading SIM settings from: "+settingsFile.toString());
                 
-                userProperties.load(is = new FindFile(sim+"."+settings).getInputStream());
+                userProperties.load(is = settingsFile.getInputStream());
                 Iterator<Entry<Object, Object>> itr = userProperties.entrySet().iterator();
                 while (itr.hasNext()) {
                     Entry<Object, Object> entry = itr.next();
@@ -508,9 +511,44 @@ public class Server {
     
     public static void main(String[] args) {
 
+        //look through the args and get the log file and userpath before doing anything else.
+        String log = null;
+        String userpath = null;
+        
+        for (int i=0; i < args.length; i++) {
+            try {
+                String arg = "";
+                String value = "";
+                        
+                if (args[i].startsWith("-") || args[i].startsWith("/")) {
+                    arg = args[i].substring(1).toLowerCase();
+                    value = "";
+                    if ((i+1) < args.length)
+                        value = args[++i];
+                    if (arg.equalsIgnoreCase("log") && !value.isEmpty()) {
+                        log = value;
+                    }
+                    else
+                    if ((arg.equals("userpath") || arg.equals("userdir")) && !value.isEmpty()) {
+                        userpath = value;
+                    }
+                }
+            }
+            catch (Exception e) {
+                Server.logStackTrace(e);
+                System.exit(1);
+            }
+        }
+        
+        if (userpath != null)
+            FindFile.setUserPath(userpath);
+        if (log != null)
+            Server.setLog(log);
+        
         //make sure the user's folders exists
-        new File(FindFile.getUserDocumentsPath()+"/SIMRacingApps/storage").mkdirs();
-        new File(FindFile.getUserDocumentsPath()+"/SIMRacingApps/favorites").mkdirs();
+        //make sure the user's first folder exists
+        new File(FindFile.getUserPath()[0]+"/storage").mkdirs();
+        new File(FindFile.getUserPath()[0]+"/favorites").mkdirs();
         
         //see if the user has a settings.txt file and copy the default over if they don't
         FindFile default_settings = null;
