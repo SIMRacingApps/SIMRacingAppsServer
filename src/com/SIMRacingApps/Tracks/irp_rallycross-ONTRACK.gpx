@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<gpx xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxedw="http://www.gpxeditor.co.uk/xmlschemas/WaypointExtension/v1" xmlns:gpxedts="http://www.gpxeditor.co.uk/xmlschemas/TrackSegExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" creator="GPXEditor" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
+  <wpt lat="39.81252" lon="-86.34041">
+    <name>Center</name>
+  </wpt>
+  <rte>
+    <name>Untitled</name>
+    <rtept lat="39.8125210087599" lon="-86.3418182730675">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8116133743303" lon="-86.3418048620224">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8113569617906" lon="-86.341724395752">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8111821345106" lon="-86.3416171073914">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8110189619815" lon="-86.3414561748505">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8109169789541" lon="-86.3413059711456">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8108295648102" lon="-86.3411182165146">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8107567196054" lon="-86.3409170508385">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8107188400684" lon="-86.3407024741173">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8107188400684" lon="-86.3405817747116">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8107625472246" lon="-86.3405361771584">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8108557890651" lon="-86.3405495882034">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.811540529956" lon="-86.3407239317894">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8115784090402" lon="-86.3407614827156">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8115988054616" lon="-86.3408151268959">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8115638401641" lon="-86.3414749503136">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8115900641389" lon="-86.3415259122849">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8116629084606" lon="-86.3415285944939">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8135364378903" lon="-86.3415071368217">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8137112591825" lon="-86.3414347171783">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8138482022175" lon="-86.3413193821907">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8139647492664" lon="-86.3411664962769">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8140667277721" lon="-86.3409626483917">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8141162601345" lon="-86.3407239317894">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.814125001136" lon="-86.3405013084412">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8140754687798" lon="-86.3402196764946">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8140026270147" lon="-86.3400721549988">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8138190654244" lon="-86.339758336544">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8135655748032" lon="-86.3394954800606">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8135568337307" lon="-86.3394337892532">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.813585970635" lon="-86.3393694162369">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8137986696619" lon="-86.3394498825073">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8139734902871" lon="-86.339562535286">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.814125001136" lon="-86.339750289917">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8142532023626" lon="-86.3399970531464">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8143551804403" lon="-86.3403376936913">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8143697487248" lon="-86.3406729698181">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.814320216545" lon="-86.3409680128098">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8142182384154" lon="-86.3412415981293">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.814028850059" lon="-86.3415151834488">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8138394611808" lon="-86.3416975736618">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8135801432551" lon="-86.3418075442314">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8134198880697" lon="-86.3418357074675">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="39.8125195518925" lon="-86.3418182730675">
+      <name />
+      <cmt />
+    </rtept>
+  </rte>
+</gpx>

@@ -1,0 +1,18 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2017 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "North":       180.0,
+    "Resolution":  1.0,
+    "Images": {
+        "SAT":     "irp_lucas_oil_indianapolis-sat.png",
+        "MAP":     "irp_lucas_oil_indianapolis-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "irp_rallycross-ONTRACK.gpx",
+        "ONPITROAD": "irp_rallycross-ONPITROAD.gpx"        
+    }
+}

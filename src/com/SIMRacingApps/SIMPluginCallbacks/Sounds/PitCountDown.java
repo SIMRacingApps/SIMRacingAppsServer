@@ -17,9 +17,10 @@ import com.SIMRacingApps.Util.Sound;
  *    pit-count-down-device = A Sound Device
  *    pit-count-down-volume = 100.0
  *    pit-count-down-start  = 5
+ *    pit-count-down-stop   = 4
  *    pit-count-down-play10 = Y
  *    pit-count-down-replay = N
- *    pit-count-down-play0  = Y
+ *    pit-count-down-play0  = N
  *    pit-count-down-pattern = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/n%d.wav
  *        #some know patterns to spotter packs. Your version may vary
  *        C:\\Program Files (x86)\\iRacing\\sound\\spcc\\JJ Spotter Pack v6.51\\n%d.wav
@@ -45,6 +46,7 @@ public class PitCountDown extends SIMPluginCallback {
     private final String m_device;
     private final boolean m_replay;
     private final int m_startCount;
+    private final int m_stopCount;
     
     private Double m_volume;
     
@@ -64,6 +66,7 @@ public class PitCountDown extends SIMPluginCallback {
         m_play0               = Server.getArg("pit-count-down-play0",true);
         m_replay              = Server.getArg("pit-count-down-replay",false);
 		m_startCount          = (int)Math.min(10.0, Math.max(0.0, (double)Server.getArg("pit-count-down-start",5)));
+        m_stopCount           = (int)Math.min(10.0, Math.max(0.0, (double)Server.getArg("pit-count-down-stop",0)));
         
 		String defaultPattern = "com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/n%d.wav";
 		String soundPattern   = Server.getArg("pit-count-down-pattern",defaultPattern);
@@ -183,14 +186,16 @@ public class PitCountDown extends SIMPluginCallback {
                     ||  status.equals(Car.Status.ENTERINGPITSTALL)
                     ||  status.equals(Car.Status.INPITSTALL)
                     ) {
-                        //stop any other clip that may be playing
-                        for (int i=1; i <= 10; i++)
-                            m_clips.get(i).stop();
-                            
-                        //don't play zero unless something else was recently played
-                        //this prevents zero from playing when you drop into your pit from a reset.
-                        if (m_play0 && (m_lastTimePlayed > (System.currentTimeMillis() - 5000L)))
-                            m_clips.get(0).play();
+                        if (m_play0) {
+                            //stop any other clip that may be playing
+                            for (int i=1; i <= 10; i++)
+                                m_clips.get(i).stop();
+                                
+                            //don't play zero unless something else was recently played
+                            //this prevents zero from playing when you drop into your pit from a reset.
+                            if ((m_lastTimePlayed > (System.currentTimeMillis() - 5000L)))
+                                m_clips.get(0).play();
+                        }
                     }
                     else
                     if (seconds == 10 || seconds > m_startCount) {
@@ -204,13 +209,15 @@ public class PitCountDown extends SIMPluginCallback {
                         }
                     }
                     else {
-                        //stop any other clip that may be playing
-                        for (int i=0; i <= 10; i++)
-                            if (i > seconds)
-                                m_clips.get(i).stop();
-                            
-                        m_clips.get(seconds).play();
-                        m_lastTimePlayed = System.currentTimeMillis();
+                        if (seconds >= m_stopCount && seconds <= m_startCount) {
+                            //stop any other clip that may be playing
+                            for (int i=0; i <= 10; i++)
+                                if (i > seconds)
+                                    m_clips.get(i).stop();
+
+                            m_clips.get(seconds).play();
+                            m_lastTimePlayed = System.currentTimeMillis();
+                        }
                     }
                 }
             }

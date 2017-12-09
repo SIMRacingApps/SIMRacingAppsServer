@@ -1,0 +1,18 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2017 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "North":       218.0,
+    "Resolution":  1.4,
+    "Images": {
+        "SAT":     "iowa-sat.png",
+        "MAP":     "iowa-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  235.0,
+    "GPX": {
+        "ONTRACK":   "iowa_rallycross-ONTRACK.gpx",
+        "ONPITROAD": "iowa_rallycross-ONPITROAD.gpx"        
+    }
+}

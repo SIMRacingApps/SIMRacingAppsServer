@@ -1,0 +1,18 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2017 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "North":       144.0,
+    "Resolution":  3.1,
+    "Images": {
+        "SAT":     "daytona-sat.png",
+        "MAP":     "daytona-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "daytona_rallycross_short-ONTRACK.gpx",
+        "ONPITROAD": "daytona_rallycross_short-ONPITROAD.gpx"        
+    }
+}

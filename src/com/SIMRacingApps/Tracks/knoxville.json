@@ -1,0 +1,18 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2017 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "North":       268.0,
+    "Resolution":  1.0,
+    "Images": {
+        "SAT":     "knoxville-sat.png",
+        "MAP":     "knoxville-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "knoxville-ONTRACK.gpx",
+        "ONPITROAD": "knoxville-ONPITROAD.gpx"        
+    }
+}
