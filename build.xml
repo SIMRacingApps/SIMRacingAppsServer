@@ -10,8 +10,8 @@
     </script>
     <property name="build.major" value="1" />
     <property name="build.minor" value="5" />
-    <property name="build.prefix" value="BETA-" />
-    <!--property name="build.prefix" value="" /-->
+    <property name="build.prefix" value="" />
+    <!--property name="build.prefix" value="BETA-" /-->
     <tstamp>
         <format property="build.time" pattern="yyyy.MM.dd.HH.mm.ss" />
     </tstamp>
