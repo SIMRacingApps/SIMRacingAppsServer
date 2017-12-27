@@ -38,6 +38,7 @@ public class TeamSpeak {
     private String                         m_hostname    = "localhost";
     private Map<String,Map<String,String>> m_clientlist  = new HashMap<String,Map<String,String>>();
     private String                         m_carnumber   = "";
+    private String                         m_drivername  = "";
     private Boolean                        m_stayalive   = false;
     private Long                           m_talkTimeout = 60000L;
     private Long                           m_noopTimer   = 60000L;
@@ -76,6 +77,7 @@ public class TeamSpeak {
     }
 
     private String m_carnumber_cached = "";
+    private String m_drivername_cached = "";
     /**
      * This method is to be called by the SIM any time there's new data.
      * I will use this to update the car number and possibly other things in the future.
@@ -85,8 +87,10 @@ public class TeamSpeak {
         if (m_SIMplugin != null) {
             //don't update the car number unless the SIM is connected to a session.
             String number = "";
+            String drivername = "";
             if (m_SIMplugin.isConnected()) {
                 number = m_SIMplugin.getSession().getCar("ME").getNumber().getString();
+                drivername = m_SIMplugin.getSession().getCar("ME").getDriverName().getString();
             }
             //Cache the car number so we don't have to wait on the sync unless it has changed.
             if (!number.equals(m_carnumber_cached)) {
@@ -94,6 +98,13 @@ public class TeamSpeak {
 
                 synchronized(m_carnumber) {
                     m_carnumber = number;
+                }
+            }
+            if (!drivername.equals(m_drivername_cached)) {
+                m_drivername_cached = drivername;
+
+                synchronized(m_drivername) {
+                    m_drivername = drivername;
                 }
             }
         }
@@ -768,7 +779,7 @@ public class TeamSpeak {
                                                 if (nickname != null) {
                                             		nickname = nickname.replaceFirst("^(#?)([ ]*?)(\\d*)([ ]?)", "");
                                                 	if (!m_carnumber.isEmpty())
-                                                		nickname = "#"+m_carnumber+" "+nickname;
+                                                		nickname = "#"+m_carnumber+" "+(m_drivername.isEmpty() || !Server.getArg("teamspeak-update-name", true) ? nickname : m_drivername);
         
         	                                        _setNickname(in,out,nickname);
         	                                        carnumber = m_carnumber;

@@ -140,6 +140,7 @@ mspec-speeding = Y
 ### teamspeak = Y/N to enable or disable teamspeak integratation.
 ### teamspeak-client = The host where TeamSpeak is running.
 ### teamspeak-carnumber = Does SRA prepend you car number to your alias.
+### teamspeak-update-name = Does SRA update your nickname with your session name from the SIM
 ### teamspeak-apikey = AAAA-BBBB-CCC-DDDD-EEEE-FFFF 
 ###    Required since TeamSpeak version 3.1.3
 ###    Get from your key from TeamSpeak -> Tools -> Options -> Addons -> ClientQuery -> Settings 
@@ -147,6 +148,7 @@ mspec-speeding = Y
 teamspeak = Y
 teamspeak-client = localhost
 teamspeak-carnumber = Y
+teamspeak-update-name = Y
 teamspeak-apikey = 
 
 #####################################################################
