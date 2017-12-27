@@ -1815,7 +1815,7 @@ public class Car {
      * @return The team name. Blank if session does not have teams 
      */
     public Data getTeamName() {
-        return new Data("Car/"+m_carIdentifier+"/TeamName","","",Data.State.NORMAL);
+        return new Data("Car/"+m_carIdentifier+"/TeamName","","",Data.State.NOTAVAILABLE);
     }
     
     /**
