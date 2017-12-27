@@ -64,6 +64,23 @@ public class Car {
 //        public static final String TOWING          = "TOWING";  //TODO: iRacing doesn't tell me when they are towing. Can I detect it?
     }
 
+    /**
+     * Defines the messages the spotter can say.
+     * 
+     * @author Jeffrey Gilliam
+     * @copyright Copyright (C) 2017 Jeffrey Gilliam
+     * @since 1.5
+     * @license Apache License 2.0
+     */
+    public static class SpotterMessages {
+        public static final String OFF              = "";
+        public static final String CLEAR            = "CLEAR";
+        public static final String CARLEFT          = "CARLEFT";
+        public static final String CARRIGHT         = "CARRIGHT";
+        public static final String CARLEFTRIGHT     = "CARLEFTRIGHT";
+        public static final String CARSLEFT         = "CARSLEFT";
+        public static final String CARSRIGHT        = "CARSRIGHT";
+    }
 
     /**
      * Defines and validates an enumerated String class of the different types of laps that can be returned by methods that take a LapType as an argument.
@@ -1756,6 +1773,28 @@ public class Car {
         return new Data("Car/"+m_carIdentifier+"/RPMPitRoadSpeed",m_pitRoadSpeedRPM,"rev/min",Data.State.NORMAL);
     }
 
+    /**
+     * Returns the current spotter message. 
+     * 
+     * Messages supported are.
+     * <dl>
+     * <dt>OFF</dt><dd>Spotter is not talking</dd>
+     * <dt>CLEAR</dt><dd>no cars around us</dd>
+     * <dt>CARLEFT</dt><dd>there is a car to our left</dd>
+     * <dt>CARRIGHT</dt><dd>there is a car to our right</dd>
+     * <dt>CARLEFTRIGHT</dt><dd>there are cars on each side</dd>
+     * <dt>CARSLEFT</dt><dd>there are two or more cars to our left</dd>
+     * <dt>CARSRIGHT</dt><dd>there are two or more cars to our right</dd>
+     * </dl>
+     * 
+     * <p>PATH = {@link #getSpotterMessage /Car/(CARIDENTIFIER)/SpotterMessage}
+     * 
+     * @return The spotter message in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getSpotterMessage() {
+        return new Data("Car/"+m_carIdentifier+"/SpotterMessage",SpotterMessages.OFF,"",Data.State.NOTAVAILABLE);
+    }
+    
     /**
      * Returns the times this car crossed the start/finish by lap.
      * 
