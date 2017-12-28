@@ -54,6 +54,7 @@ public class Session {
     public static final int UNLIMITEDLAPS = 9999;
 
     private String m_referenceCar = "ME";
+    private boolean m_hideApps = false;
 
     private SIMPlugin m_SIMPlugin;
     private Car defaultCar = null;
@@ -548,6 +549,15 @@ public class Session {
     public    Data    getIncidentLimit()                              { /*int*/                                  return new Data("Session/IncidentLimit",0,"x",Data.State.NOTAVAILABLE); } 
 
     /**
+     * Returns true if the client should hide the App windows.
+     * 
+     * <p>PATH = {@link #getIsAppsHidden() /Session/IsAppsHidden}
+     * 
+     * @return true if the Apps should be hidden {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getIsAppsHidden()                { /*Boolean*/                             return new Data("Session/IsAppsHidden",m_hideApps,"boolean",Data.State.NORMAL); }
+    
+    /**
      * Returns true if the green flag is waving.
      * 
      * <p>PATH = {@link #getIsGreenFlag() /Session/IsGreenFlag}
@@ -1005,6 +1015,25 @@ public class Session {
      */
     public    Data setAdvanceFlag() {
         return new Data("Session/setAdvanceFlag","","String",Data.State.NOTAVAILABLE);
+    }
+    
+    /**
+     * Sets the flag returned by getIsAppsHidden().
+     * 
+     * <p>PATH = {@link #setAppsHidden() /Session/setAppsHidden}
+     * 
+     * @param isHidden true to hide the apps, false to unhide them
+     * @return The apps hidden state in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data setAppsHidden(boolean isHidden) {
+        m_hideApps = isHidden;
+        return getIsAppsHidden();
+    }
+    public    Data setAppsHidden(String isHidden) {
+        return setAppsHidden(new Data("",isHidden).getBoolean());
+    }
+    public    Data setAppsHidden() {
+        return setAppsHidden(true);
     }
     
     /**
