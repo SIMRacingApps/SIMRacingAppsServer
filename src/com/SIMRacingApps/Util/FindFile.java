@@ -57,7 +57,7 @@ public class FindFile {
 
 //for the purposes of SRA, I do not want it looking in the current folder first.
 //all my files will either be in documents\SIMRacingApps or the user path passed in.
-//had an issue with there begin a settins.txt file in the downloads with the exe and it was not using the 
+//had an issue with there begin a settings.txt file in the downloads with the exe and it was not using the 
 //one in documents
 //        try {
 //            m_file = new File(pathname);
@@ -68,6 +68,29 @@ public class FindFile {
 //                Server.logger().finest("FindFile URL found: "+m_url.toExternalForm());
 //        }
 //        catch (FileNotFoundException | MalformedURLException e) {
+
+            // if the filename is absolute, just open it and return the error
+            m_file = new File(pathname);
+            //absolute doesn't work on windows when the drive letter is not used.
+            if (m_file.isAbsolute() || pathname.startsWith("/") || pathname.startsWith("\\")) {
+                Server.logger().finest("FindFile checking absoulte path: " + m_file.toString());
+                if (m_file.exists()) {
+                    try {
+                        m_is = new FileInputStream(m_file);
+                        m_pathnameFound = m_file.toString();
+                        m_url = new URL("file:///"+m_pathnameFound);
+                        m_bis = new BufferedInputStream(m_is);
+                        if (m_url != null)
+                            Server.logger().finest("FindFile URL found: "+m_url.toExternalForm());
+                        return;
+                    }
+                    catch (FileNotFoundException e1) {} 
+                    catch (MalformedURLException e2) {
+                        Server.logStackTrace(e2);
+                    }
+                }
+                throw new FileNotFoundException(pathname);
+            }
         
             //first look in the user's path
             for (int pathIndex=0; pathIndex < getUserPath().length; pathIndex++) {
@@ -96,7 +119,7 @@ public class FindFile {
             if (m_is == null) {
                 m_pathnameFound = "";
                 Server.logger().finest("FindFile not found in classpath: " + m_pathnameFound);
-                throw new FileNotFoundException(m_pathnameFound);
+                throw new FileNotFoundException(pathname);
             }
             //for getResource to work, the path needs to start with a slash
             m_url = com.SIMRacingApps.Util.FindFile.class.getClass().getResource("/"+m_pathnameFound);
