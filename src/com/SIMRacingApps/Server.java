@@ -748,7 +748,7 @@ public class Server {
                                                      //use to be require for transparency, that's no longer the case as of electron 1.6
                         }
                         
-                        a.add(".");
+                        a.add(Server.getArg("electron-apps",FindFile.getUserPath()[0]+"/electron-apps"));
                         
                         if (!(s = getArg("electron-client-options","")).isEmpty()) {
                             String[] sa = s.split(" ");
@@ -767,11 +767,15 @@ public class Server {
                         //force electron to the same language as the server.
                         s = System.getProperty("user.language")+"-"+System.getProperty("user.country");
                         a.add("-lang");
-                        a.add(s.toLowerCase());
+                        a.add(getArg("electron-lang",s.toLowerCase()));  //let the user override the system's language
                         
                         if (!(s = getArg("electron-configuration","")).isEmpty()) {
                             a.add("-configuration");
                             a.add(s);
+                        }
+                        
+                        if (!(s = getArg("electron-noclickthrough","")).isEmpty()) {
+                            a.add("-noclickthrough");
                         }
                         
                         ProcessBuilder pb = new ProcessBuilder(a);
