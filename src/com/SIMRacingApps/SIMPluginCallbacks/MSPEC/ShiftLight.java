@@ -145,7 +145,7 @@ public class ShiftLight extends SIMPluginCallback {
         private void _light(boolean state, int light) {
             if (m_prevState != state || m_prevLight != light) {
                 if (state) {
-                    if (Server.logger().getLevel().intValue() >= Level.FINER.intValue())
+                    if (Server.isLogLevelFiner())
                         Server.logger().finer("MSPEC: Turning On the "+m_function+" light("+String.format("%d", light));
                     
                     if ((light & RTS) > 0) {
@@ -175,7 +175,7 @@ public class ShiftLight extends SIMPluginCallback {
                     }
                 }
                 else {
-                    if (Server.logger().getLevel().intValue() >= Level.FINER.intValue())
+                    if (Server.isLogLevelFiner())
                         Server.logger().finer("MSPEC: Turning Off the "+m_function+" light");
                     if (!Windows.setCommPortRTS(m_handle,false)) {
                         Server.logger().warning("MSPEC: Error turning off the "+m_function+" light(RTS). " + Windows.getLastErrorMessage());

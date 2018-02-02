@@ -220,6 +220,31 @@ public class Server {
         logStackTrace(Level.SEVERE,"",exception);
     }
     
+    /**
+     * Use these methods to test if the specified level will actually log anything.
+     * I do this in time critical sections to prevent forming the string to be logged,
+     * if it's not going to be logged anyway.
+     * @return true if level will be logged.
+     */
+    public static boolean isLogLevelFinest() {
+        return logger().getLevel().intValue() <= Level.FINEST.intValue();
+    }
+    public static boolean isLogLevelFiner() {
+        return logger().getLevel().intValue() <= Level.FINER.intValue();
+    }
+    public static boolean isLogLevelFine() {
+        return logger().getLevel().intValue() <= Level.FINE.intValue();
+    }
+    public static boolean isLogLevelInfo() {
+        return logger().getLevel().intValue() <= Level.INFO.intValue();
+    }
+    public static boolean isLogLevelWarning() {
+        return logger().getLevel().intValue() <= Level.WARNING.intValue();
+    }
+    public static boolean isLogLevelSevere() {
+        return logger().getLevel().intValue() <= Level.SEVERE.intValue();
+    }
+    
     public static int getPort() {
         return m_port;
     }
@@ -637,7 +662,7 @@ public class Server {
             container.addEndpoint(streamingConfig); 
             
             server.start();
-            if (logger().getLevel().intValue() < Level.FINE.intValue())
+            if (isLogLevelFiner())
                 server.dumpStdErr();
             
             //Check if electron can be installed. If so, check version and install it, if needed.

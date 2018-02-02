@@ -1983,7 +1983,7 @@ public class Car {
      */
     public Data setRPMPitRoadSpeed(double rpm) {
         if (m_id != -1)
-            if (Server.logger().getLevel().intValue() >= Level.FINE.intValue())
+            if (Server.isLogLevelFine())
                 Server.logger().fine(String.format("Car.setRPMPitRoadSpeed(%.0f) for (%d) - %s",rpm, m_id, m_name));
         
         m_pitRoadSpeedRPM = rpm;

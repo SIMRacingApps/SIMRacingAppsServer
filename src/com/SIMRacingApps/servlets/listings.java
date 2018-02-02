@@ -308,8 +308,7 @@ public class listings extends HttpServlet {
 
             if(jarFile.isFile()) {  // Run with JAR file
                 JarFile jar = new JarFile(jarFile);
-                if (Server.logger().getLevel().intValue() >= Level.FINEST.intValue())
-                    Server.logger().finest("Looking in folder in jar: " + jarFile.toString());
+                Server.logger().finest("Looking in folder in jar: " + jarFile.toString());
                 Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
                 while(entries.hasMoreElements()) {
                     String name = entries.nextElement().getName();
@@ -320,8 +319,7 @@ public class listings extends HttpServlet {
                         String p = name+"listing.json";
                         InputStream is_p = this.getClass().getClassLoader().getResourceAsStream(p);
                         if (is_p != null) {
-                            if (Server.logger().getLevel().intValue() >= Level.FINER.intValue())
-                                Server.logger().finer("listing file in jar: " + p);
+                            Server.logger().finer("listing file in jar: " + p);
                             try {
                                 @SuppressWarnings("unchecked")
                                 Map<String,Object> listing = (Map<String, Object>) m_genson.deserialize(is_p, Map.class);
@@ -341,8 +339,7 @@ public class listings extends HttpServlet {
             else {
                 //not in a jar, look in the classpath
                 URL url = this.getClass().getClassLoader().getResource(folder);
-                if (Server.logger().getLevel().intValue() >= Level.FINEST.intValue())
-                    Server.logger().finest("Looking in folder in classpath: " + URLDecoder.decode(url.getPath(),"UTF-8"));
+                Server.logger().finest("Looking in folder in classpath: " + URLDecoder.decode(url.getPath(),"UTF-8"));
                 InputStream is = this.getClass().getClassLoader().getResourceAsStream(folder);
                 
                 if (is != null) {
@@ -355,8 +352,7 @@ public class listings extends HttpServlet {
                             String p = folder+"/"+l+"/listing.json";
                             InputStream is_p = this.getClass().getClassLoader().getResourceAsStream(p);
                             if (is_p != null) {
-                                if (Server.logger().getLevel().intValue() >= Level.FINER.intValue())
-                                    Server.logger().finer("listing file in classpath: " + p);
+                                Server.logger().finer("listing file in classpath: " + p);
                                 try {
                                     @SuppressWarnings("unchecked")
                                     Map<String,Object> listing = (Map<String, Object>) m_genson.deserialize(is_p, Map.class);
@@ -391,35 +387,38 @@ public class listings extends HttpServlet {
                 //now check users folder for additional apps and widgets.
                 File userPath = new File(FindFile.getUserPath()[i]+"\\"+folder);
                 if (userPath.isDirectory()) {
-                    if (Server.logger().getLevel().intValue() >= Level.FINEST.intValue())
-                        Server.logger().finest("Looking in folder: " + userPath.getAbsolutePath());
+                    Server.logger().finest("Looking in folder: " + userPath.getAbsolutePath());
                     for (File l : userPath.listFiles()) {
                         String fa[] = folder.split("/");
-                        String p = userPath.getAbsolutePath()+"/"+l.getName()+"/listing.json";
-                        InputStream is_p = new FileInputStream(new File(p));
-                        if (is_p != null) {
-                            if (Server.logger().getLevel().intValue() >= Level.FINER.intValue())
-                                Server.logger().finer("listing file in userPath: " + p);
+                        if (l.isDirectory()) {
                             try {
-                                @SuppressWarnings("unchecked")
-                                Map<String,Object> listing = (Map<String, Object>) m_genson.deserialize(is_p, Map.class);
-                                //not take the first folder listed off of the name and leave the rest.
-                                list.putIfAbsent((folder+"/"+l.getName()).substring(fa[0].length()+1),listing);
+                                String p = userPath.getAbsolutePath()+"/"+l.getName()+"/listing.json";
+                                InputStream is_p = new FileInputStream(new File(p));
+                                if (is_p != null) {
+                                    Server.logger().info("listing file in userPath: " + p);
+                                    try {
+                                        @SuppressWarnings("unchecked")
+                                        Map<String,Object> listing = (Map<String, Object>) m_genson.deserialize(is_p, Map.class);
+                                        //not take the first folder listed off of the name and leave the rest.
+                                        list.putIfAbsent((folder+"/"+l.getName()).substring(fa[0].length()+1),listing);
+                                    }
+                                    catch (JsonStreamException | JsonBindingException e) {
+                                        Server.logStackTrace(Level.SEVERE, "listing file in userPath: " + p, e);
+                                    }
+                                    finally {
+                                        is_p.close();
+                                    }
+                                }
                             }
-                            catch (JsonStreamException | JsonBindingException e) {
-                                Server.logStackTrace(Level.SEVERE, "listing file in userPath: " + p, e);
-                            }
-                            finally {
-                                is_p.close();
-                            }
+                            catch (FileNotFoundException e) {}
                         }
-                        if (l.isDirectory())
-                            _loadListUser((folder+"/"+l.getName()).substring(fa[0].length()+1),list);
                     }
                 }            
             }
         }
-        catch (IOException e) {}
+        catch (IOException e) {
+            Server.logStackTrace(e);
+        }
     }
 
     private void _loadListFavorites(String folder,Map<String,Map<String,Object>> list) {
@@ -428,19 +427,15 @@ public class listings extends HttpServlet {
                 //now check users folder for additional apps and widgets.
                 File userPath = new File(FindFile.getUserPath()[i]+"\\"+folder);
                 if (userPath.isDirectory()) {
-                    if (Server.logger().getLevel().intValue() >= Level.FINEST.intValue())
-                        Server.logger().finest("Looking in folder: " + userPath.getAbsolutePath());
+                    Server.logger().finest("Looking in folder: " + userPath.getAbsolutePath());
                     for (File l : userPath.listFiles()) {
                         String fa[] = folder.split("/");
-                        if (l.isDirectory())
-                            _loadListUser((folder+"/"+l.getName()).substring(fa[0].length()+1),list);
-                        else {
+                        if (!l.isDirectory()) {
                             if (l.getName().toLowerCase().endsWith(".json")) {
                                 String p = userPath.getAbsolutePath()+"/"+l.getName();
                                 InputStream is_p = new FileInputStream(new File(p));
                                 if (is_p != null) {
-                                    if (Server.logger().getLevel().intValue() >= Level.FINER.intValue())
-                                        Server.logger().finer("listing file in userFavorites: " + p);
+                                    Server.logger().info("listing file in userFavorites: " + p);
                                     try {
                                         @SuppressWarnings("unchecked")
                                         Map<String,Object> listing = (Map<String, Object>) m_genson.deserialize(is_p, Map.class);
@@ -460,7 +455,9 @@ public class listings extends HttpServlet {
                 }            
             }
         }
-        catch (IOException e) {}
+        catch (IOException e) {
+            Server.logStackTrace(e);
+        }
     }
     
     @SuppressWarnings("unchecked")

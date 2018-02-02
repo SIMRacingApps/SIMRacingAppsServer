@@ -59,7 +59,7 @@ public class SIMRacingApps extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String resource = URLDecoder.decode(request.getRequestURI(),"UTF-8");
-        if (Server.logger().getLevel().intValue() >= Level.FINEST.intValue())
+        if (Server.isLogLevelFinest())
             Server.logger().finest(String.format("doGet(%s) called", resource));
         
         response.addHeader("Access-Control-Allow-Origin", "http://simracingapps.com");
@@ -95,14 +95,14 @@ public class SIMRacingApps extends HttpServlet {
         
         if (file != null) {
             
-            if (Server.logger().getLevel().intValue() >= Level.FINER.intValue())
+            if (Server.isLogLevelFiner())
                 Server.logger().finer(String.format("doGet(%s) loading resource", filename));
             
             //IE 10 or 11 would not retrieve the css files without the mime type being set
             ServletContext context = getServletContext();
             if (context != null) {
                 String mimeType = context.getMimeType(filename);
-                if (Server.logger().getLevel().intValue() >= Level.FINER.intValue())
+                if (Server.isLogLevelFiner())
                     Server.logger().finer(String.format("%s.doGet(%s) content mime-type = %s", this.getClass().getName(),filename,mimeType));
                 response.setContentType(mimeType);
             }
@@ -123,7 +123,7 @@ public class SIMRacingApps extends HttpServlet {
             return;
         }
         
-        if (Server.logger().getLevel().intValue() >= Level.FINER.intValue())
+        if (Server.isLogLevelFiner())
             Server.logger().finer(String.format("doGet(%s) resource not found", resource));
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         response.getOutputStream().println(resource + " not found");

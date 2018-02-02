@@ -595,7 +595,7 @@ public class Data extends HttpServlet {
         if (sessionid == null)
             sessionid = "";
 
-        if (Server.logger().getLevel().intValue() >= Level.FINEST.intValue())
+        if (Server.isLogLevelFinest())
             Server.logger().finest(String.format("doPost(%s): Input = %s",sessionid,genson.serialize(d)));
         
         DataService.deleteSession(sessionid);

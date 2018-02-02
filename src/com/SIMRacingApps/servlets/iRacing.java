@@ -45,14 +45,14 @@ public class iRacing extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (Server.logger().getLevel().intValue() >= Level.FINE.intValue())
+        if (Server.isLogLevelFine())
             Server.logger().fine(String.format("doGet(%s) called", request.getRequestURL()));
         
         String path = request.getRequestURI().replace("/SIMRacingApps/iRacing/", "");
         if (!path.equals("")) {
             path = "http://127.0.0.1:32034/" + path + "?" + request.getQueryString() + "&nocache="+Long.toString(System.currentTimeMillis());
 
-            if (Server.logger().getLevel().intValue() >= Level.FINE.intValue())
+            if (Server.isLogLevelFine())
                 Server.logger().fine(String.format("doGet(%s) calling iRacing server %s", request.getRequestURL(),path));
 	        
 	        URL url = new URL(path);

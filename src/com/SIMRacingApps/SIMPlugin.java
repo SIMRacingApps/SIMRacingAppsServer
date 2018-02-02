@@ -581,7 +581,7 @@ public class SIMPlugin {
 //                        }
                         else
                         if (ipsnext != ips && ipsnext < 25 && Server.getArg("log-ips",true)) {
-                            if (Server.logger().getLevel().intValue() >= Level.FINEST.intValue())
+                            if (Server.isLogLevelFinest())
                                 Server.logger().finest(String.format("IPS(%d) dropped below threshold(25), DataVersion=(%s)", ipsnext,this.getSession().getDataVersion().getString()));
                         }
                         ips = ipsnext;
@@ -766,7 +766,7 @@ public class SIMPlugin {
                         
                         //now store the overloaded method, indexed by the number of string arguments.
                         methods.get(methodName).put(new Integer(allParameters.length), method);
-                        if (Server.logger().getLevel().intValue() >= Level.FINEST.intValue())
+                        if (Server.isLogLevelFinest())
                             Server.logger().finest(String.format("Adding method(%-30s): Data %s.%s(%d)", methodName,className,method.getName(),allParameters.length));
                     }
                     
