@@ -43,9 +43,9 @@
     <property name="version.properties" value="src/com/SIMRacingApps/version.properties" />
     
     <path id="Web App Libraries.libraryclasspath">
-        <pathelement location="WebContent/WEB-INF/lib/jna-platform-4.2.1.jar" />
+        <pathelement location="WebContent/WEB-INF/lib/jna-platform-4.5.1.jar" />
         <pathelement location="WebContent/WEB-INF/lib/snakeyaml-1.13.jar" />
-        <pathelement location="WebContent/WEB-INF/lib/jna-4.2.1.jar" />
+        <pathelement location="WebContent/WEB-INF/lib/jna-4.5.1.jar" />
         <pathelement location="WebContent/WEB-INF/lib/genson-1.3.jar" />
     </path>
     <path id="Jetty.libraryclasspath">
