@@ -97,6 +97,17 @@ SimPlugins =
 log = SIMRacingApps
 level = INFO
 
+
+#####################################################################
+### Simply add the name to change in the settings with SIM name on the left.
+### Any spaces on the left side must have a backslash in front of the space.
+### Use this to highlight friends, enemies, blacklist, whatever
+#####################################################################
+Jeffrey\ Gilliam = Jeff Gilliam 
+John\ Doe27 = >>John Doe
+Young\ Gun = !!Danger Danger
+
+
 #####################################################################
 ### MSPEC Shift Light's COMM Port Assignments
 ### Refer to MSPEC's documentation for installing drivers
