@@ -32,9 +32,12 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletException;
+import javax.websocket.DeploymentException;
 import javax.websocket.server.ServerContainer;
 import javax.websocket.server.ServerEndpointConfig;
 
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
@@ -534,6 +537,48 @@ public class Server {
     //@SuppressWarnings("deprecation")
     private static Process electronProcess = null;
     
+    public static String m_hostname = "";  //once the service starts up, it will populate this.
+
+    private static org.eclipse.jetty.server.Server startServer() throws Exception {
+        //since my package is also named Server, I have to specify the entire path to Jetty
+        org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(m_port);
+        
+        ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        contextHandler.setContextPath("/");
+        contextHandler.setResourceBase(System.getProperty("java.io.tmpdir"));
+        server.setHandler(contextHandler);
+        
+        ServletHolder servlet;
+        
+        servlet = contextHandler.addServlet(ROOT.class,          "/");
+        servlet = contextHandler.addServlet(SIMRacingApps.class, "/SIMRacingApps/*");
+        servlet = contextHandler.addServlet(listings.class,      "/SIMRacingApps/listings");
+        servlet = contextHandler.addServlet(iRacing.class,       "/SIMRacingApps/iRacing/*");
+        servlet = contextHandler.addServlet(upload.class,        "/SIMRacingApps/upload");
+        servlet = contextHandler.addServlet(settings.class,      "/SIMRacingApps/settings");
+        servlet = contextHandler.addServlet(sendkeys.class,      "/SIMRacingApps/sendkeys/*");
+        servlet = contextHandler.addServlet(sendkeys.class,      "/SIMRacingApps/SENDKEYS/*");
+        servlet = contextHandler.addServlet(sendkeys.class,      "/SIMRacingApps/sendKeys/*");
+        servlet = contextHandler.addServlet(sendkeys.class,      "/SIMRacingApps/SendKeys/*");
+        servlet = contextHandler.addServlet(Data.class,          "/SIMRacingApps/Data/*");
+        servlet.setInitOrder(0); //Jetty's way to load on startup
+        servlet = contextHandler.addServlet(DataEvent.class,     "/SIMRacingApps/DataEvent");
+        servlet = contextHandler.addServlet(ConsumerTester.class,"/SIMRacingApps/ConsumerTester");
+    
+        ServerContainer container = WebSocketServerContainerInitializer.configureContext(contextHandler); 
+         
+        // Add endpoint to server container 
+        ServerEndpointConfig socketConfig = ServerEndpointConfig.Builder.create(DataSocket.class,"/SIMRacingApps/DataSocket").build(); 
+        container.addEndpoint(socketConfig); 
+
+        // Add endpoint to server container 
+        ServerEndpointConfig streamingConfig = ServerEndpointConfig.Builder.create(DataStreaming.class,"/SIMRacingApps/DataStreaming").build(); 
+        container.addEndpoint(streamingConfig); 
+        
+        server.start();
+        return server;
+    }
+    
     public static void main(String[] args) {
 
         //look through the args and get the log file and userpath before doing anything else.
@@ -626,42 +671,24 @@ public class Server {
         logger().info(String.format("com.SIMRacingApps.main() using tmpdir = %s",tmpdir));
         
         try {
-            //since my package is also named Server, I have to specify the entire path to Jetty
-            org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(m_port);
+            org.eclipse.jetty.server.Server server = null;
             
-            ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-            contextHandler.setContextPath("/");
-            contextHandler.setResourceBase(System.getProperty("java.io.tmpdir"));
-            server.setHandler(contextHandler);
+            try {
+                server = startServer();
+            } catch (BindException be) {
+                try {
+                    //if requested port is in use, try 8080
+                    logger().warning(String.format("Port %s in use, trying 8080",m_port));
+                    m_port = 8080;
+                    server = startServer();
+                } catch (BindException be2) {
+                    //if requested port is in use, try 5555
+                    logger().warning(String.format("Port %s in use, trying 5555",m_port));
+                    m_port = 5555;
+                    server = startServer();
+                }
+            }
             
-            ServletHolder servlet;
-            
-            servlet = contextHandler.addServlet(ROOT.class,          "/");
-            servlet = contextHandler.addServlet(SIMRacingApps.class, "/SIMRacingApps/*");
-            servlet = contextHandler.addServlet(listings.class,      "/SIMRacingApps/listings");
-            servlet = contextHandler.addServlet(iRacing.class,       "/SIMRacingApps/iRacing/*");
-            servlet = contextHandler.addServlet(upload.class,        "/SIMRacingApps/upload");
-            servlet = contextHandler.addServlet(settings.class,      "/SIMRacingApps/settings");
-            servlet = contextHandler.addServlet(sendkeys.class,      "/SIMRacingApps/sendkeys/*");
-            servlet = contextHandler.addServlet(sendkeys.class,      "/SIMRacingApps/SENDKEYS/*");
-            servlet = contextHandler.addServlet(sendkeys.class,      "/SIMRacingApps/sendKeys/*");
-            servlet = contextHandler.addServlet(sendkeys.class,      "/SIMRacingApps/SendKeys/*");
-            servlet = contextHandler.addServlet(Data.class,          "/SIMRacingApps/Data/*");
-            servlet.setInitOrder(0); //Jetty's way to load on startup
-            servlet = contextHandler.addServlet(DataEvent.class,     "/SIMRacingApps/DataEvent");
-            servlet = contextHandler.addServlet(ConsumerTester.class,"/SIMRacingApps/ConsumerTester");
-        
-            ServerContainer container = WebSocketServerContainerInitializer.configureContext(contextHandler); 
-             
-            // Add endpoint to server container 
-            ServerEndpointConfig socketConfig = ServerEndpointConfig.Builder.create(DataSocket.class,"/SIMRacingApps/DataSocket").build(); 
-            container.addEndpoint(socketConfig); 
-
-            // Add endpoint to server container 
-            ServerEndpointConfig streamingConfig = ServerEndpointConfig.Builder.create(DataStreaming.class,"/SIMRacingApps/DataStreaming").build(); 
-            container.addEndpoint(streamingConfig); 
-            
-            server.start();
             if (isLogLevelFiner())
                 server.dumpStdErr();
             
@@ -759,7 +786,14 @@ public class Server {
                         String s;
                         
                         logger().info("Electron: Starting " + exe.toString());
-                        Thread.sleep(getArg("electron-delay",5000)); //Give the server time to get started.
+                        //Thread.sleep(getArg("electron-delay",5000)); //Give the server time to get started.
+                        //wait for the service to start up
+                        while (true) {
+                            synchronized (m_hostname) {
+                                if (!m_hostname.isEmpty())
+                                    break;
+                            }
+                        }
                         
                         a.add(exe.toString());
                         if (!(s = getArg("electron-options","")).isEmpty()) {
@@ -783,7 +817,7 @@ public class Server {
                         
                         //the host has to be the same computer, so force it.
                         a.add("-hostname");
-                        a.add("localhost");
+                        a.add(m_hostname);
                         
                         //always pass the port in case Electron saved the wrong one
                         a.add("-port");
@@ -864,7 +898,7 @@ public class Server {
 //            }
             DataService.stop();
             logStackTrace(Level.SEVERE,"Port: "+m_port,be);
-            System.err.print("\nTo solve this problem, see https://github.com/SIMRacingApps/SIMRacingApps/Port-80-in-use-by-another-process\n");
+            System.err.print("\nTo solve this problem, see https://github.com/SIMRacingApps/SIMRacingApps/Port-80-in-use-by-another-process\n\n");
             System.err.print("Press ENTER to exit...");
             try { System.in.read(); } catch (IOException e) {}
             System.exit(1);

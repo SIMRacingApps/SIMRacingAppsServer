@@ -249,8 +249,12 @@ public class Data extends HttpServlet {
 //            Server.logStackTrace(Level.WARNING, "while getting IP address",e);
 //        }
         
-        ip = "http://" + ip + ((Server.getPort() == 80) ? "" : ":" + Server.getPort()); 
+        synchronized (Server.m_hostname) {
+            Server.m_hostname = ip;
+        }
         
+        ip = "http://" + ip + ((Server.getPort() == 80) ? "" : ":" + Server.getPort()); 
+
         InputStream in;
         try {
             String userPath = FindFile.getUserPath()[0];
