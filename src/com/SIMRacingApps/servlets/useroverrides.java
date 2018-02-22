@@ -148,7 +148,9 @@ public class useroverrides extends HttpServlet {
               "<html><body>"
             + dest.toString() 
             + " saved.<br />"
-            + "You must restart the server for these to take effect.<br />"
+            + "You must reload the affected App/Widget for these to take effect.<br />"
+            + "For Electron, make the App/Widget active, the press Ctrl-R.<br />"
+            + "All other clients/browers refer to their help on how to refresh them.<br />"
             + "You can close this window.<br />"
             + "You may have to right click the header, then select close"
             + "</body></html>"
