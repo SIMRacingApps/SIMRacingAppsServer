@@ -433,11 +433,14 @@ public class Car {
      * 
      * <p>PATH = {@link #getDriverName() /Car/(CARIDENTIFIER)/DriverName}
      * 
+     * @param allowMapping true allows the user to map the name in settings to something else.
      * @return The name in a {@link com.SIMRacingApps.Data} container.
      */
-    public Data getDriverName() {
+    public Data getDriverName(boolean allowMapping) {
         return new Data("Car/"+m_carIdentifier+"/DriverName","","text",Data.State.NORMAL);
     }
+    public Data getDriverName(String allowName) { return getDriverName(new Data("",allowName).getBoolean()); }
+    public Data getDriverName() { return getDriverName(true); }
 
     /**
      * Returns the name of the current driver of the car in a shortened format.
@@ -446,11 +449,14 @@ public class Car {
      * 
      * <p>PATH = {@link #getDriverNameShort() /Car/(CARIDENTIFIER)/DriverNameShort}
      * 
+     * @param allowMapping true allows the user to map the name in settings to something else.
      * @return The drivers shortened name in a {@link com.SIMRacingApps.Data} container.
      */
-    public Data getDriverNameShort() {
+    public Data getDriverNameShort(boolean allowMapping) {
         return new Data("Car/"+m_carIdentifier+"/DriverNameShort","","text",Data.State.NORMAL);
     }
+    public Data getDriverNameShort(String allowName) { return getDriverNameShort(new Data("",allowName).getBoolean()); }
+    public Data getDriverNameShort() { return getDriverNameShort(true); }
     
     /**
      * Returns the rating of the current driver of the car.

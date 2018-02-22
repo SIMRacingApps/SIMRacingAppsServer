@@ -90,7 +90,7 @@ public class TeamSpeak {
             String drivername = "";
             if (m_SIMplugin.isConnected()) {
                 number = m_SIMplugin.getSession().getCar("ME").getNumber().getString();
-                drivername = m_SIMplugin.getSession().getCar("ME").getDriverName().getString();
+                drivername = m_SIMplugin.getSession().getCar("ME").getDriverName(false).getString();
             }
             //Cache the car number so we don't have to wait on the sync unless it has changed.
             if (!number.equals(m_carnumber_cached)) {
