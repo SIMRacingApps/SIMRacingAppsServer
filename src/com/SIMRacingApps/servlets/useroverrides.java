@@ -1,36 +1,28 @@
 package com.SIMRacingApps.servlets;
 
 import java.io.*;
-import java.net.URLDecoder;
 import java.util.logging.Level;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
-import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
-
-import org.eclipse.jetty.server.Request;
 
 import com.SIMRacingApps.Server;
 import com.SIMRacingApps.Util.FindFile;
 
 /**
- * Implements the save settings servlet.
+ * Implements the save useroverrides servlet.
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2017 Jeffrey Gilliam
- * @since 1.0
+ * @copyright Copyright (C) 2015 - 2018 Jeffrey Gilliam
+ * @since 1.6
  * @license Apache License 2.0
  */
-@WebServlet(urlPatterns = { "settings" })
-public class settings extends HttpServlet {
+@WebServlet(urlPatterns = { "useroverrides" })
+public class useroverrides extends HttpServlet {
     private static final long serialVersionUID = 1L;
     
 
@@ -38,7 +30,7 @@ public class settings extends HttpServlet {
      * Default Constructor.
      * @see HttpServlet#HttpServlet()
      */
-    public settings() {
+    public useroverrides() {
         super();
     }
 
@@ -66,7 +58,7 @@ public class settings extends HttpServlet {
         
         FindFile file = null;
         try {
-            file = new FindFile(Server.getArg("settings","settings.txt"));
+            file = new FindFile("useroverrides.css");
             
             Server.logger().finer(String.format("doGet() loading %s",file.getFileFound()));
             
@@ -90,7 +82,7 @@ public class settings extends HttpServlet {
         catch (FileNotFoundException e) {
         }
         
-        Server.logger().finer(String.format("doGet() %s not found", Server.getArg("settings","settings.txt")));
+        Server.logger().finer(String.format("doGet() %s not found", "useroverrides.css"));
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
     }
     
@@ -107,16 +99,16 @@ public class settings extends HttpServlet {
 
         File dest = null;
         try {
-            FindFile file = new FindFile(Server.getArg("settings","settings.txt"));
+            FindFile file = new FindFile("useroverrides.css");
             dest   = file.getFile();
         }
         catch (FileNotFoundException e) {
             String outputFolder = FindFile.getUserPath()[0]; //upload it the first directory in the userpath.
-            dest = new File(outputFolder + "\\" + Server.getArg("settings","settings.txt"));
+            dest = new File(outputFolder + "\\useroverrides.css");
         }
 //outputFolder = "C:/temp";
         
-        Server.logger().info("Saving settings to: " + dest.toString());
+        Server.logger().info("Saving useroverrides to: " + dest.toString());
         ServletOutputStream out = response.getOutputStream();
         
         try {
@@ -125,7 +117,7 @@ public class settings extends HttpServlet {
             FileOutputStream fos = null;
             BufferedOutputStream out1 = null;
             try {
-                byte[] data = request.getParameter("settings").getBytes();
+                byte[] data = request.getParameter("useroverrides").getBytes();
                 fos = new FileOutputStream(dest);
                 out1 = new BufferedOutputStream(fos);
                 out1.write(data);

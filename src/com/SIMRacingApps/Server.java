@@ -57,6 +57,7 @@ import com.SIMRacingApps.servlets.Data;
 import com.SIMRacingApps.servlets.settings;
 import com.SIMRacingApps.servlets.sendkeys;
 import com.SIMRacingApps.servlets.upload;
+import com.SIMRacingApps.servlets.useroverrides;
 import com.owlike.genson.Genson;
 
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer; 
@@ -556,6 +557,7 @@ public class Server {
         servlet = contextHandler.addServlet(iRacing.class,       "/SIMRacingApps/iRacing/*");
         servlet = contextHandler.addServlet(upload.class,        "/SIMRacingApps/upload");
         servlet = contextHandler.addServlet(settings.class,      "/SIMRacingApps/settings");
+        servlet = contextHandler.addServlet(useroverrides.class, "/SIMRacingApps/useroverrides");
         servlet = contextHandler.addServlet(sendkeys.class,      "/SIMRacingApps/sendkeys/*");
         servlet = contextHandler.addServlet(sendkeys.class,      "/SIMRacingApps/SENDKEYS/*");
         servlet = contextHandler.addServlet(sendkeys.class,      "/SIMRacingApps/sendKeys/*");

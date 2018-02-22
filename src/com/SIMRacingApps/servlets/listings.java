@@ -293,6 +293,7 @@ public class listings extends HttpServlet {
         JSON.append("   ,{ \"name\": \"SIMRacingApps - Wiki\", \"description\": \"\", \"doc\": \"http://wiki.SIMRacingApps.com\", \"url\": \"http://wiki.SIMRacingApps.com\", \"width\": 1000, \"height\": 700, \"icon\": \"SRA-Logo.png\", \"args\": \"\" }");
         JSON.append("   ,{ \"name\": \"Browse SIM Raw Data\", \"description\": \"\", \"doc\": \"Data/SIM\", \"url\": \"Data/SIM\", \"width\": 1000, \"height\": 700, \"icon\": \"SRA-Logo.png\", \"args\": \"\" }");
         JSON.append("   ,{ \"name\": \"Settings\", \"description\": \"\", \"doc\": \"settings.html\", \"url\": \"settings.html\", \"width\": 800, \"height\": 800, \"icon\": \"settings-icon.png\", \"args\": \"\" }");
+        JSON.append("   ,{ \"name\": \"useroverrides.css\", \"description\": \"\", \"doc\": \"useroverrides.html\", \"url\": \"useroverrides.html\", \"width\": 800, \"height\": 800, \"icon\": \"settings-icon.png\", \"args\": \"\" }");
         JSON.append("   ,{ \"name\": \"View Server Log\", \"description\": \"\", \"doc\": \"logs/"+Server.getLog()+"\", \"url\": \"logs/"+Server.getLog()+"\", \"width\": 1000, \"height\": 700, \"icon\": \"SRA-Logo.png\", \"args\": \"\" }");
         JSON.append("]\n");
 
