@@ -779,7 +779,7 @@ public class TeamSpeak {
                                                 if (nickname != null) {
                                             		nickname = nickname.replaceFirst("^(#?)([ ]*?)(\\d*)([ ]?)", "");
                                                 	if (!m_carnumber.isEmpty())
-                                                		nickname = "#"+m_carnumber+" "+(m_drivername.isEmpty() || !Server.getArg("teamspeak-update-name", true) ? nickname : m_drivername);
+                                                		nickname = "#"+m_carnumber+" "+(m_drivername.isEmpty() || !Server.getArg("teamspeak-update-name", false) ? nickname : m_drivername);
         
         	                                        _setNickname(in,out,nickname);
         	                                        carnumber = m_carnumber;

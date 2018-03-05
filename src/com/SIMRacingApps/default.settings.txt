@@ -161,7 +161,7 @@ mspec-speeding = Y
 teamspeak = Y
 teamspeak-client = localhost
 teamspeak-carnumber = Y
-teamspeak-update-name = Y
+teamspeak-update-name = N
 teamspeak-apikey = 
 
 #####################################################################
