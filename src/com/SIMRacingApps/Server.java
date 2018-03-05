@@ -32,12 +32,9 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import javax.servlet.ServletException;
-import javax.websocket.DeploymentException;
 import javax.websocket.server.ServerContainer;
 import javax.websocket.server.ServerEndpointConfig;
 
-import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
@@ -540,9 +537,9 @@ public class Server {
     
     public static String m_hostname = "";  //once the service starts up, it will populate this.
 
-    private static org.eclipse.jetty.server.Server startServer() throws Exception {
+    private static org.eclipse.jetty.server.Server startServer(int port) throws Exception {
         //since my package is also named Server, I have to specify the entire path to Jetty
-        org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(m_port);
+        org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(port);
         
         ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         contextHandler.setContextPath("/");
@@ -676,18 +673,18 @@ public class Server {
             org.eclipse.jetty.server.Server server = null;
             
             try {
-                server = startServer();
+                server = startServer(m_port);
             } catch (BindException be) {
                 try {
                     //if requested port is in use, try 8080
                     logger().warning(String.format("Port %s in use, trying 8080",m_port));
+                    server = startServer(8080);
                     m_port = 8080;
-                    server = startServer();
                 } catch (BindException be2) {
-                    //if requested port is in use, try 5555
-                    logger().warning(String.format("Port %s in use, trying 5555",m_port));
+                    //if 8080 is in use, try 5555
+                    logger().warning(String.format("Port 8080 in use, trying 5555"));
+                    server = startServer(5555);
                     m_port = 5555;
-                    server = startServer();
                 }
             }
             
@@ -899,8 +896,8 @@ public class Server {
 //                if (t.getName().startsWith("Servlet.DataService.")) t.stop();
 //            }
             DataService.stop();
-            logStackTrace(Level.SEVERE,"Port: "+m_port,be);
-            System.err.print("\nTo solve this problem, see https://github.com/SIMRacingApps/SIMRacingApps/Port-80-in-use-by-another-process\n\n");
+            logStackTrace(Level.SEVERE,"All Ports: "+m_port+",8080,5555",be);
+            System.err.print("\nTo solve this problem, see https://github.com/SIMRacingApps/SIMRacingApps/wiki/Port-80-in-use-by-another-process\n\n");
             System.err.print("Press ENTER to exit...");
             try { System.in.read(); } catch (IOException e) {}
             System.exit(1);
