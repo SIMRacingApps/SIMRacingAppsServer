@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<gpx xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxedw="http://www.gpxeditor.co.uk/xmlschemas/WaypointExtension/v1" xmlns:gpxedts="http://www.gpxeditor.co.uk/xmlschemas/TrackSegExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" creator="GPXEditor" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
+  <wpt lat="38.16254" lon="-122.45758">
+    <name>Center</name>
+  </wpt>
+  <rte>
+    <name>Untitled</name>
+    <rtept lat="38.1646994984638" lon="-122.459517254909">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1639909200813" lon="-122.458353176196">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1636745882227" lon="-122.458101048549">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1632949881806" lon="-122.457993760188">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1630081779491" lon="-122.458068862041">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1628268120733" lon="-122.458245887836">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1626834061777" lon="-122.458514108737">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1625863961472" lon="-122.458835973819">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1626074852952" lon="-122.45910419472">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1626918418264" lon="-122.459415330966">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1628479011518" lon="-122.459651365359">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1641047992144" lon="-122.460659875949">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1642650732485" lon="-122.460831537326">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1643789519533" lon="-122.461072936137">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1644843950399" lon="-122.461314334949">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1645265722319" lon="-122.461593284686">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1645476608187" lon="-122.461893692096">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1643156860281" lon="-122.463154330333">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1641891540131" lon="-122.463368907054">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1641047992144" lon="-122.463449373325">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1641406499857" lon="-122.463570072603">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1643030328365" lon="-122.463717594226">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1646109265426" lon="-122.463948264201">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1648218118923" lon="-122.464136018832">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1649905197328" lon="-122.464254036029">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1650959619349" lon="-122.464243307193">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1652098393419" lon="-122.464119925578">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.165264669141" lon="-122.464028730472">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1653068458816" lon="-122.463798060497">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1653279342427" lon="-122.463513746341">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.166394997351" lon="-122.462483778079">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.166445608652" lon="-122.462376489719">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1664034325703" lon="-122.462269201358">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="38.1647037161716" lon="-122.459517254909">
+      <name />
+      <cmt />
+    </rtept>
+  </rte>
+</gpx>

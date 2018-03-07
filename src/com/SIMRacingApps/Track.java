@@ -198,7 +198,8 @@ public class Track {
             Iterator<Entry<String, String>> itr = GPX.entrySet().iterator();
             while (itr.hasNext()) {
                 Entry<String, String> GPXEntry = itr.next();
-                String path = "com/SIMRacingApps/Tracks/" + trackname.replace(' ', '_') + "-" + GPXEntry.getKey() + ".gpx";
+                //String path = "com/SIMRacingApps/Tracks/" + trackname.replace(' ', '_') + "-" + GPXEntry.getKey() + ".gpx";
+                String path = "com/SIMRacingApps/Tracks/" + GPXEntry.getValue();
                 Server.logger().info(String.format("Loading GPX Lat/Lon from %s", path));
                 try {
                     is = new FindFile(path).getInputStream();
@@ -344,7 +345,9 @@ public class Track {
                     catch (IOException | ParserConfigurationException | SAXException e) {
                         Server.logStackTrace(Level.SEVERE,e);
                     }
-                } catch (FileNotFoundException e1) {}
+                } catch (FileNotFoundException e1) {
+                    Server.logger().warning(String.format("Track: GPX file, %s, not found",path));
+                }
                 finally {
                     try {
                         if (is != null) is.close();

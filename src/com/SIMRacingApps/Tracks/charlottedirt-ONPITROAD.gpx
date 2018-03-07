@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<gpx xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxedw="http://www.gpxeditor.co.uk/xmlschemas/WaypointExtension/v1" xmlns:gpxedts="http://www.gpxeditor.co.uk/xmlschemas/TrackSegExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" creator="GPXEditor" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
+  <wpt lat="35.35155" lon="-80.68655">
+    <name>Charlotte Motor Speedway</name>
+  </wpt>
+  <wpt lat="35.35859" lon="-80.68415">
+    <name>Center</name>
+  </wpt>
+  <rte>
+    <name>Untitled</name>
+    <rtept lat="35.3582533412264" lon="-80.6848214810954">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3581935131421" lon="-80.6847812479601">
+      <name>MergePoint</name>
+      <cmt />
+    </rtept>
+    <rtept lat="35.358010113542" lon="-80.6846592073464">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3577676514279" lon="-80.6844379252062">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3576284404374" lon="-80.684212619649">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3575572880607" lon="-80.6840034073458">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3575418201445" lon="-80.6838156527148">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3575789431385" lon="-80.6836091226206">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3576593762338" lon="-80.6834347790347">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3578047743182" lon="-80.6832738464938">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3580120434751" lon="-80.6831719225512">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3582224056575" lon="-80.6831692403422">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3584187363925" lon="-80.6832362955676">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3586136298045" lon="-80.6833355373011">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3587570898092" lon="-80.6834401434527">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3587695816937" lon="-80.6836064404116">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3586937978258" lon="-80.6837727373705">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3589077935775" lon="-80.6842340773211">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.358927014314" lon="-80.6843199080096">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3589038316923" lon="-80.68440037428">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3588456230617" lon="-80.6844593828783">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3587516377286" lon="-80.6844835227595">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.358613527691" lon="-80.6845076626406">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3584324453265" lon="-80.6844432896243">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="35.3582595283388" lon="-80.6848187988863">
+      <name />
+      <cmt />
+    </rtept>
+  </rte>
+</gpx>

@@ -1,0 +1,18 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2018 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "North":       50.0,
+    "Resolution":  2.9,
+    "Images": {
+        "SAT":     "sonoma-sat.png",
+        "MAP":     "sonoma-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  90.0,
+    "GPX": {
+        "ONTRACK":   "sonoma_rallycross-ONTRACK.gpx",
+        "ONPITROAD": "sonoma_rallycross-ONPITROAD.gpx"        
+    }
+}
