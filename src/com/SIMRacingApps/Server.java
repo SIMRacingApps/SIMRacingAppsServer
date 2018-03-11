@@ -728,36 +728,51 @@ public class Server {
                     logger().info("Electron: Source Version = "+jarVersion+", Destination Version = "+installedJarVersion);
 
                     //if the versions are not equal, we need to install
-                    if (!jarVersion.equals(installedJarVersion)) {
-                        JarFile jar = new JarFile(jarFile);
-                        String name = "";
-                        logger().info("Electron: Installing from " + jarFile.toString());
+                    if (!jarVersion.equals(installedJarVersion) || getArg("electron-force-update",false)) {
+                        File exe = new File(getArg("electron-path",FindFile.getUserPath()[0]+"/electron-apps/electron/electron.exe"));
                         
-                        try {
-                            Enumeration<JarEntry> entries = jar.entries();
-                            while (entries.hasMoreElements()) {
-                                name = entries.nextElement().getName();
-                                if (name.startsWith("electron-apps/")) {
-                                    if (name.endsWith("/")) {
-                                        new File(FindFile.getUserPath()[0]+"/"+name).mkdirs();
-                                    }
-                                    else {
-                                        is_p = classFromJar.getClass().getClassLoader().getResourceAsStream(name);
-                                        if (is_p != null) {
-                                            File dest = new File(FindFile.getUserPath()[0]+"/"+name);
-                                            Server.logger().info("Electron: Installing "+dest.toString());
-                                            FindFile.copy(is_p,new File(name),dest);
-                                            is_p.close();;
+                        ProcessBuilder processBuilder = new ProcessBuilder("tasklist.exe");
+                        Process process = processBuilder.start();
+                        Scanner scanner = new Scanner(process.getInputStream(), "UTF-8");
+                        scanner.useDelimiter("\\A");
+                        String tasksList = scanner.hasNext() ? scanner.next() : "";
+                        scanner.close();
+                        boolean isRunning = tasksList.contains(exe.getName());
+                        
+                        if (isRunning) {
+                            logger().info("Electron: " + exe.getName() + " is running. Cannot update Electron");
+                        }
+                        else {
+                            JarFile jar = new JarFile(jarFile);
+                            String name = "";
+                            logger().info("Electron: Installing from " + jarFile.toString());
+                            
+                            try {
+                                Enumeration<JarEntry> entries = jar.entries();
+                                while (entries.hasMoreElements()) {
+                                    name = entries.nextElement().getName();
+                                    if (name.startsWith("electron-apps/")) {
+                                        if (name.endsWith("/")) {
+                                            new File(FindFile.getUserPath()[0]+"/"+name).mkdirs();
+                                        }
+                                        else {
+                                            is_p = classFromJar.getClass().getClassLoader().getResourceAsStream(name);
+                                            if (is_p != null) {
+                                                File dest = new File(FindFile.getUserPath()[0]+"/"+name);
+                                                Server.logger().info("Electron: Installing "+dest.toString());
+                                                FindFile.copy(is_p,new File(name),dest);
+                                                is_p.close();;
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                        catch (Exception e) {
-                            Server.logger().severe("Electron: Exception while installing: " + name + "\r\n" + e.getMessage());
-                        }
-                        finally {
-                            jar.close();
+                            catch (Exception e) {
+                                Server.logger().severe("Electron: Exception while installing: " + name + "\r\n" + e.getMessage());
+                            }
+                            finally {
+                                jar.close();
+                            }
                         }
                     }
                 }
