@@ -97,6 +97,10 @@ SimPlugins =
 log = SIMRacingApps
 level = INFO
 
+#####################################################################
+### Allows REFERENCE car to follow the car the camera is focused on.
+#####################################################################
+reference-camera = y
 
 #####################################################################
 ### Simply add the name to change in the settings with SIM name on the left.
