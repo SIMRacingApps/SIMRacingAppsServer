@@ -831,7 +831,7 @@ public class Server {
                         
                         //the host has to be the same computer, so force it.
                         a.add("-hostname");
-                        a.add(m_hostname);
+                        a.add(Server.getArg("electron-hostname",m_hostname));
                         
                         //always pass the port in case Electron saved the wrong one
                         a.add("-port");
