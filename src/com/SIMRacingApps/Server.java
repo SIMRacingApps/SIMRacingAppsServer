@@ -299,6 +299,10 @@ public class Server {
                 return false;
             if (s.equalsIgnoreCase("y") || s.equalsIgnoreCase("yes"))
                 return true;
+            if (s.equalsIgnoreCase("off"))
+                return false;
+            if (s.equalsIgnoreCase("on"))
+                return true;
             int i = Integer.parseInt(s);
             if (i != 0)
                 return true;
