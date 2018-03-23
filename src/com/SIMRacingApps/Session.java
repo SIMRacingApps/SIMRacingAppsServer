@@ -968,6 +968,7 @@ public class Session {
 
     /**
      * If the current session has a time restriction, this returns the number of seconds remaining.
+     * If the session is laps bound and the laps to go is not estimated, then the time remaining will be estimated.
      * 
      * If there is no time restriction, then the time is estimated based on the leader's average lap times.
      * The UOM will be prefixed with a tilde(~) to indicate it is an approximate time.
