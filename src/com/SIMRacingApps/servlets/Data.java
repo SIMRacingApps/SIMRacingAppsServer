@@ -1,5 +1,7 @@
 package com.SIMRacingApps.servlets;
 
+import static com.sun.jna.platform.win32.WinReg.HKEY_LOCAL_MACHINE;
+
 import java.io.*;
 //import java.lang.management.ManagementFactory;
 import java.net.Inet4Address;
@@ -11,11 +13,14 @@ import java.util.*;
 import java.util.logging.Level;
 
 import com.owlike.genson.*;
-
+import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.management.OperatingSystemMXBean;
+
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
+
 
 //import javax.management.AttributeNotFoundException;
 //import javax.management.InstanceNotFoundException;
@@ -276,6 +281,9 @@ public class Data extends HttpServlet {
             m_version.load(in);
             in.close();
             Server.logger().fine(System.getProperties().toString());
+            int iMHz = Advapi32Util.registryGetIntValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "~MHz");
+            Double dGHz = iMHz / 1000.0;
+
             OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
             String OSInfo = "";
             for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
@@ -313,6 +321,7 @@ public class Data extends HttpServlet {
                 + String.format("%n%-35s %s", "OS Version:", System.getProperty("os.version"))
                 + String.format("%n%-35s %s", "OS Architecture:", System.getProperty("os.arch"))
                 + String.format("%n%-35s %d", "OS AvailableCores:", Runtime.getRuntime().availableProcessors())
+                + String.format("%n%-35s %.2f GHz", "OS Processor Speed:", dGHz)
                 + OSInfo
                 + String.format("%n*************************************************************************************************")
             );
