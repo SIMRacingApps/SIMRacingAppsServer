@@ -651,7 +651,7 @@ public class SIMPlugin {
      * @return The Server Version for this SIM
      */
     public Data getVersion() {
-        Data d = new Data("Version",String.format("%s Plugin Version: Unknown",getSIMName().getString()),"String");
+        Data d = new Data("Version","Unknown");
         if (m_version == null) {
             InputStream in;
             Properties version = new Properties();
@@ -661,8 +661,7 @@ public class SIMPlugin {
                     //in = new FileInputStream(config.getServletContext().getRealPath("") + "version.properties");
                     version.load(in);
                     in.close();
-                    m_version = String.format("%s Plugin Version: %s.%s Build-%s",
-                                       getSIMName().getString(),
+                    m_version = String.format("%s.%s Build-%s",
                                        (String)version.get("major"),
                                        (String)version.get("minor"),
                                        (String)version.get("build")

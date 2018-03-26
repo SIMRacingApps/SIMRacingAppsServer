@@ -12,6 +12,11 @@ import java.util.logging.Level;
 
 import com.owlike.genson.*;
 
+import com.sun.management.OperatingSystemMXBean;
+import java.lang.management.ManagementFactory;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
 //import javax.management.AttributeNotFoundException;
 //import javax.management.InstanceNotFoundException;
 //import javax.management.MBeanException;
@@ -271,22 +276,44 @@ public class Data extends HttpServlet {
             m_version.load(in);
             in.close();
             Server.logger().fine(System.getProperties().toString());
+            OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+            String OSInfo = "";
+            for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
+                method.setAccessible(true);
+                if (method.getName().startsWith("get")
+                    && Modifier.isPublic(method.getModifiers())) {
+                        Object value;
+                    try {
+                        value = method.invoke(operatingSystemMXBean);
+                    } catch (Exception e) {
+                        value = e;
+                    } // try
+                    OSInfo += String.format("%n%-35s %s","OS " + method.getName().substring(3) + ":",value.toString());
+                } // if
+              } // for
             Server.logger().info(
                   String.format("%n*************************************************************************************************")
-                + String.format("%nSIMRacingAppsServer %s.%s Build: %s",(String)m_version.get("major"),(String)m_version.get("minor"),(String)m_version.get("build"))
-                + String.format("%n%s", DataService.getSIMVersion().getString())
-                + String.format("%nYour Server Address = %s", ip)
-                + String.format("%nYour Personal Folder = %s", userPath)
                 + String.format("%n%s", (String)m_version.get("copyright"))
-                + String.format("%n%s%s", ip,(String)m_version.get("copyrightUrl"))
                 + String.format("%n%s", (String)m_version.get("license"))
+                + String.format("%n%s%s", ip,(String)m_version.get("copyrightUrl"))
                 + String.format("%n%s%s", ip,(String)m_version.get("licenseUrl"))
                 + String.format("%n%s%s", ip,(String)m_version.get("noticeUrl"))
-                + String.format("%nJava Runtime: %s by %s", System.getProperty("java.runtime.version"),System.getProperty("java.vm.vendor"))
-                + String.format("%nJava VM Name: %s", System.getProperty("java.vm.name"))
-                + String.format("%nOS: %s, Version: %s", System.getProperty("os.name"),System.getProperty("os.version"))
-                + String.format("%nJava java.class.path: %s", System.getProperty("java.class.path"))
-                + String.format("%nJava main thread classpath: %s", classpath)
+                + String.format("%n%n%-35s %s", "Your Server Address:", ip)
+                + String.format("%n%-35s %s.%s Build-%s","SIMRacingAppsServer Version:",(String)m_version.get("major"),(String)m_version.get("minor"),(String)m_version.get("build"))
+                + String.format("%n%-35s %s", DataService.getSIMName().getString() + " Plugin Version:", DataService.getSIMVersion().getString())
+                + String.format("%n%-35s %s", "Your Personal Folder:", userPath)
+                + String.format("%n%-35s %s by %s", "Java Runtime:", System.getProperty("java.runtime.version"),System.getProperty("java.vm.vendor"))
+                + String.format("%n%-35s %s", "Java VM Name:", System.getProperty("java.vm.name"))
+                + String.format("%n%-35s %s", "Java java.class.path:", System.getProperty("java.class.path"))
+                + String.format("%n%-35s %s", "Java main.thread.classpath:", classpath)
+                + String.format("%n%-35s %d", "Java FreeMemory (bytes):", Runtime.getRuntime().freeMemory())
+                + String.format("%n%-35s %s", "Java MaxMemory (bytes):", Runtime.getRuntime().maxMemory() == Long.MAX_VALUE ? "no limit" : Long.toString(Runtime.getRuntime().maxMemory()) )
+                + String.format("%n%-35s %d", "Java TotalMemory (bytes):", Runtime.getRuntime().totalMemory())
+                + String.format("%n%-35s %s", "OS Name:", System.getProperty("os.name"))
+                + String.format("%n%-35s %s", "OS Version:", System.getProperty("os.version"))
+                + String.format("%n%-35s %s", "OS Architecture:", System.getProperty("os.arch"))
+                + String.format("%n%-35s %d", "OS AvailableCores:", Runtime.getRuntime().availableProcessors())
+                + OSInfo
                 + String.format("%n*************************************************************************************************")
             );
             Windows.setConsoleTitle(

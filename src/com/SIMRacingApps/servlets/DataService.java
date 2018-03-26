@@ -419,6 +419,18 @@ public class DataService {
 //       return session;
 //    }
 
+    public static com.SIMRacingApps.Data getSIMName() throws SIMPluginException {
+        start();
+        
+        //put this in a sync block until I can get the SIMPlugins thread safe
+        if (m_SIMPlugin != null) {
+            synchronized (m_SIMPlugin) {
+                return m_SIMPlugin.getSIMName();
+            }
+        }
+        return new Data("SIMName","NO Connection to SIM","",com.SIMRacingApps.Data.State.ERROR);
+    }
+    
     public static com.SIMRacingApps.Data getSIMVersion() throws SIMPluginException {
         start();
         
