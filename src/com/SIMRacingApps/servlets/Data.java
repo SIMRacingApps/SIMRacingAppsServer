@@ -281,24 +281,40 @@ public class Data extends HttpServlet {
             m_version.load(in);
             in.close();
             Server.logger().fine(System.getProperties().toString());
-            int iMHz = Advapi32Util.registryGetIntValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "~MHz");
-            Double dGHz = iMHz / 1000.0;
-
-            OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+            Double dGHz = -1.0;
+            String processor = "Unknown";
             String OSInfo = "";
-            for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
-                method.setAccessible(true);
-                if (method.getName().startsWith("get")
-                    && Modifier.isPublic(method.getModifiers())) {
-                        Object value;
-                    try {
-                        value = method.invoke(operatingSystemMXBean);
-                    } catch (Exception e) {
-                        value = e;
-                    } // try
-                    OSInfo += String.format("%n%-35s %s","OS " + method.getName().substring(3) + ":",value.toString());
-                } // if
-              } // for
+            try {
+                int iMHz = Advapi32Util.registryGetIntValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "~MHz");
+                dGHz = iMHz / 1000.0;
+                processor = Advapi32Util.registryGetStringValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "ProcessorNameString"); 
+            }                
+            catch (Exception e) {
+                //log any exceptions, but keep on going
+                Server.logStackTrace(e);
+            }
+            
+            try {
+                OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+                for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
+                    method.setAccessible(true);
+                    if (method.getName().startsWith("get")
+                        && Modifier.isPublic(method.getModifiers())) {
+                            Object value;
+                        try {
+                            value = method.invoke(operatingSystemMXBean);
+                        } catch (Exception e) {
+                            value = e;
+                        } // try
+                        OSInfo += String.format("%n%-35s %s","OS " + method.getName().substring(3) + ":",value.toString());
+                    } // if
+                  } // for
+            }
+            catch (Exception e) {
+                //log any exceptions, but keep on going
+                Server.logStackTrace(e);
+            }
+            
             Server.logger().info(
                   String.format("%n*************************************************************************************************")
                 + String.format("%n%s", (String)m_version.get("copyright"))
@@ -314,12 +330,13 @@ public class Data extends HttpServlet {
                 + String.format("%n%-35s %s", "Java VM Name:", System.getProperty("java.vm.name"))
                 + String.format("%n%-35s %s", "Java java.class.path:", System.getProperty("java.class.path"))
                 + String.format("%n%-35s %s", "Java main.thread.classpath:", classpath)
+                + String.format("%n%-35s %d", "Java TotalMemory (bytes):", Runtime.getRuntime().totalMemory())
                 + String.format("%n%-35s %d", "Java FreeMemory (bytes):", Runtime.getRuntime().freeMemory())
                 + String.format("%n%-35s %s", "Java MaxMemory (bytes):", Runtime.getRuntime().maxMemory() == Long.MAX_VALUE ? "no limit" : Long.toString(Runtime.getRuntime().maxMemory()) )
-                + String.format("%n%-35s %d", "Java TotalMemory (bytes):", Runtime.getRuntime().totalMemory())
                 + String.format("%n%-35s %s", "OS Name:", System.getProperty("os.name"))
                 + String.format("%n%-35s %s", "OS Version:", System.getProperty("os.version"))
                 + String.format("%n%-35s %s", "OS Architecture:", System.getProperty("os.arch"))
+                + String.format("%n%-35s %s", "OS Processor:", processor)
                 + String.format("%n%-35s %d", "OS AvailableCores:", Runtime.getRuntime().availableProcessors())
                 + String.format("%n%-35s %.2f GHz", "OS Processor Speed:", dGHz)
                 + OSInfo
