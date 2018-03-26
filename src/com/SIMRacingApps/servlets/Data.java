@@ -306,7 +306,13 @@ public class Data extends HttpServlet {
                         } catch (Exception e) {
                             value = e;
                         } // try
-                        OSInfo += String.format("%n%-35s %s","OS " + method.getName().substring(3) + ":",value.toString());
+                        if (value instanceof Long || value instanceof Integer)
+                            OSInfo += String.format("%n%-35s %,d","OS " + method.getName().substring(3) + ":",value);
+                        else
+                        if (value instanceof Double)
+                            OSInfo += String.format("%n%-35s %,f","OS " + method.getName().substring(3) + ":",value);
+                        else
+                            OSInfo += String.format("%n%-35s %s","OS " + method.getName().substring(3) + ":",value.toString());
                     } // if
                   } // for
             }
@@ -330,9 +336,9 @@ public class Data extends HttpServlet {
                 + String.format("%n%-35s %s", "Java VM Name:", System.getProperty("java.vm.name"))
                 + String.format("%n%-35s %s", "Java java.class.path:", System.getProperty("java.class.path"))
                 + String.format("%n%-35s %s", "Java main.thread.classpath:", classpath)
-                + String.format("%n%-35s %d", "Java TotalMemory (bytes):", Runtime.getRuntime().totalMemory())
-                + String.format("%n%-35s %d", "Java FreeMemory (bytes):", Runtime.getRuntime().freeMemory())
-                + String.format("%n%-35s %s", "Java MaxMemory (bytes):", Runtime.getRuntime().maxMemory() == Long.MAX_VALUE ? "no limit" : Long.toString(Runtime.getRuntime().maxMemory()) )
+                + String.format("%n%-35s %,d", "Java TotalMemory (bytes):", Runtime.getRuntime().totalMemory())
+                + String.format("%n%-35s %,d", "Java FreeMemory (bytes):", Runtime.getRuntime().freeMemory())
+                + String.format("%n%-35s %s", "Java MaxMemory (bytes):", Runtime.getRuntime().maxMemory() == Long.MAX_VALUE ? "no limit" : String.format("%,d",Runtime.getRuntime().maxMemory()) )
                 + String.format("%n%-35s %s", "OS Name:", System.getProperty("os.name"))
                 + String.format("%n%-35s %s", "OS Version:", System.getProperty("os.version"))
                 + String.format("%n%-35s %s", "OS Architecture:", System.getProperty("os.arch"))
