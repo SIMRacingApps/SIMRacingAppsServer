@@ -36,10 +36,12 @@ sim = iRacing
 ### electron = "Y" will install Electron and keep it up to date. "N" you do it manually.
 ### electron-autostart = If Electron is installed, "Y" will launch the menu for you, "N" you do it manually.
 ### electron-configuration = {Name}, The name of the configuration to start up with. Defaults to last one used.
+### electron-showappsontaskbar = "Y" will show the apps on the task bar. Default is "N".
 ### electron-lang = {languageCode}
 #####################################################################
 electron-autoupdate = Y
 electron-autostart = Y
+electron-showappsontaskbar = N
 #electron-lang = en-us
 #electron-configuration = default
 

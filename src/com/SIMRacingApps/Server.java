@@ -851,8 +851,12 @@ public class Server {
                             a.add(s);
                         }
                         
-                        if (!(s = getArg("electron-noclickthrough","")).isEmpty()) {
+                        if (!getArg("electron-noclickthrough",true)) {
                             a.add("-noclickthrough");
+                        }
+                        
+                        if (getArg("electron-showappsontaskbar",false)) {
+                            a.add("-showappsontaskbar");
                         }
                         
                         ProcessBuilder pb = new ProcessBuilder(a);
