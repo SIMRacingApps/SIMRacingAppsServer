@@ -34,8 +34,8 @@
     <property name="SIMRacingAppsSIMPluginiRacing.location" value="../SIMRacingAppsSIMPluginiRacing" />
     <property name="SIMRacingAppsWebContent.location" value="../SIMRacingAppsWebContent" />
     <property name="SIMRacingApps.github.io.location" value="../SIMRacingApps.github.io" />
-    <property name="ECLIPSE_HOME" value="X:/PortableApps/EclipsePortable/App/Eclipse/" />
-    <property name="JETTY_VERSION" value="9.3.7.v20160115" />
+    <property name="ECLIPSE_HOME" value="O:/OneDrive/PortableApps/EclipsePortable/App/Eclipse/" />
+    <property name="JETTY_VERSION" value="9.4.9.v20180320" />
     <property name="JETTY" value="jetty-distribution-${JETTY_VERSION}" />
     <property name="debuglevel" value="source,lines,vars" />
     <property name="target" value="1.8" />
@@ -49,21 +49,22 @@
         <pathelement location="WebContent/WEB-INF/lib/genson-1.3.jar" />
     </path>
     <path id="Jetty.libraryclasspath">
-        <pathelement location="${JETTY}/lib/jetty-server-${JETTY_VERSION}.jar" />
-        <pathelement location="${JETTY}/lib/jetty-util-${JETTY_VERSION}.jar" />
+        <pathelement location="${JETTY}/lib/jetty-client-${JETTY_VERSION}.jar" />
         <pathelement location="${JETTY}/lib/jetty-http-${JETTY_VERSION}.jar" />
         <pathelement location="${JETTY}/lib/jetty-io-${JETTY_VERSION}.jar" />
-        <pathelement location="${JETTY}/lib/servlet-api-3.1.jar" />
+        <pathelement location="${JETTY}/lib/jetty-server-${JETTY_VERSION}.jar" />
+        <pathelement location="${JETTY}/lib/jetty-util-${JETTY_VERSION}.jar" />
         <pathelement location="${JETTY}/lib/jetty-security-${JETTY_VERSION}.jar" />
         <pathelement location="${JETTY}/lib/jetty-servlet-${JETTY_VERSION}.jar" />
+        <pathelement location="${JETTY}/lib/servlet-api-3.1.jar" />
         <pathelement location="${JETTY}/lib/websocket/javax.websocket-api-1.0.jar" />
-        <pathelement location="${JETTY}/lib/websocket/javax-websocket-server-impl-${JETTY_VERSION}.jar" />
         <pathelement location="${JETTY}/lib/websocket/javax-websocket-client-impl-${JETTY_VERSION}.jar" />
-        <pathelement location="${JETTY}/lib/websocket/websocket-server-${JETTY_VERSION}.jar" />
+        <pathelement location="${JETTY}/lib/websocket/javax-websocket-server-impl-${JETTY_VERSION}.jar" />
         <pathelement location="${JETTY}/lib/websocket/websocket-api-${JETTY_VERSION}.jar" />
-        <pathelement location="${JETTY}/lib/websocket/websocket-servlet-${JETTY_VERSION}.jar" />
-        <pathelement location="${JETTY}/lib/websocket/websocket-common-${JETTY_VERSION}.jar" />
         <pathelement location="${JETTY}/lib/websocket/websocket-client-${JETTY_VERSION}.jar" />
+        <pathelement location="${JETTY}/lib/websocket/websocket-common-${JETTY_VERSION}.jar" />
+        <pathelement location="${JETTY}/lib/websocket/websocket-server-${JETTY_VERSION}.jar" />
+        <pathelement location="${JETTY}/lib/websocket/websocket-servlet-${JETTY_VERSION}.jar" />
     </path>
     <path id="SIMRacingAppsServer.classpath">
         <pathelement location="WebContent/WEB-INF/classes" />
@@ -155,13 +156,14 @@
                     <attribute name="Created-By" value="Jeffrey Gilliam" />
                     <attribute name="Main-Class" value="com.SIMRacingApps.Server" />
                 </manifest>
-                <zipgroupfileset file="${JETTY}/lib/jetty-server-${JETTY_VERSION}.jar" />
-                <zipgroupfileset file="${JETTY}/lib/jetty-util-${JETTY_VERSION}.jar" />
+                <zipgroupfileset file="${JETTY}/lib/jetty-client-${JETTY_VERSION}.jar" />
                 <zipgroupfileset file="${JETTY}/lib/jetty-http-${JETTY_VERSION}.jar" />
                 <zipgroupfileset file="${JETTY}/lib/jetty-io-${JETTY_VERSION}.jar" />
-                <zipgroupfileset file="${JETTY}/lib/servlet-api-3.1.jar" />
                 <zipgroupfileset file="${JETTY}/lib/jetty-security-${JETTY_VERSION}.jar" />
+                <zipgroupfileset file="${JETTY}/lib/jetty-server-${JETTY_VERSION}.jar" />
                 <zipgroupfileset file="${JETTY}/lib/jetty-servlet-${JETTY_VERSION}.jar" />
+                <zipgroupfileset file="${JETTY}/lib/jetty-util-${JETTY_VERSION}.jar" />
+                <zipgroupfileset file="${JETTY}/lib/servlet-api-3.1.jar" />
                 <zipgroupfileset dir="${JETTY}/lib/websocket" includes="*.jar" />
                 <zipgroupfileset dir="WebContent/WEB-INF/lib" includes="*.jar" />
                 <fileset dir="WebContent/WEB-INF/classes" />

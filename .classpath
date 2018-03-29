@@ -5,6 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/SIMRacingAppsWebContent"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jetty-distribution-9.3.7.v20160115"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jetty-distribution-9.4.9.v20180320"/>
 	<classpathentry kind="output" path="WebContent/WEB-INF/classes"/>
 </classpath>
