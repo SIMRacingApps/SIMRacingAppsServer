@@ -1597,6 +1597,30 @@ public class Car {
     }
 
     /**
+     * Returns the lowest position in the current session.
+     * Positions start at 1, such that 1 is considered the leader.
+     * 
+     * <p>PATH = {@link #getPositionLowest() /Car/(CARIDENTIFIER)/PositionLowest}
+     * 
+     * @return The position in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getPositionLowest() {
+        return new Data("Car/"+m_carIdentifier+"/PositionLowest",0,"integer",Data.State.NOTAVAILABLE);
+    }
+    
+    /**
+     * Returns the highest position in the current session.
+     * Positions start at 1, such that 1 is considered the leader.
+     * 
+     * <p>PATH = {@link #getPositionHighest() /Car/(CARIDENTIFIER)/PositionHighest}
+     * 
+     * @return The position in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getPositionHighest() {
+        return new Data("Car/"+m_carIdentifier+"/PositionHighest",0,"integer",Data.State.NOTAVAILABLE);
+    }
+
+    /**
      * Returns the number of positions changed.
      * Positions start at 1, such that 1 is considered the leader.
      * 
@@ -1666,6 +1690,30 @@ public class Car {
      */
     public Data getPositionClass() {
         return new Data("Car/"+m_carIdentifier+"/PositionClass",0,"integer",Data.State.NOTAVAILABLE);
+    }
+
+    /**
+     * Returns the lowest position in the current session for your class.
+     * Positions start at 1, such that 1 is considered the leader.
+     * 
+     * <p>PATH = {@link #getPositionLowestClass() /Car/(CARIDENTIFIER)/PositionLowestClass}
+     * 
+     * @return The position in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getPositionLowestClass() {
+        return new Data("Car/"+m_carIdentifier+"/PositionLowestClass",0,"integer",Data.State.NOTAVAILABLE);
+    }
+    
+    /**
+     * Returns the highest position in the current session for your class.
+     * Positions start at 1, such that 1 is considered the leader.
+     * 
+     * <p>PATH = {@link #getPositionHighestClass() /Car/(CARIDENTIFIER)/PositionHighestClass}
+     * 
+     * @return The position in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getPositionHighestClass() {
+        return new Data("Car/"+m_carIdentifier+"/PositionHighestClass",0,"integer",Data.State.NOTAVAILABLE);
     }
 
     /**
