@@ -732,6 +732,10 @@ public class Track {
      */
     public    Data    getLength(String UOM) { /*double*/
         _loadTrack();
+        return new Data("Track/Length",0.0,UOM,Data.State.NORMAL).convertUOM(UOM); 
+    }
+    public    Data    getLength()                        { 
+        _loadTrack();
         String distanceUOM = m_trackmap != null ? (String)m_trackmap.get("DistanceUOM") : null;
         
         //if not defined in the JSON file, then make some assumptions
@@ -744,9 +748,8 @@ public class Track {
             else
                 distanceUOM = "km";
         }
-        return new Data("Track/Length",0.0,distanceUOM,Data.State.NORMAL).convertUOM(UOM); 
+        return getLength(distanceUOM); 
     }
-    public    Data    getLength()                        { return getLength(""); }
     
     /**
      * Returns the Longitude of the requested position based on percentage traveled from the start/finish line.

@@ -1296,7 +1296,8 @@ public class Car {
         double remainingTime = (getLapTime(Car.LapType.SESSIONLAST).getDouble() * (1.0 - pct));
 
         //while on pit road, use speed if we can get it, otherwise use last lap time
-        if ((remainingTime <= 0.0 || getStatus().getString().contains("PIT")) && Math.floor(carspeed.getDouble()) > 0.0) {
+        //or of this is the pace car, use speed
+        if ((remainingTime <= 0.0 || getStatus().getString().contains("PIT") || getIsPaceCar().getBoolean()) && Math.floor(carspeed.getDouble()) > 0.0) {
             Data tracklength = m_SIMPlugin.getSession().getTrack().getLength().convertUOM("mile");
             timeProjection = ( (tracklength.getDouble() / carspeed.getDouble()) * 60 * 60 );
         }

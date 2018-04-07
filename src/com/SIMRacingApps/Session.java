@@ -306,6 +306,8 @@ public class Session {
             Data lap1;
             Data pct2 = _car2.getLap(Car.LapType.COMPLETEDPERCENT);
             Data pct1 = _car1.getLap(Car.LapType.COMPLETEDPERCENT);
+            double car1Speed = _car1._getGauge(Gauge.Type.SPEEDOMETER).getValueCurrent("mph").getDouble();
+            double car2Speed = _car2._getGauge(Gauge.Type.SPEEDOMETER).getValueCurrent("mph").getDouble();
 
             if (m_SIMPlugin.getSession().getIsCheckeredFlag().getBoolean()) {
                 pct1.setValue(0.0);
@@ -338,6 +340,10 @@ public class Session {
             else {
                 lap2 = _car2.getLap(Car.LapType.CURRENT);
                 lap1 = _car1.getLap(Car.LapType.CURRENT);
+                
+                //use the fastest car 
+                if (car1Speed > car2Speed)
+                    cartoproject = carIdentifier1;
             }
 
             double distanceBetween = (lap2.getDouble() + (pct2.getDouble()/100.0)) - (lap1.getDouble() + (pct1.getDouble()/100.0));
@@ -476,45 +482,33 @@ public class Session {
                     distanceBetween = (1.0 - (((pct2.getDouble()/100.0)) - ((pct1.getDouble()/100.0)))) * -1.0;
                 else
                     distanceBetween = (((pct1.getDouble()/100.0)) - ((pct2.getDouble()/100.0))) * -1.0;
-                carspeed = _car2._getGauge(Gauge.Type.SPEEDOMETER).getValueCurrent().convertUOM("mph");
+                carspeed = _car2._getGauge(Gauge.Type.SPEEDOMETER).getValueCurrent("mph");
                 if (Math.floor(carspeed.getDouble()) <= 0.0)
-                    carspeed = _car1._getGauge(Gauge.Type.SPEEDOMETER).getValueCurrent().convertUOM("mph");
+                    carspeed = _car1._getGauge(Gauge.Type.SPEEDOMETER).getValueCurrent("mph");
             }
             else {
                 if (pct2.getDouble() < pct1.getDouble())
                     distanceBetween = (1.0 - (((pct1.getDouble()/100.0)) - ((pct2.getDouble()/100.0))));
                 else
                     distanceBetween = (((pct2.getDouble()/100.0)) - ((pct1.getDouble()/100.0)));
-                carspeed = _car1._getGauge(Gauge.Type.SPEEDOMETER).getValueCurrent().convertUOM("mph");
+                carspeed = _car1._getGauge(Gauge.Type.SPEEDOMETER).getValueCurrent("mph");
                 if (Math.floor(carspeed.getDouble()) <= 0.0)
-                    carspeed = _car2._getGauge(Gauge.Type.SPEEDOMETER).getValueCurrent().convertUOM("mph");
+                    carspeed = _car2._getGauge(Gauge.Type.SPEEDOMETER).getValueCurrent("mph");
             }
 
             //use the car's speed if you can get it. The unit of measure for speed and track length need to match.
 //            if (Math.floor(carspeed.getDouble()) > 0.0) {
-//                Data tracklength = m_SIMPlugin.getSession().getTrack().getLength().convertUOM("mile");
-//                seconds.setValue(((tracklength.getDouble() / carspeed.getDouble()) * 60 * 60) * distanceBetween );
+//                double tracklength = m_SIMPlugin.getSession().getTrack().getLength("mile").getDouble();
+//                seconds.setValue((((tracklength * distanceBetween) / carspeed.getDouble()) * 60 * 60));
 //            }
 //            else 
             {
-//if (logit) {
-//    if (pct1.getDouble() < 1.0) {
-//        double x = pct1.getDouble();
-//    }
-//}
                 double projected = _car1.getLapTimeProjected().getDouble();
                 //if car1 is not moving, see if car2 is.
                 if (projected <= 0.0) {
-//if (logit) {
-//    Server.logger().info("projected("+projected+") is <= 0, using car2");
-//}
                     projected = _car2.getLapTimeProjected().getDouble();
                 }
                 double s = distanceBetween * projected;
-//if (logit) {
-//    Server.logger().info(String.format("car1(%s,%8.6f), car2(%s,%8.6f), distanceBetween(%8.6f), TimeProjected(%8.6f), seconds(%8.6f), current(%8.6f)",
-//            carIdentifier1,pct1.getDouble()/100.0,carIdentifier2,pct1.getDouble()/100.0,distanceBetween,projected,s,_car1.getLapTime(Car.LapType.CURRENT).getDouble()));
-//}
                 seconds.setValue(s);
             }
             seconds.setState(State.NORMAL);
