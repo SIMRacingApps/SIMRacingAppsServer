@@ -463,6 +463,10 @@ public class DataService {
                     }
 //                }
             }
+            
+            //if nothing needs updating return
+            if (highest_interval == 0)
+                return count;
 
             synchronized (SIMPlugin) {
                 for ( Entry<String,Map<String,com.SIMRacingApps.Data>> id : session.entrySet()) {
