@@ -54,6 +54,8 @@
             "Metric":   "L",
             "Imperial": "GAL", 
             "Conversions": {
+                "L":       3.785410944660645,
+                "IMPGAL":  0.832674
             }
         },
         "H": {      
@@ -96,7 +98,8 @@
             "Metric":   "L",
             "Imperial": "IMPGAL", 
             "Conversions": {
-                "L":    4.54609
+                "L":    4.54609,
+                "GAL":  1.20095
             }
         },
         "KG": {      
@@ -163,7 +166,8 @@
             "Imperial": "GAL", 
             "Conversions": {
                 "GAL":  0.264172,
-                "QT":   1.05668821
+                "QT":   1.05668821,
+                "IMPGAL": 0.21996924829909
             }
         },
         "LB": {      
