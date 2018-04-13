@@ -34,7 +34,7 @@ import com.owlike.genson.stream.JsonStreamException;
  * All of the access methods take "name" as an argument, but also there's an overloaded version that doesn't take a name and uses the default name.
  * @author Jeffrey Gilliam
  * @since 1.0
- * @copyright Copyright (C) 2015 - 2017 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2018 Jeffrey Gilliam
  * @license Apache License 2.0
  */
 
@@ -42,6 +42,7 @@ public class Data extends Object {
 
 //    private Genson gensonPretty = new Genson.Builder().useIndentation(true).create(); //this is really slow.
     private static Genson genson = new Genson();
+    private static Map<String,Locale> s_locale_cache = new HashMap<String,Locale>();
 
     /** Defines the Type the Value is */
     public enum Type {
@@ -143,16 +144,18 @@ public class Data extends Object {
          * Sets the Locale based on Lang. Looks for the format {language}_{country}.
          */
         public void setLocale() {
-            String[] s = Lang.split("[_-]");
-            Locale l = null;
-            if (s.length > 1)
-                    l = new Locale(s[0],s[1].toUpperCase());
-            else
-            if (s.length == 1)
-                    l = new Locale(s[0]);
-            else
-                    l = new Locale(Lang);
-            locale = l;
+            if ((locale = s_locale_cache.get(Lang)) == null) {
+                String[] s = Lang.split("[_-]");
+                Locale l = null;
+                if (s.length > 1)
+                        l = new Locale(s[0],s[1].toUpperCase());
+                else
+                if (s.length == 1)
+                        l = new Locale(s[0]);
+                else
+                        l = new Locale(Lang);
+                s_locale_cache.put(Lang, locale = l);
+            }
         }
         
         /**
