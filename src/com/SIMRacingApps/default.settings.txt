@@ -82,7 +82,7 @@ sound-volume = 100
 ### But, you have to add it to this list manually yourself. This is to prevent trojans.
 ### Each plug-in should be listed with a semicolon as a separator.
 ### For Example:
-###     simplugins = Plugin1.Class;Plugin2.Class;Plugin3.Class;!Sounds.PitCountDown
+###     simplugins = Plugin1.Class;Plugin2.Class;Plugin3.Class;!Sounds.PitCountDown;!LIFX.Flags
 ###
 ### NOTE: The plug-in names are case sensitive.
 #####################################################################
@@ -283,3 +283,14 @@ DataPublisher-Post-Log = false
 #####################################################################
 use-sim-colors = Y
 
+#####################################################################
+### LIFX Lights
+### * Please visit https://github.com/SIMRacingApps/SIMRacingApps/wiki/LIFX-Lights-Setup
+### * for instructions on how to setup your lights to be used by SIMRacingApps.
+### Brightness can range between 0.0 - 1.0
+### Test mode will cycle through all the flags. Takes about 2-3 minutes
+#####################################################################
+LIFX-Flags = N
+LIFX-token = YourToken
+LIFX-flags-brightness = 1.0
+LIFX-flags-testmode = N

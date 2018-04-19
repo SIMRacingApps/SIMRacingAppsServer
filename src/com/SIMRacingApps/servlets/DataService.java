@@ -586,7 +586,7 @@ public class DataService {
                             //To unload a callback, start it with an exclamation point.
                             //Other callbacks specified by the user is appended.       
                             //keep this list in sync with the list in the default.setttings.txt file.                     
-                            String[] callbacksToLoad = ("MSPEC.ShiftLight;Sounds.PitCountDown;Sounds.PitSpeedLimit;Sounds.Shift;DataPublisher.Post;"+Server.getArg("simplugins","")).split(";");
+                            String[] callbacksToLoad = ("MSPEC.ShiftLight;Sounds.PitCountDown;Sounds.PitSpeedLimit;Sounds.Shift;DataPublisher.Post;LIFX.Flags;"+Server.getArg("simplugins","")).split(";");
                             
                             for (int i=0; i < callbacksToLoad.length; i++) {
                                 String callback = callbacksToLoad[i].trim();
@@ -594,7 +594,8 @@ public class DataService {
                                                     callback.replaceAll("[.]", "-"),
                                                     Server.getArg(
                                                         callback,
-                                                        callback.equals("DataPublisher.Post") 
+                                                           callback.equals("DataPublisher.Post")
+                                                        || callback.equals("LIFX.Flags")
                                                         ? false 
                                                         : true
                                                     )

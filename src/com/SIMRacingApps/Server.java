@@ -357,7 +357,14 @@ public class Server {
     public static void logArgs() {
         for (Iterator<Entry<String, String>> itr = m_args.entrySet().iterator(); itr.hasNext();) {
             Entry<String, String> entry = itr.next();
-            logger().info(String.format("Arg(%s) = %s",entry.getKey(),entry.getValue()));
+            //don't log the secrets
+            if (entry.getKey().toLowerCase().endsWith("-apikey")
+            ||  entry.getKey().toLowerCase().endsWith("-token")
+            ||  entry.getKey().toLowerCase().endsWith("-password")
+               )
+                logger().info(String.format("Arg(%s) = %s",entry.getKey(),entry.getValue().length() > 0 ? "xxxxx" : ""));
+            else
+                logger().info(String.format("Arg(%s) = %s",entry.getKey(),entry.getValue()));
         }
     }
 
