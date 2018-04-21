@@ -274,6 +274,18 @@ public class Flags extends SIMPluginCallback {
             //isCheckered = data.get("Session/IsCheckeredFlag").getBoolean();
         }
                     
+        if (isRed) {
+            if (!m_state.equals(states.redflag)) {
+                _send(states.redflag);
+            }
+        }
+        else 
+        if (isWhite) {
+            if (!m_state.equals(states.whiteflag)) {
+                _send(states.whiteflag);
+            }
+        }
+        else 
         if (isYellow) {
             if (!m_state.equals(states.yellowflagblinking) && !m_state.equals(states.yellowflag)) {
                 _send(states.yellowflagblinking);
@@ -286,21 +298,15 @@ public class Flags extends SIMPluginCallback {
             }
         }
         else
-        if (isGreen) {
-            if (!m_state.equals(states.greenflag)) {
-                _send(states.greenflag);
-            }
-        }
-        else 
         if (isBlue) {
             if (!m_state.equals(states.blueflag)) {
                 _send(states.blueflag);
             }
         }
         else
-        if (isWhite) {
-            if (!m_state.equals(states.whiteflag)) {
-                _send(states.whiteflag);
+        if (isGreen) {
+            if (!m_state.equals(states.greenflag)) {
+                _send(states.greenflag);
             }
         }
         else
@@ -310,12 +316,7 @@ public class Flags extends SIMPluginCallback {
 //            }
 //        }
 //        else 
-        if (isRed) {
-            if (!m_state.equals(states.redflag)) {
-                _send(states.redflag);
-            }
-        }
-        else {
+        {
             //if the light(s) are on, turn them off
             if (!m_state.equals(states.off))
                 _send(states.off);
