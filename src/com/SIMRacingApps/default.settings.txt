@@ -22,6 +22,12 @@ port = 80
 sim = iRacing
 
 #####################################################################
+### Use the browser-autostart option to control if the browser 
+### should start up with the server or not.
+#####################################################################
+browser-autostart = Y
+
+#####################################################################
 ### Electron is a non-browser HTML based client that can run on the 
 ### same computer as the SIM. 
 ###  - It can save multiple configurations and switch between them.

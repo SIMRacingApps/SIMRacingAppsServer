@@ -545,6 +545,7 @@ public class Server {
      */
     //@SuppressWarnings("deprecation")
     private static Process electronProcess = null;
+    private static Process browserProcess = null;
     
     public static String m_hostname = "";  //once the service starts up, it will populate this.
 
@@ -893,7 +894,7 @@ public class Server {
                         }
                         logger().info("Electron: Stopped" );
                         DataService.stop();
-                        Thread.sleep(1000);
+                        Thread.sleep(5000);
                         logger().info("Server: Exiting");
                         Thread.sleep(1000);
                         System.exit(0);
@@ -903,9 +904,57 @@ public class Server {
                     }
                 } catch (Exception e1) {
                   logStackTrace(Level.WARNING,e1);
-              }
+                }
             }
-            
+            else
+            if (getArg("browser-autostart",false) || !getArg("app-autostart-url","").isEmpty()) {
+                File exe = new File(getArg("cmd-path",System.getenv("ComSpec")));
+                
+                if (exe.canExecute()) {
+                    List<String> a = new ArrayList<String>();
+                    String s;
+                    
+                    logger().info("Browser: Starting " + exe.toString());
+                    //wait for the service to start up
+                    while (true) {
+                        synchronized (m_hostname) {
+                            if (!m_hostname.isEmpty())
+                                break;
+                        }
+                    }
+                    
+                    a.add(exe.toString());
+                    a.add("/c");
+                    a.add("start");
+                    a.add("\"SIMRacingApps\"");
+                    s = System.getProperty("user.language")+"-"+System.getProperty("user.country");
+                    String url = "http://"+Server.getArg("browser-hostname",m_hostname)+":"+m_port + Server.getArg("app-autostart-url","?lang="+getArg("browser-lang",s.toLowerCase()));
+                    a.add(url);
+                    
+                    ProcessBuilder pb = new ProcessBuilder(a);
+                    browserProcess = pb.start();
+                    logger().info("Browser: Started with " + a.toString() );
+                    while (browserProcess.isAlive()) {
+                        BufferedReader stdin = new BufferedReader(
+                                new InputStreamReader(
+                                        browserProcess.getInputStream()
+                                )
+                        );
+                        BufferedReader stderr = new BufferedReader(
+                                new InputStreamReader(
+                                        browserProcess.getErrorStream()
+                                )
+                        );
+                        
+                        String line;
+                        while ((line = stdin.readLine()) != null)
+                            logger().fine("Browser: "+line);
+                        while ((line = stderr.readLine()) != null)
+                            logger().warning("Browser: "+line);
+                        Thread.sleep(1000);
+                    }
+                }
+            }
             
             //TODO: can't get this to work when the CMD window is closed
             Runtime.getRuntime().addShutdownHook(new Thread()
