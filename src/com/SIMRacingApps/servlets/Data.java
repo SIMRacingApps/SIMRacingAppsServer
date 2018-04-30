@@ -296,25 +296,30 @@ public class Data extends HttpServlet {
             
             try {
                 OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
-                for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
-                    method.setAccessible(true);
-                    if (method.getName().startsWith("get")
-                        && Modifier.isPublic(method.getModifiers())) {
-                            Object value;
-                        try {
-                            value = method.invoke(operatingSystemMXBean);
-                        } catch (Exception e) {
-                            value = e;
-                        } // try
-                        if (value instanceof Long || value instanceof Integer)
-                            OSInfo += String.format("%n%-35s %,d","OS " + method.getName().substring(3) + ":",value);
-                        else
-                        if (value instanceof Double)
-                            OSInfo += String.format("%n%-35s %,f","OS " + method.getName().substring(3) + ":",value);
-                        else
-                            OSInfo += String.format("%n%-35s %s","OS " + method.getName().substring(3) + ":",value.toString());
-                    } // if
-                  } // for
+
+//In Java 10 access via reflection has been removed. Must call the methods directly.
+                OSInfo += String.format("%n%-35s %,d","OS TotalPhysicalMemorySize:", operatingSystemMXBean.getTotalPhysicalMemorySize());
+                OSInfo += String.format("%n%-35s %,d","OS FreePhysicalMemorySize:", operatingSystemMXBean.getFreePhysicalMemorySize());
+
+//                for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
+//                    method.setAccessible(true);
+//                    if (method.getName().startsWith("get")
+//                        && Modifier.isPublic(method.getModifiers())) {
+//                            Object value;
+//                        try {
+//                            value = method.invoke(operatingSystemMXBean);
+//                        } catch (Exception e) {
+//                            value = e;
+//                        } // try
+//                        if (value instanceof Long || value instanceof Integer)
+//                            OSInfo += String.format("%n%-35s %,d","OS " + method.getName().substring(3) + ":",value);
+//                        else
+//                        if (value instanceof Double)
+//                            OSInfo += String.format("%n%-35s %,f","OS " + method.getName().substring(3) + ":",value);
+//                        else
+//                            OSInfo += String.format("%n%-35s %s","OS " + method.getName().substring(3) + ":",value.toString());
+//                    } // if
+//                  } // for
             }
             catch (Exception e) {
                 //log any exceptions, but keep on going
