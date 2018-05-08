@@ -177,6 +177,10 @@ public class Flags extends SIMPluginCallback {
                 
                 return;
             }
+            catch (IOException e) {
+                e.printStackTrace();
+                Server.logStackTrace(e);
+            }
             catch (Exception e) {
                 Server.logStackTrace(e);
             }
