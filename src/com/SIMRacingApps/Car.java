@@ -61,7 +61,7 @@ public class Car {
         public static final String LEAVINGPITS     = "LEAVINGPITS";
         public static final String ONTRACK         = "ONTRACK";
         public static final String OFFTRACK        = "OFFTRACK";
-//        public static final String TOWING          = "TOWING";  //TODO: iRacing doesn't tell me when they are towing. Can I detect it?
+        public static final String TOWING          = "TOWING";
     }
 
     /**
@@ -87,6 +87,10 @@ public class Car {
      */
     public static class LapType {
 
+        /** The average lap time for green flag laps from the start of the race */
+        public static final String AVERAGE         = "Average";
+        /** The average lap time for green flag laps from your last pit stop */
+        public static final String AVERAGESINCEPITTING = "AverageSincePitting";
         /** The best lap ever run in this car at the track ever */
         public static final String BEST            = "Best";
         /** The lap completed */
@@ -107,6 +111,10 @@ public class Car {
         public static final String FINISHLINE      = "FinishLine";
         /** Snapshot at the finish line at the start of the race*/
         public static final String RACESTART       = "RaceStart";
+        /** The average lap time for green flag laps */
+        public static final String RUNNINGAVERAGE  = "RunningAverage";
+        /** The average lap time for green flag laps since your last pit stop */
+        public static final String RUNNINGAVERAGESINCEPITTING = "RunningAverageSincePitting";
         /** The best lap of this session*/
         public static final String SESSIONBEST     = "SessionBest";
         /** The last lap of this session*/
@@ -127,6 +135,18 @@ public class Car {
          */
         public static String getReference(String ref) {
             String s = "Unknown";
+            if (ref.equalsIgnoreCase(AVERAGE))
+                s = AVERAGE;
+            else
+            if (ref.equalsIgnoreCase(AVERAGESINCEPITTING))
+                s = AVERAGESINCEPITTING;
+            else
+            if (ref.equalsIgnoreCase(RUNNINGAVERAGE))
+                s = RUNNINGAVERAGE;
+            else
+            if (ref.equalsIgnoreCase(RUNNINGAVERAGESINCEPITTING))
+                s = RUNNINGAVERAGESINCEPITTING;
+            else
             if (ref.equalsIgnoreCase(CURRENT))
                 s = CURRENT;
             else
@@ -1161,18 +1181,25 @@ public class Car {
      * Returns the lap based on the specified reference type.
      * Subclasses should extract the validated reference value from Data to use in deciding the return value.
      * <p>
-     * Supported Reference Types are: BEST, CAUTION, COMPLETED, COMPLETEDPERCENT, CURRENT, LED, PITTED, QUALIFYING, SESSIONBEST, SESSIONLAST, SINCEPITTING
+     * Supported Reference Types are: AVERAGE, AVERAGESINCEPITTING, BEST, CAUTION, COMPLETED, COMPLETEDPERCENT, CURRENT, LED, PITTED, QUALIFYING, SESSIONBEST, SESSIONLAST, SINCEPITTING
      * 
-     * <p>PATH = {@link #getLap(String) /Car/(CARIDENTIFIER)/Lap/(LAPTYPE)}
+     * <p>PATH = {@link #getLap(String,int) /Car/(CARIDENTIFIER)/Lap/(LAPTYPE)/(LAPSTOAVERAGE)}
      * 
      * @param lapType (Optional) as defined by {@link com.SIMRacingApps.Car.LapType}. Default CURRENT.
+     * @param lapsToAverage (Optional) as defined by {@link com.SIMRacingApps.Car.LapType}. Default 9999.
      * @return lap in a {@link com.SIMRacingApps.Data} container.
      */
-    public Data getLap(String lapType) {
+    public Data getLap(String lapType,int lapsToAverage) {
         String s = LapType.getReference(lapType);
-        Data d = new Data("Car/"+m_carIdentifier+"/Lap/"+lapType,0,"lap",Data.State.NORMAL);
+        Data d = new Data("Car/"+m_carIdentifier+"/Lap/"+lapType+"/"+lapsToAverage,0,"lap",Data.State.NORMAL);
         d.add("reference",s);
         return d;
+    }
+    public Data getLap(String lapType,String lapsToAverage) {
+        return getLap(lapType,Integer.parseInt(lapsToAverage));
+    }
+    public Data getLap(String lapType) {
+        return getLap(lapType,9999);
     }
     public Data getLap() {
         return getLap(LapType.CURRENT);
@@ -1197,18 +1224,25 @@ public class Car {
      * Returns the time of the lap based on the specified reference type.
      * Subclasses should extract the validated reference value from Data to use in deciding the return value.
      * <p>
-     * Supported Reference Types are: BEST, CURRENT, FINISHLINE, QUALIFYING, RACESTART, SESSIONBEST, SESSIONLAST
+     * Supported Reference Types are: AVERAGE, AVERAGESINCEPITTING, BEST, CURRENT, FINISHLINE, QUALIFYING, RACESTART, SESSIONBEST, SESSIONLAST
      * 
-     * <p>PATH = {@link #getLapTime(String) /Car/(CARIDENTIFIER)/LapTime/(LAPTYPE)}
+     * <p>PATH = {@link #getLapTime(String,int) /Car/(CARIDENTIFIER)/LapTime/(LAPTYPE)/(LAPSTOAVERAGE)}
      * 
      * @param lapType (Optional) as defined by {@link com.SIMRacingApps.Car.LapType}. Default CURRENT.
+     * @param lapsToAverage (Optional) as defined by {@link com.SIMRacingApps.Car.LapType}. Default 9999.
      * @return time in a {@link com.SIMRacingApps.Data} container.
      */
-    public Data getLapTime(String lapType) {
+    public Data getLapTime(String lapType, int lapsToAverage) {
         String s = LapType.getReference(lapType);
-        Data d = new Data("Car/"+m_carIdentifier+"/LapTime/"+lapType,0.0,"s",Data.State.NOTAVAILABLE);
+        Data d = new Data("Car/"+m_carIdentifier+"/LapTime/"+lapType+(lapsToAverage > 0 ? "/"+lapsToAverage : ""),0.0,"s",Data.State.NOTAVAILABLE);
         d.add("reference",s);
         return d;
+    }
+    public Data getLapTime(String lapType,String lapsToAverage) {
+        return getLapTime(lapType,Integer.parseInt(lapsToAverage));
+    }
+    public Data getLapTime(String lapType) {
+        return getLapTime(lapType,9999);
     }
     public Data getLapTime() {
         return getLapTime(LapType.CURRENT);
