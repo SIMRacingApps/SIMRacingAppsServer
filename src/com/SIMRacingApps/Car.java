@@ -1467,6 +1467,7 @@ public class Car {
     public final static class Message {
         public static final String REPAIR           = "REPAIR";
         public static final String PITSPEEDLIMITER  = "PITSPEEDLIMITER";
+        public static final String TOWING           = "TOWING";
     }
     
     /**
