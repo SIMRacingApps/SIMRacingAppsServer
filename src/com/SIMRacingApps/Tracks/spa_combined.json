@@ -12,7 +12,7 @@
     "SpeedUOM":    "kph",
     "FinishLine":  280.0,
     "GPX": {
-        "ONTRACK": "spa_combinded-ONTRACK.gpx",
-        "ONPITROAD": "spa_combinded-ONPITROAD.gpx"
+        "ONTRACK": "spa_combined-ONTRACK.gpx",
+        "ONPITROAD": "spa_combined-ONPITROAD.gpx"
     }
 }
