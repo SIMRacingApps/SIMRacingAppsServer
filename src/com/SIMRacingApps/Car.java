@@ -935,72 +935,94 @@ public class Car {
      */
     public Data getIsBelowMinimumSpeed() {
         Data d = new Data("Car/"+m_carIdentifier+"/IsBelowMinimumSpeed",false,"boolean",Data.State.NORMAL);
+        int lapPitted                        = getLap(LapType.PITTED).getInteger();
+        int lapCurrent                       = getLap(LapType.CURRENT).getInteger();
+        boolean useQualifyingTime            = this.m_SIMPlugin.getSession().getType().getString().equals(Session.Type.LONE_QUALIFY)
+                                            || this.m_SIMPlugin.getSession().getType().getString().equals(Session.Type.OPEN_QUALIFY)
+                                            || (this.m_SIMPlugin.getSession().getType().getString().equals(Session.Type.RACE) && this.m_SIMPlugin.getSession().getLap().getInteger() <= 1);
+//useQualifyingTime = true;        
         //if not the leader of your class and you're on the track
-        if (!getIsEqual("PC1").getBoolean() && getStatus().getString().contains("TRACK")) {
-            int laps                             = Server.getArg("minimum-speed-laps",3);
-            int lapsLeader                       = Server.getArg("minimum-speed-laps-leader",3);
+        if (useQualifyingTime || (!getIsEqual("PC1").getBoolean() && getStatus().getString().contains("TRACK"))) {
+            int laps                             = useQualifyingTime ? 1 : Server.getArg("minimum-speed-laps",3);
+            int lapsLeader                       = useQualifyingTime ? 1 : Server.getArg("minimum-speed-laps-leader",3);
             double percentage                    = Server.getArg("minimum-speed-percentage",110.0) / 100.0;
-            int lapPitted                        = getLap(LapType.PITTED).getInteger();
-            int lapCurrent                       = getLap(LapType.CURRENT).getInteger();
             
 //if (getIsEqual("22").getBoolean())        
 //    laps = laps;
                              
-            if (lapCurrent > (lapPitted + laps)
-            && !m_SIMPlugin.getSession().getIsCautionFlag().getBoolean()
-            && !m_SIMPlugin.getSession().getIsRedFlag().getBoolean()
+            if ((useQualifyingTime && getId().getInteger() > -1) 
+            || (   lapCurrent > (lapPitted + laps)
+                && !m_SIMPlugin.getSession().getIsCautionFlag().getBoolean()
+                && !m_SIMPlugin.getSession().getIsRedFlag().getBoolean()
+                && getId().getInteger() > -1
+               )
             ) {
-                ArrayList<Double> lapTimes           = getLapTimes().getDoubleArray();
-                ArrayList<Boolean> lapsInvalid       = getLapInvalidFlags().getBooleanArray();
                 double timeLeader                    = 0.0;
-                int count;
-                int lap;
 
+                //get the leader for the class of this car
                 Car leader                           = m_SIMPlugin.getSession().getCar(CarIdentifiers.LEADER_PREFIX + "I" + getId().getString());
-                ArrayList<Double> lapTimesLeader     = leader.getLapTimes().getDoubleArray();
-                ArrayList<Boolean> lapsInvalidLeader = leader.getLapInvalidFlags().getBooleanArray();
-                //get the average lap time for the leader
-                for (lap = lapTimesLeader.size() - 1, count=0
-                     ;
-                        lap >= 0 
-                     && count < lapsLeader 
-                     && lap < lapsInvalidLeader.size()
-                     ;
-                     lap--
-                ) {
-                    if (!lapsInvalidLeader.get(lap)
-                    && lapTimesLeader.get(lap) > 0.0
-                    ) {
-                        timeLeader += lapTimesLeader.get(lap);
-                        count++;
-                    }
+                if (useQualifyingTime) {
+                    
+                    timeLeader = leader.getLapTime(Car.LapType.QUALIFYING).getDouble();
+                    
+                    double time = getLapTime(Car.LapType.QUALIFYING).getDouble();
+                    
+                    if (time > 0.0 && time <= (timeLeader * percentage))
+                        return d;
+                    
+                    d.setValue(true);
                 }
-                
-                if (count == lapsLeader) {
-                    timeLeader /= count;    //convert to an average.
-
-                    //check the lap times against the valid laps that have occurred since pitting.
-                    for (lap = lapTimes.size() - 1, count=0
-                         ; 
+                else {
+                    ArrayList<Double> lapTimesLeader     = leader.getLapTimes().getDoubleArray();
+                    ArrayList<Boolean> lapsInvalidLeader = leader.getLapInvalidFlags().getBooleanArray();
+                    ArrayList<Double> lapTimes           = getLapTimes().getDoubleArray();
+                    ArrayList<Boolean> lapsInvalid       = getLapInvalidFlags().getBooleanArray();
+                    int count;
+                    int lap;
+                    
+                    //get the average lap time for the leader
+                    for (lap = lapTimesLeader.size() - 1, count=0
+                         ;
                             lap >= 0 
-                         && (lap + 1) > lapPitted
-                         && count < laps
-                         && lap < lapsInvalid.size() 
-                         && !lapsInvalid.get(lap)
-                         //&& lapTimes.get(lap) > 0.0
-                         ; 
+                         && count < lapsLeader 
+                         && lap < lapsInvalidLeader.size()
+                         ;
                          lap--
                     ) {
-                        //if any lap is fast enough, then we won't flag them.
-                        //laps zero and below are not good laps.
-                        if (lapTimes.get(lap) > 0.0 && lapTimes.get(lap) <= (timeLeader * percentage))
-                            return d;
-                        count++;
+                        if (!lapsInvalidLeader.get(lap)
+                        && lapTimesLeader.get(lap) > 0.0
+                        ) {
+                            timeLeader += lapTimesLeader.get(lap);
+                            count++;
+                        }
                     }
                 
-                    //if we have enough laps to flag them
-                    if (count == laps) {
-                        d.setValue(true);
+                    if (count == lapsLeader) {
+                        timeLeader /= count;    //convert to an average.
+    
+                        //check the lap times against the valid laps that have occurred since pitting.
+                        for (lap = lapTimes.size() - 1, count=0
+                             ; 
+                                lap >= 0 
+                             && (lap + 1) > lapPitted
+                             && count < laps
+                             && lap < lapsInvalid.size() 
+                             && !lapsInvalid.get(lap)
+                             //&& lapTimes.get(lap) > 0.0
+                             ; 
+                             lap--
+                        ) {
+                            //if any lap is fast enough, then we won't flag them.
+                            //laps zero and below are not good laps.
+                            if (lapTimes.get(lap) > 0.0 && lapTimes.get(lap) <= (timeLeader * percentage))
+                                return d;
+                            count++;
+                        }
+                    
+                        //if we have enough laps to flag them
+                        if (count == laps) {
+                            d.setValue(true);
+                        }
                     }
                 }
             }

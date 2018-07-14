@@ -735,7 +735,7 @@ public class Gauge {
      * 
      * @return The Unit of Measure.
      */
-    public Data getUOM() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/UOM",new Data("",0.0,m_UOM).convertUOM(m_measurementSystem).getUOM(),"String",Data.State.NORMAL); }
+    public Data getUOM() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/UOM",new Data("",0.0,m_UOM).convertUOM(_getGaugeUOM(m_measurementSystem)).getUOM(),"String",Data.State.NORMAL); }
    
     /**
       * Return a multiplier to be used when calculating the major and minor tick marks.
@@ -783,7 +783,11 @@ public class Gauge {
       * @param UOM (Optional) The UOM to convert the value to, defaults to the gauge's UOM.
       * @return The major increment value
       */
-    public Data getMajorIncrement(String UOM) { return m_majorIncrement.convertUOM(UOM); }
+    public Data getMajorIncrement(String UOM) { 
+        Data d = m_majorIncrement.convertUOM(_getGaugeUOM(UOM));
+        d.setValue(Math.abs(d.getDouble()));
+        return d;
+    }
     public Data getMajorIncrement()           { return getMajorIncrement(m_measurementSystem); }
 
     /**
@@ -795,7 +799,11 @@ public class Gauge {
       * @param UOM (Optional) The UOM to convert the value to, defaults to the gauge's UOM.
       * @return The minor increment value
       */
-    public Data getMinorIncrement(String UOM) { return m_minorIncrement.convertUOM(UOM); }
+    public Data getMinorIncrement(String UOM) { 
+        Data d = m_minorIncrement.convertUOM(_getGaugeUOM(UOM));
+        d.setValue(Math.abs(d.getDouble()));
+        return d;
+    }
     public Data getMinorIncrement()           { return getMinorIncrement(m_measurementSystem); }
 
     /**
@@ -833,7 +841,11 @@ public class Gauge {
       * @param UOM (Optional) The UOM to convert the value to, defaults to the gauge's UOM.
       * @return The incremental capacity.
       */
-    public Data getCapacityIncrement(String UOM) { return m_capacityIncrement.convertUOM(UOM); }
+    public Data getCapacityIncrement(String UOM) { 
+        Data d = m_capacityIncrement.convertUOM(_getGaugeUOM(UOM));
+        d.setValue(Math.abs(d.getDouble()));
+        return d;
+    }
     public Data getCapacityIncrement()           { return getCapacityIncrement(m_measurementSystem); }
 
     /**
@@ -871,9 +883,9 @@ public class Gauge {
     protected double _roundToIncrement(double value,String UOM) {
         
         double d = value;
-        double increment = this.m_capacityIncrement.convertUOM(UOM).getDouble();
-        double minimum   = this.m_capacityMinimum.convertUOM(UOM).getDouble(); 
-        double maximum   = this.m_capacityMaximum.convertUOM(UOM).getDouble();
+        double increment = this.m_capacityIncrement.convertUOM(_getGaugeUOM(UOM)).getDouble();
+        double minimum   = this.m_capacityMinimum.convertUOM(_getGaugeUOM(UOM)).getDouble(); 
+        double maximum   = this.m_capacityMaximum.convertUOM(_getGaugeUOM(UOM)).getDouble();
         
         double floored_d = Math.floor(d / increment) * increment; //floor it to the closest increment
 
@@ -899,9 +911,9 @@ public class Gauge {
      */
     protected double _roundUpToIncrement(double value,String UOM) {
         double d = value;
-        double increment = this.m_capacityIncrement.convertUOM(UOM).getDouble();
-        double minimum   = this.m_capacityMinimum.convertUOM(UOM).getDouble(); 
-        double maximum   = this.m_capacityMaximum.convertUOM(UOM).getDouble();
+        double increment = this.m_capacityIncrement.convertUOM(_getGaugeUOM(UOM)).getDouble();
+        double minimum   = this.m_capacityMinimum.convertUOM(_getGaugeUOM(UOM)).getDouble(); 
+        double maximum   = this.m_capacityMaximum.convertUOM(_getGaugeUOM(UOM)).getDouble();
         
         double floored_d = Math.floor(d / increment) * increment; //floor it to the closest increment
 
@@ -1151,6 +1163,14 @@ public class Gauge {
     }
     
     /*
+     * Returns the UOM for this gauge to display
+     * @return The UOM
+     */
+    protected String _getGaugeUOM(String UOM) {
+        return  UOM.equalsIgnoreCase("METRIC") ? m_metric : UOM.equalsIgnoreCase("IMPERIAL") ? m_imperial : UOM;
+    }
+    
+    /*
      * Prepares a value to be returned. 
      * It converts to the request UOM, sets the state and state percentage
      * @return A data value prepared for the user.
@@ -1159,7 +1179,7 @@ public class Gauge {
         //use the imperial and metric UOM from the json file instead of the global one.
         //this allows each car/gauge to decide what UOM to use.
         //was mainly done for the quart gauges. The global one would return gallons.
-        Data r = d.convertUOM(UOM.equalsIgnoreCase("METRIC") ? m_metric : UOM.equalsIgnoreCase("IMPERIAL") ? m_imperial : UOM);
+        Data r = d.convertUOM(_getGaugeUOM(UOM));
 
         TreeMap<Double, StateRange> states = null;
         if (!gear.isEmpty() && !power.isEmpty()) 
