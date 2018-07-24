@@ -690,13 +690,13 @@ public class Server {
                 try {
                     //if requested port is in use, try 8080
                     logger().warning(String.format("Port %s in use, trying 8080",m_port));
-                    server = startServer(8080);
                     m_port = 8080;
+                    server = startServer(m_port);
                 } catch (BindException be2) {
                     //if 8080 is in use, try 5555
                     logger().warning(String.format("Port 8080 in use, trying 5555"));
-                    server = startServer(5555);
                     m_port = 5555;
+                    server = startServer(m_port);
                 }
             }
             
@@ -975,7 +975,7 @@ public class Server {
 //                if (t.getName().startsWith("Servlet.DataService.")) t.stop();
 //            }
             DataService.stop();
-            logStackTrace(Level.SEVERE,"All Ports: "+m_port+",8080,5555",be);
+            logStackTrace(Level.SEVERE,"All Ports: "+Server.getArg("port","80")+",8080,5555",be);
             System.err.print("\nTo solve this problem, see https://github.com/SIMRacingApps/SIMRacingApps/wiki/Port-80-in-use-by-another-process\n\n");
             System.err.print("Press ENTER to exit...");
             try { System.in.read(); } catch (IOException e) {}
