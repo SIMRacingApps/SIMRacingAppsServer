@@ -3,6 +3,8 @@
  */
 package com.SIMRacingApps;
 
+import static com.sun.jna.platform.win32.WinReg.HKEY_LOCAL_MACHINE;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,8 +12,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.management.ManagementFactory;
 import java.net.BindException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.net.URLDecoder;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,9 +46,11 @@ import javax.websocket.server.ServerEndpointConfig;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import com.SIMRacingApps.SIMPlugin.SIMPluginException;
 import com.SIMRacingApps.Util.FindFile;
 import com.SIMRacingApps.Util.SendKeys;
 import com.SIMRacingApps.Util.Sound;
+import com.SIMRacingApps.Util.URLBroadcastThread;
 import com.SIMRacingApps.servlets.ConsumerTester;
 import com.SIMRacingApps.servlets.DataEvent;
 import com.SIMRacingApps.servlets.DataService;
@@ -56,6 +66,8 @@ import com.SIMRacingApps.servlets.sendkeys;
 import com.SIMRacingApps.servlets.upload;
 import com.SIMRacingApps.servlets.useroverrides;
 import com.owlike.genson.Genson;
+import com.sun.jna.platform.win32.Advapi32Util;
+import com.sun.management.OperatingSystemMXBean;
 
 import org.eclipse.jetty.websocket.jsr356.server.deploy.WebSocketServerContainerInitializer; 
 
@@ -76,6 +88,7 @@ public class Server {
     private static int m_port          = 80;
     private static Map<String,String> m_args = new HashMap<String,String>();
     private static Genson m_genson = new Genson();
+    private static Properties m_version = new Properties();
     
     public static String getLog() {
         return m_log + "-0.log.txt";
@@ -700,8 +713,135 @@ public class Server {
                 }
             }
             
+            InputStream in;
+            //see if the user want's to tell us what ip to bind to
+            String ip = Server.getArg("ip", "" );
+            try {
+
+                  String hostname = InetAddress.getLocalHost().getHostName();
+                  InetAddress[] addresses = InetAddress.getAllByName(hostname);
+                  for (InetAddress addr : addresses) {
+                      String host = addr.getHostAddress();
+                      if (addr instanceof Inet4Address) {
+                          if (ip.isEmpty()) //this will use the first one found, but list them all in the log
+                              ip = host;
+                          Server.logger().info("Found Address = " + host);
+                      }
+                  }
+            } 
+            catch (UnknownHostException e) {
+                  Server.logStackTrace(Level.WARNING, "while getting IP address",e);
+            } 
+                      
+            synchronized (Server.m_hostname) {
+                  Server.m_hostname = ip;
+            }
+            
+            ip = "http://" + ip + ((Server.getPort() == 80) ? "" : ":" + Server.getPort()); 
+            URLBroadcastThread.start(ip);
+            
             if (isLogLevelFiner())
                 server.dumpStdErr();
+
+            try {
+                String userPath = FindFile.getUserPath()[0];
+                new File(userPath).mkdirs();
+                //URLClassLoader loader = (URLClassLoader)Thread.currentThread().getContextClassLoader();
+                URLClassLoader loader = (URLClassLoader)Thread.currentThread().getContextClassLoader();
+                URL[] urls = loader.getURLs();
+                String classpath = "";
+                for (int i=0; i < urls.length; i++)
+                    classpath = classpath.length() > 0 ? ";" + urls[i].toString() : urls[i].toString();
+                    
+                in = loader.getResourceAsStream("com/SIMRacingApps/version.properties");
+                //in = new FileInputStream(config.getServletContext().getRealPath("") + "version.properties");
+                m_version.load(in);
+                in.close();
+                Server.logger().fine(System.getProperties().toString());
+                Double dGHz = -1.0;
+                String processor = "Unknown";
+                String OSInfo = "";
+                try {
+                    int iMHz = Advapi32Util.registryGetIntValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "~MHz");
+                    dGHz = iMHz / 1000.0;
+                    processor = Advapi32Util.registryGetStringValue(HKEY_LOCAL_MACHINE, "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0", "ProcessorNameString"); 
+                }                
+                catch (Exception e) {
+                    //log any exceptions, but keep on going
+                    Server.logStackTrace(e);
+                }
+                
+                try {
+                    OperatingSystemMXBean operatingSystemMXBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+    
+    //In Java 10 access via reflection has been removed. Must call the methods directly.
+                    OSInfo += String.format("%n%-35s %,d","OS TotalPhysicalMemorySize:", operatingSystemMXBean.getTotalPhysicalMemorySize());
+                    OSInfo += String.format("%n%-35s %,d","OS FreePhysicalMemorySize:", operatingSystemMXBean.getFreePhysicalMemorySize());
+    
+    //                for (Method method : operatingSystemMXBean.getClass().getDeclaredMethods()) {
+    //                    method.setAccessible(true);
+    //                    if (method.getName().startsWith("get")
+    //                        && Modifier.isPublic(method.getModifiers())) {
+    //                            Object value;
+    //                        try {
+    //                            value = method.invoke(operatingSystemMXBean);
+    //                        } catch (Exception e) {
+    //                            value = e;
+    //                        } // try
+    //                        if (value instanceof Long || value instanceof Integer)
+    //                            OSInfo += String.format("%n%-35s %,d","OS " + method.getName().substring(3) + ":",value);
+    //                        else
+    //                        if (value instanceof Double)
+    //                            OSInfo += String.format("%n%-35s %,f","OS " + method.getName().substring(3) + ":",value);
+    //                        else
+    //                            OSInfo += String.format("%n%-35s %s","OS " + method.getName().substring(3) + ":",value.toString());
+    //                    } // if
+    //                  } // for
+                }
+                catch (Exception e) {
+                    //log any exceptions, but keep on going
+                    Server.logStackTrace(e);
+                }
+                
+                Server.logger().info(
+                      String.format("%n*************************************************************************************************")
+                    + String.format("%n%s", (String)m_version.get("copyright"))
+                    + String.format("%n%s", (String)m_version.get("license"))
+                    + String.format("%n%s%s", ip,(String)m_version.get("copyrightUrl"))
+                    + String.format("%n%s%s", ip,(String)m_version.get("licenseUrl"))
+                    + String.format("%n%s%s", ip,(String)m_version.get("noticeUrl"))
+                    + String.format("%n%n%-35s %s", "Your Server Address:", ip)
+                    + String.format("%n%-35s %s.%s Build-%s","SIMRacingAppsServer Version:",(String)m_version.get("major"),(String)m_version.get("minor"),(String)m_version.get("build"))
+                    + String.format("%n%-35s %s", DataService.getSIMName().getString() + " Plugin Version:", DataService.getSIMVersion().getString())
+                    + String.format("%n%-35s %s", "Your Personal Folder:", userPath)
+                    + String.format("%n%-35s %s by %s", "Java Runtime:", System.getProperty("java.runtime.version"),System.getProperty("java.vm.vendor"))
+                    + String.format("%n%-35s %s", "Java VM Name:", System.getProperty("java.vm.name"))
+                    + String.format("%n%-35s %s", "Java java.class.path:", System.getProperty("java.class.path"))
+                    + String.format("%n%-35s %s", "Java main.thread.classpath:", classpath)
+                    + String.format("%n%-35s %,d", "Java TotalMemory (bytes):", Runtime.getRuntime().totalMemory())
+                    + String.format("%n%-35s %,d", "Java FreeMemory (bytes):", Runtime.getRuntime().freeMemory())
+                    + String.format("%n%-35s %s", "Java MaxMemory (bytes):", Runtime.getRuntime().maxMemory() == Long.MAX_VALUE ? "no limit" : String.format("%,d",Runtime.getRuntime().maxMemory()) )
+                    + String.format("%n%-35s %s", "OS Name:", System.getProperty("os.name"))
+                    + String.format("%n%-35s %s", "OS Version:", System.getProperty("os.version"))
+                    + String.format("%n%-35s %s", "OS Architecture:", System.getProperty("os.arch"))
+                    + String.format("%n%-35s %s", "OS Processor:", processor)
+                    + String.format("%n%-35s %d", "OS AvailableCores:", Runtime.getRuntime().availableProcessors())
+                    + String.format("%n%-35s %.2f GHz", "OS Processor Speed:", dGHz)
+                    + OSInfo
+                    + String.format("%n*************************************************************************************************")
+                );
+                Windows.setConsoleTitle(
+                        "SIMRacingAppsServer "
+                      + (String)m_version.getProperty("major")
+                      + "."
+                      + (String)m_version.getProperty("minor")
+                      + " Build: "
+                      + (String)m_version.getProperty("build")
+                      + " @ " 
+                      + ip);
+            } catch (IOException | SIMPluginException e) {
+                Server.logStackTrace(Level.WARNING, "while getting version",e);
+            }
             
             //Check if electron can be installed. If so, check version and install it, if needed.
             //default to false here so existing users will not get a surprise.
@@ -812,15 +952,6 @@ public class Server {
                         String s;
                         
                         logger().info("Electron: Starting " + exe.toString());
-                        //Thread.sleep(getArg("electron-delay",5000)); //Give the server time to get started.
-                        //wait for the service to start up
-                        while (true) {
-                            synchronized (m_hostname) {
-                                if (!m_hostname.isEmpty())
-                                    break;
-                            }
-                        }
-                        
                         a.add(exe.toString());
                         if (!(s = getArg("electron-options","")).isEmpty()) {
                             String[] sa = s.split(" ");
