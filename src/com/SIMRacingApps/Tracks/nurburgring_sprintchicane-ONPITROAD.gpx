@@ -2,7 +2,7 @@
 <gpx xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxedw="http://www.gpxeditor.co.uk/xmlschemas/WaypointExtension/v1" xmlns:gpxedts="http://www.gpxeditor.co.uk/xmlschemas/TrackSegExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" creator="GPXEditor" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
   <rte>
     <name>Untitled</name>
-    <rtept lat="50.3340336312351" lon="6.94493383169174">
+    <rtept lat="50.3356258414344" lon="6.94746047258377">
       <name />
       <cmt />
     </rtept>
@@ -22,7 +22,7 @@
       <name />
       <cmt />
     </rtept>
-    <rtept lat="50.3317171269159" lon="6.9409990310669">
+    <rtept lat="50.3317171269159" lon="6.94099903106689">
       <name />
       <cmt />
     </rtept>
@@ -58,11 +58,11 @@
       <name />
       <cmt />
     </rtept>
-    <rtept lat="50.33355253357" lon="6.9399905204773">
+    <rtept lat="50.33355253357" lon="6.93999052047729">
       <name />
       <cmt />
     </rtept>
-    <rtept lat="50.3334018685308" lon="6.93923950195312">
+    <rtept lat="50.3334018685308" lon="6.93923950195313">
       <name />
       <cmt />
     </rtept>
@@ -202,7 +202,7 @@
       <name />
       <cmt />
     </rtept>
-    <rtept lat="50.3369834580899" lon="6.9459879398346">
+    <rtept lat="50.3369834580899" lon="6.94598793983459">
       <name />
       <cmt />
     </rtept>
@@ -262,7 +262,7 @@
       <name />
       <cmt />
     </rtept>
-    <rtept lat="50.3340319191524" lon="6.94493651390076">
+    <rtept lat="50.3356309775099" lon="6.94746851921082">
       <name />
       <cmt />
     </rtept>
