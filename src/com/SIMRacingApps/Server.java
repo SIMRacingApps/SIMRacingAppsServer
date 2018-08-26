@@ -959,10 +959,10 @@ public class Server {
                                 a.add(sa[i]);
                         }
                         
-                        if (getArg("electron-disable-gpu",true)) {
-                            a.add("--disable-gpu");  //prevents studdering on my machine
-                                                     //use to be require for transparency, that's no longer the case as of electron 1.6
-                        }
+//                        if (getArg("electron-disable-gpu",true)) {
+//                            a.add("--disable-gpu");  //prevents studdering on my machine
+//                                                     //use to be require for transparency, that's no longer the case as of electron 1.6
+//                        }
                         
                         a.add(Server.getArg("electron-apps",FindFile.getUserPath()[0]+"/electron-apps"));
                         
@@ -979,7 +979,11 @@ public class Server {
                         //always pass the port in case Electron saved the wrong one
                         a.add("-port");
                         a.add(Integer.toString(m_port));
-                        
+
+                        if (!getArg("electron-disable-gpu",true)) {
+                            a.add("-enableHardwareAcceleration");
+                        }
+
                         //force electron to the same language as the server.
                         s = System.getProperty("user.language")+"-"+System.getProperty("user.country");
                         a.add("-lang");
