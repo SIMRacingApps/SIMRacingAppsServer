@@ -1,0 +1,18 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2018 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "North":       71.5,
+    "Resolution":  1.9,
+    "Images": {
+        "SAT":     "atlanta-sat.png",
+        "MAP":     "atlanta-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "atlanta_rallycross_long-ONTRACK.gpx",
+        "ONPITROAD": "atlanta_rallycross_long-ONPITROAD.gpx"        
+    }
+}

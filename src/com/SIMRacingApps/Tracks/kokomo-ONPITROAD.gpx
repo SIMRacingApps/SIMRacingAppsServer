@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<gpx xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxedw="http://www.gpxeditor.co.uk/xmlschemas/WaypointExtension/v1" xmlns:gpxedts="http://www.gpxeditor.co.uk/xmlschemas/TrackSegExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" creator="GPXEditor" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
+  <wpt lat="40.51119" lon="-86.14337">
+    <name>Center</name>
+  </wpt>
+  <rte>
+    <name>Untitled</name>
+    <rtept lat="40.5113378977349" lon="-86.1434670067633">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="40.5115181410433" lon="-86.1432524300421">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="40.5111360246542" lon="-86.1437177933062">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="40.5113364557865" lon="-86.1434656656588">
+      <name />
+      <cmt />
+    </rtept>
+  </rte>
+</gpx>
