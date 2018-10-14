@@ -1269,6 +1269,54 @@
                 "IsChangable":       true,
                 "IsFixed":           false
             }
+        },
+        "HYSCharge": {
+            "default": {
+                "Name":              "HYS",
+                "TypeName":          "CHARGE",
+                "UOM":               "%",
+                "imperial":          "%",
+                "metric":            "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    20.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false,
+                "States": {
+                    "WARNING":  {"Start": 15.0, "End": 5.0},
+                    "CRITICAL": {"Start": 5.0, "End": 0.0}
+                }
+            }
+        },
+        "HYSDeployment": {
+            "default": {
+                "Name":              "HYS",
+                "TypeName":          "DEPLOYMENT",
+                "UOM":               "%",
+                "imperial":          "%",
+                "metric":            "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           100.0,
+                "MajorIncrement":    20.0,
+                "MinorIncrement":    5.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   100.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false,
+                "States": {
+                    "WARNING":  {"Start": 15.0, "End": 5.0},
+                    "CRITICAL": {"Start": 5.0, "End": 0.0}
+                }
+            }
         }
     }
 }

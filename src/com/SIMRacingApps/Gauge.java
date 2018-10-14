@@ -512,6 +512,12 @@ public class Gauge {
          */
         public static final String FASTREPAIRS = "FastRepairs";
         
+        /**
+         * The charge and usage status of the HYS system
+         */
+        public static final String HYSCHARGE = "HYSCharge";
+        public static final String HYSDDEPLOYMENT = "HYSDeployment";
+        
     }
 
     /**

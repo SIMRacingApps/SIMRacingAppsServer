@@ -881,7 +881,7 @@ public class Server {
 
                     //if the versions are not equal, we need to install
                     if (!jarVersion.equals(installedJarVersion) || getArg("electron-force-update",false)) {
-                        File exe = new File(getArg("electron-path",FindFile.getUserPath()[0]+"/electron-apps/electron/electron.exe"));
+                        File exe = new File(getArg("electron-path",FindFile.getUserPath()[0]+"/electron-apps/electron/SIMRacingApps-electron.exe"));
                         
                         ProcessBuilder processBuilder = new ProcessBuilder("tasklist.exe");
                         Process process = processBuilder.start();
@@ -932,7 +932,7 @@ public class Server {
             
             if (getArg("electron-autostart",false)) {
                 try {
-                    File exe = new File(getArg("electron-path",FindFile.getUserPath()[0]+"/electron-apps/electron/electron.exe"));
+                    File exe = new File(getArg("electron-path",FindFile.getUserPath()[0]+"/electron-apps/electron/SIMRacingApps-electron.exe"));
                     
                     ProcessBuilder processBuilder = new ProcessBuilder("tasklist.exe");
                     Process process = processBuilder.start();
