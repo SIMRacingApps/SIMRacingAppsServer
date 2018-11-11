@@ -2,7 +2,7 @@
 <gpx xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxedw="http://www.gpxeditor.co.uk/xmlschemas/WaypointExtension/v1" xmlns:gpxedts="http://www.gpxeditor.co.uk/xmlschemas/TrackSegExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" creator="GPXEditor" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
   <rte>
     <name>ONPITROAD</name>
-    <rtept lat="30.1319819464548" lon="-97.6397332549094">
+    <rtept lat="30.1336475241932" lon="-97.6421606540679">
       <name>Start</name>
       <cmt />
     </rtept>
@@ -258,7 +258,7 @@
       <name>72</name>
       <cmt />
     </rtept>
-    <rtept lat="30.1319865859862" lon="-97.6397292315959">
+    <rtept lat="30.1336452044667" lon="-97.6421606540679">
       <name>Finish</name>
       <cmt />
     </rtept>

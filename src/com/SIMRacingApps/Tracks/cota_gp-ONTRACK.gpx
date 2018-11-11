@@ -2,7 +2,7 @@
 <gpx xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxedw="http://www.gpxeditor.co.uk/xmlschemas/WaypointExtension/v1" xmlns:gpxedts="http://www.gpxeditor.co.uk/xmlschemas/TrackSegExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" creator="GPXEditor" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
   <rte>
     <name>ONTRACK</name>
-    <rtept lat="30.1318798767102" lon="-97.639829814434">
+    <rtept lat="30.1335268983373" lon="-97.6422598958015">
       <name />
       <cmt />
     </rtept>
@@ -306,7 +306,7 @@
       <name />
       <cmt />
     </rtept>
-    <rtept lat="30.1318856761303" lon="-97.6398298144339">
+    <rtept lat="30.1335326976606" lon="-97.6422652602194">
       <name />
       <cmt />
     </rtept>

@@ -2,19 +2,23 @@
 <gpx xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxedw="http://www.gpxeditor.co.uk/xmlschemas/WaypointExtension/v1" xmlns:gpxedts="http://www.gpxeditor.co.uk/xmlschemas/TrackSegExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" creator="GPXEditor" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
   <rte>
     <name>ONTRACK</name>
-    <rtept lat="30.1369461202742" lon="-97.6325234770774">
+    <rtept lat="30.1368440556629" lon="-97.633183300495">
       <name />
       <cmt />
     </rtept>
-    <rtept lat="30.1367025568226" lon="-97.6323598623276">
+    <rtept lat="30.1361922314511" lon="-97.6329660415649">
       <name />
       <cmt />
     </rtept>
-    <rtept lat="30.1364056405637" lon="-97.6321238279343">
+    <rtept lat="30.1361504774402" lon="-97.6328319311142">
       <name />
       <cmt />
     </rtept>
-    <rtept lat="30.1359927399066" lon="-97.6316249370574">
+    <rtept lat="30.1362177478513" lon="-97.6325315237471">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.136173674115" lon="-97.6323115825652">
       <name />
       <cmt />
     </rtept>
@@ -102,15 +106,27 @@
       <name />
       <cmt />
     </rtept>
-    <rtept lat="30.1375933002393" lon="-97.6329070329666">
+    <rtept lat="30.1376768070225" lon="-97.6335614919662">
       <name />
       <cmt />
     </rtept>
-    <rtept lat="30.1374726792056" lon="-97.6328480243683">
+    <rtept lat="30.1375654646292" lon="-97.6336151361465">
       <name />
       <cmt />
     </rtept>
-    <rtept lat="30.1369426408006" lon="-97.6325234770773">
+    <rtept lat="30.1372262170116" lon="-97.6335333279786">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.1371354611302" lon="-97.6334656022555">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.137104001069" lon="-97.6333083579103">
+      <name />
+      <cmt />
+    </rtept>
+    <rtept lat="30.1368405761857" lon="-97.633183300495">
       <name />
       <cmt />
     </rtept>
