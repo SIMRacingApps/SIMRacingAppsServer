@@ -72,13 +72,6 @@ public class Gauge {
         public static final String GENERIC         = "Generic";
         
         /**
-         * The brake bias adjustment value that is set real-time while driving.
-         * It is the percentage applied to the brake bias as an adjustment, usually +/-3%.
-         * Use the isFixed value to determine if this value can be adjusted while driving.
-         */
-        public static final String BRAKEBIASADJUSTMENT = "BrakeBiasAdjustment";
-        
-        /**
          * The fuel level. This could be real-time, estimated, or may not be possible to see until you pit. 
          * That depends on the SIM.
          * <p>
@@ -159,7 +152,12 @@ public class Gauge {
          * </ul>
          */
         public static final String SPEEDOMETER     = "Speedometer";
-        
+
+        /**
+         * Power Steering Assist.
+         */
+        public static final String POWERSTEERINGASSIST  = "PowerSteeringAssist";
+
         /**
          * The Revolutions Per Minute (RPM).
          * The pit road states could be based on the speedometer or RPMs in 2nd gear.
@@ -237,11 +235,6 @@ public class Gauge {
          * The amount of front wing angle.
          */
         public static final String FRONTWING         = "FrontWing";
-        
-        /**
-         * The amount of rear wing angle.
-         */
-        public static final String REARWING          = "RearWing";
         
         /**
          * Controls the wind shield tear off for the next pit stop. 
@@ -440,71 +433,9 @@ public class Gauge {
         public static final String TIREWEARRRR     = "TireWearRRR";
 
         /**
-         * The traction control
-         */
-        public static final String TRACTIONCONTROL = "TractionControl";
-        
-        /**
-         * The Automatic Braking System (ABS) 
-         */
-        public static final String ABS = "ABS";
-        
-        /**
-         * The Anti Roll Bar Front
-         */
-        public static final String ANTIROLLFRONT = "AntiRollFront";
-        
-        /**
-         * The Anti Roll Bar Rear
-         */
-        public static final String ANTIROLLREAR = "AntiRollRear";
-        
-        /**
-         * The Fuel Mixture
-         */
-        public static final String FUELMIXTURE = "FuelMixture";
-        
-        /**
-         * Throttle Shaping
-         */
-        public static final String THROTTLESHAPE = "ThrottleShape";
-        
-        /**
-         * Power Steering Assist
-         */
-        public static final String POWERSTEERINGASSIST = "PowerSteeringAssist";
-        
-        /**
-         * Engine Power
-         */
-        public static final String ENGINEPOWER = "EnginePower";
-        
-        /**
-         * The number of clicks on the Weight Jacker Right
-         */
-        public static final String WEIGHTJACKERRIGHT = "WeightJackerRight";
-        
-        /**
-         * The number of clicks on the Weight Jacker Left
-         */
-        public static final String WEIGHTJACKERLEFT = "WeightJackerLeft";
-
-        /**
          * Front Flap
          */
         public static final String FRONTFLAP = "FrontFlap";
-        
-        /**
-         * Engine Braking
-         */
-        public static final String ENGINEBRAKING = "EngineBraking";
-        
-        /**
-         * Diff, Entry, Middle, Exit
-         */
-        public static final String DIFFENTRY  = "DiffEntry";
-        public static final String DIFFMIDDLE = "DiffMiddle";
-        public static final String DIFFEXIT   = "DiffExit";
         
         /**
          * The number of Fast Repairs you have left
@@ -512,12 +443,43 @@ public class Gauge {
          */
         public static final String FASTREPAIRS = "FastRepairs";
         
-        /**
-         * The charge and usage status of the HYS system
+        /*
+         * In-Car Adjustable Gauges
          */
-        public static final String HYSCHARGE = "HYSCharge";
-        public static final String HYSDDEPLOYMENT = "HYSDeployment";
-        
+        public static final String ABS                  = "ABS";
+        public static final String ANTIROLLFRONT        = "AntiRollFront";
+        public static final String ANTIROLLREAR         = "AntiRollRear";
+        public static final String BRAKEBIASADJUSTMENT  = "BrakeBiasAdjustment";
+        public static final String DIFFENTRY            = "DiffEntry";
+        public static final String DIFFEXIT             = "DiffExit";
+        public static final String DIFFMIDDLE           = "DiffMiddle";
+        public static final String DIFFPRELOAD          = "DiffPreload";
+        public static final String DISABLEFUELCUT       = "DisableFuelCut";
+        public static final String ENGINEBRAKING        = "EngineBraking";
+        public static final String ENGINEPOWER          = "EnginePower";
+        public static final String FULLCOURSEYELLOWMODE = "FullCourseYellowMode";
+        public static final String FUELCUTPOSITION      = "FuelCutPosition";
+        public static final String FUELMIXTURE          = "FuelMixture";
+        public static final String HYSBOOSTHOLD         = "HYSBoostHold";
+        public static final String HYSDISABLEBOOSTHOLD  = "HYSDisableBoostHold";
+        public static final String HYSCHARGE            = "HYSCharge";
+        public static final String HYSDEPLOYMENT        = "HYSDeployment";
+        public static final String HYSDEPLOYMODE        = "HYSDeployMode";
+        public static final String HYSDEPLOYTRIM        = "HYSDeployTrim";
+        public static final String HYSREGENGAIN         = "HYSRegenGain";
+        public static final String INLAPMODE            = "InLapMode";
+        public static final String LOWFUELACCEPT        = "LowFuelAccept";
+        public static final String PEAKBRAKEBIAS        = "PeakBrakeBias";
+        public static final String PITSPEEDLIMITER      = "PitSpeedLimiter";
+        public static final String RFBRAKECONNECTED     = "RFBrakeConnected";
+        public static final String STARTER              = "Starter";
+        public static final String THROTTLESHAPE        = "ThrottleShape";
+        public static final String TRACTIONCONTROL      = "TractionControl";
+        public static final String TRACTIONCONTROLFRONT = "TractionControlFront";
+        public static final String TRACTIONCONTROLREAR  = "TractionControlRear";
+        public static final String WEIGHTJACKERRIGHT    = "WeightJackerRight";
+        public static final String WEIGHTJACKERLEFT     = "WeightJackerLeft";
+        public static final String WINGREAR             = "WingRear";
     }
 
     /**
@@ -704,7 +666,7 @@ public class Gauge {
       * 
       * @return the type of gauge
       */
-    public Data getType() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Type",m_type,"String",Data.State.NORMAL); }
+    public Data getType() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Type",m_type,"",Data.State.NORMAL); }
 
     /**
       * Returns the untranslated name to display on the gauge. (e.g. WATER)
@@ -712,7 +674,7 @@ public class Gauge {
       * <p>PATH = {@link #getName() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/Name}
       * @return The name of the gauge.
       */
-    public Data getName() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Name",m_name,"String",Data.State.NORMAL); }
+    public Data getName() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Name",m_name,"",Data.State.NORMAL); }
 
     /**
       * Returns farther explanation of the gauge (i.e. TEMP)
@@ -721,7 +683,7 @@ public class Gauge {
       * 
       * @return A additional explanation of the gauge.
       */
-    public Data getTypeName() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/TypeName",m_typeName,"String",Data.State.NORMAL); }
+    public Data getTypeName() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/TypeName",m_typeName,"",Data.State.NORMAL); }
     
     /*
      * Returns the Default Unit of Measure for this gauge (i.e. "NATIVE")
@@ -730,7 +692,7 @@ public class Gauge {
      * 
      * @return The Unit of Measure.
      */
-//   public Data getDefaultUOM() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/DefaultUOM","","String",Data.State.NORMAL); }
+//   public Data getDefaultUOM() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/DefaultUOM","","",Data.State.NORMAL); }
 
     /**
      * Returns the Unit of Measure for this gauge (i.e. "F") based on the users locale.
@@ -741,7 +703,7 @@ public class Gauge {
      * 
      * @return The Unit of Measure.
      */
-    public Data getUOM() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/UOM",new Data("",0.0,m_UOM).convertUOM(_getGaugeUOM(m_measurementSystem)).getUOM(),"String",Data.State.NORMAL); }
+    public Data getUOM() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/UOM",new Data("",0.0,m_UOM).convertUOM(_getGaugeUOM(m_measurementSystem)).getUOM(),"",Data.State.NORMAL); }
    
     /**
       * Return a multiplier to be used when calculating the major and minor tick marks.
@@ -1290,7 +1252,7 @@ public class Gauge {
                             (Double)state.getValue().get("Start"),
                             (Double)state.getValue().get("End"),
                             m_UOM,
-                            new Data((String)state.getValue().get("Name"),state.getValue().get("Value"),"String",Data.State.NORMAL)
+                            new Data((String)state.getValue().get("Name"),state.getValue().get("Value"),"",Data.State.NORMAL)
                         );
                     }
                     else {

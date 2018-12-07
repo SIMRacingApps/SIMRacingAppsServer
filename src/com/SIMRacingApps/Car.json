@@ -292,11 +292,11 @@
                 "metric":            "",
                 "StateAscending":    false,
                 "Minimum":           1.0,
-                "Maximum":           10.0,
+                "Maximum":           6.0,
                 "MajorIncrement":    2.0,
                 "MinorIncrement":    1.0,
                 "CapacityMinimum":   1.0,
-                "CapacityMaximum":   10.0,
+                "CapacityMaximum":   6.0,
                 "CapacityIncrement": 1.0
             }
         },
@@ -924,10 +924,10 @@
                 "IsFixed":           false
             }
         },
-        "RearWing": {
+        "WingRear": {
             "default": {
-                "Name":              "REAR",
-                "TypeName":          "WING",
+                "Name":              "WING",
+                "TypeName":          "REAR",
                 "UOM":               "deg",
                 "imperial":          "deg",
                 "metric":            "rad",
@@ -1176,6 +1176,24 @@
                 "IsFixed":           false
             }
         },
+        "DiffPreload": {
+            "default": {
+                "Name":              "DIFF",
+                "TypeName":          "PRELOAD",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           9.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   9.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
         "WeightJackerRight": {
             "default": {
                 "Name":              "WEIGHT JACKER",
@@ -1186,7 +1204,7 @@
                 "StateAscending":    false,
                 "Minimum":           -20.0,
                 "Maximum":           20.0,
-                "MajorIncrement":    1.0,
+                "MajorIncrement":    5.0,
                 "MinorIncrement":    1.0,
                 "CapacityMinimum":   -20.0,
                 "CapacityMaximum":   20.0,
@@ -1204,7 +1222,7 @@
                 "StateAscending":    false,
                 "Minimum":           -20.0,
                 "Maximum":           20.0,
-                "MajorIncrement":    1.0,
+                "MajorIncrement":    5.0,
                 "MinorIncrement":    1.0,
                 "CapacityMinimum":   -20.0,
                 "CapacityMaximum":   20.0,
@@ -1215,7 +1233,49 @@
         "TractionControl": {
             "default": {
                 "Name":              "TRACTION CONTROL",
-                "TypeName":          "TC",
+                "TypeName":          "MODE",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   1.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false,
+                "States": {
+                    "OFF": {"Start": -1.0, "End": 1.0, "Name": "Car/Gauge/TractionControl", "Value": "OFF"},
+                    "ON":  {"Start":  1.0, "End": 2.0, "Name": "Car/Gauge/TractionControl", "Value": "ON"}
+                }
+            }
+        },
+        "TractionControlRear": {
+            "default": {
+                "Name":              "TRACTION CONTROL",
+                "TypeName":          "REAR",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           6.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   6.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "TractionControlFront": {
+            "default": {
+                "Name":              "TRACTION CONTROL",
+                "TypeName":          "FRONT",
                 "UOM":               "",
                 "imperial":          "",
                 "metric":            "",
@@ -1315,6 +1375,319 @@
                 "States": {
                     "WARNING":  {"Start": 15.0, "End": 5.0},
                     "CRITICAL": {"Start": 5.0, "End": 0.0}
+                }
+            }
+        },
+        "HYSDeployTrim": {
+            "default": {
+                "Name":              "HYS",
+                "TypeName":          "DEPLOY TRIM",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           12.0,
+                "MajorIncrement":    2.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   12.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false
+            }
+        },
+        "FullCourseYellowMode": {
+            "default": {
+                "Name":              "FULL COURSE YELLOW",
+                "TypeName":          "MODE",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   1.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false,
+                "States": {
+                    "OFF": {"Start": -1.0, "End": 1.0, "Name": "Car/Gauge/FCYMode", "Value": "OFF"},
+                    "ON":  {"Start":  1.0, "End": 2.0, "Name": "Car/Gauge/FCYMode", "Value": "ON"}
+                }
+            }
+        },
+        "FuelCutPosition": {
+            "default": {
+                "Name":              "FUEL CUT",
+                "TypeName":          "POSITION",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           -10.0,
+                "Maximum":           10.0,
+                "MajorIncrement":    5.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   -10.0,
+                "CapacityMaximum":   10.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "DisableFuelCut": {
+            "default": {
+                "Name":              "FUEL CUT",
+                "TypeName":          "DISABLE",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   1.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false,
+                "States": {
+                    "OFF": {"Start": -1.0, "End": 1.0, "Name": "Car/Gauge/DisableFuelCut", "Value": "OFF"},
+                    "ON":  {"Start":  1.0, "End": 2.0, "Name": "Car/Gauge/DisableFuelCut", "Value": "ON"}
+                }
+            }
+        },
+        "HYSBoostHold": {
+            "default": {
+                "Name":              "HYS",
+                "TypeName":          "BOOST HOLD",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   1.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false,
+                "States": {
+                    "OFF": {"Start": -1.0, "End": 1.0, "Name": "Car/Gauge/HYSBoostHold", "Value": "OFF"},
+                    "ON":  {"Start":  1.0, "End": 2.0, "Name": "Car/Gauge/HYSBoostHold", "Value": "ON"}
+                }
+            }
+        },
+        "HYSDisableBoostHold": {
+            "default": {
+                "Name":              "HYS",
+                "TypeName":          "DISABLE BOOST HOLD",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   1.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false,
+                "States": {
+                    "OFF": {"Start": -1.0, "End": 1.0, "Name": "Car/Gauge/HYSDisableBoostHold", "Value": "OFF"},
+                    "ON":  {"Start":  1.0, "End": 2.0, "Name": "Car/Gauge/HYSDisableBoostHold", "Value": "ON"}
+                }
+            }
+        },
+        "InLapMode": {
+            "default": {
+                "Name":              "IN LAP MODE",
+                "TypeName":          "",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   1.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false,
+                "States": {
+                    "OFF": {"Start": -1.0, "End": 1.0, "Name": "Car/Gauge/InLapMode", "Value": "OFF"},
+                    "ON":  {"Start":  1.0, "End": 2.0, "Name": "Car/Gauge/InLapMode", "Value": "ON"}
+                }
+            }
+        },
+        "LowFuelAccept": {
+            "default": {
+                "Name":              "LOW FUEL ACCEPT",
+                "TypeName":          "",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   1.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false,
+                "States": {
+                    "OFF": {"Start": -1.0, "End": 1.0, "Name": "Car/Gauge/LowFuelAccept", "Value": "OFF"},
+                    "ON":  {"Start":  1.0, "End": 2.0, "Name": "Car/Gauge/LowFuelAccept", "Value": "ON"}
+                }
+            }
+        },
+        "HYSRegenGain": {
+            "default": {
+                "Name":              "HYS",
+                "TypeName":          "REGEN GAIN",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           1.0,
+                "Maximum":           10.0,
+                "MajorIncrement":    2.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   1.0,
+                "CapacityMaximum":   10.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false
+            }
+        },
+        "HYSDeployMode": {
+            "default": {
+                "Name":              "HYS",
+                "TypeName":          "DEPLOY MODE",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   1.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false,
+                "States": {
+                    "MANUAL":     {"Start": -1.0, "End": 1.0, "Name": "Car/Gauge/HYSDeployMode", "Value": "MANUAL"},
+                    "AUTOMATIC":  {"Start":  1.0, "End": 2.0, "Name": "Car/Gauge/HYSDeployMode", "Value": "AUTOMATIC"}
+                }
+            }
+        },
+        "PeakBrakeBias": {
+            "default": {
+                "Name":              "PEAK BRAKE BIAS",
+                "TypeName":          "",
+                "UOM":               "%",
+                "imperial":          "%",
+                "metric":            "%",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           9.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    0.5,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   9.0,
+                "CapacityIncrement": 1.0
+            }
+        },
+        "PitSpeedLimiter": {
+            "default": {
+                "Name":              "PIT SPEED LIMITER",
+                "TypeName":          "",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   1.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false,
+                "States": {
+                    "OFF": {"Start": -1.0, "End": 1.0, "Name": "Car/Gauge/PitSpeedLimiter", "Value": "OFF"},
+                    "ON":  {"Start":  1.0, "End": 2.0, "Name": "Car/Gauge/PitSpeedLimiter", "Value": "ON"}
+                }
+            }
+        },
+        "BrakeConnectedRF": {
+            "default": {
+                "Name":              "BRAKE CONNECTED",
+                "TypeName":          "RF",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   1.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false,
+                "States": {
+                    "OFF": {"Start": -1.0, "End": 1.0, "Name": "Car/Gauge/BrakeConnectedRF", "Value": "OFF"},
+                    "ON":  {"Start":  1.0, "End": 2.0, "Name": "Car/Gauge/BrakeConnectedRF", "Value": "ON"}
+                }
+            }
+        },
+        "Starter": {
+            "default": {
+                "Name":              "STARTER",
+                "TypeName":          "",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   1.0,
+                "CapacityIncrement": 1.0,
+                "OnResetChange":     false,
+                "IsChangable":       false,
+                "IsFixed":           false,
+                "States": {
+                    "OFF": {"Start": -1.0, "End": 1.0, "Name": "Car/Gauge/Starter", "Value": "OFF"},
+                    "ON":  {"Start":  1.0, "End": 2.0, "Name": "Car/Gauge/Starter", "Value": "ON"}
                 }
             }
         }
