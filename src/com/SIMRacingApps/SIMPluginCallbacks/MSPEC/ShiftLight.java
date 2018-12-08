@@ -69,6 +69,8 @@ public class ShiftLight extends SIMPluginCallback {
             }
         }
         Subscribe("Car/REFERENCE/PitSpeedLimit");
+        Subscribe("Car/REFERENCE/Gauge/Gear/ValueCurrent");
+        Subscribe("Car/REFERENCE/Gauge/Gear/CapacityMaximum");
         Subscribe("Car/REFERENCE/Gauge/Tachometer/ValueCurrent");
         Subscribe("Car/REFERENCE/Gauge/Speedometer/ValueCurrent");
         Subscribe("Car/REFERENCE/Status");
@@ -222,6 +224,8 @@ public class ShiftLight extends SIMPluginCallback {
     
                 if (m_function.equals("rpm") || m_function.equals("red")) {
 //                    Data limit            = data.get("Car/REFERENCE/PitSpeedLimit");
+                    String gear           = data.get("Car/REFERENCE/Gauge/Gear/ValueCurrent").getString();
+                    String maxgear        = data.get("Car/REFERENCE/Gauge/Gear/CapacityMaximum").getString();
                     Data tach             = data.get("Car/REFERENCE/Gauge/Tachometer/ValueCurrent"); 
                     Data speed            = data.get("Car/REFERENCE/Gauge/Speedometer/ValueCurrent");
                     String status         = data.get("Car/REFERENCE/Status").getString();
@@ -241,20 +245,25 @@ public class ShiftLight extends SIMPluginCallback {
                         _lightBlink(m_blinkRateCritical,RTS);
                     }
                     else
-                    if (tach.getState().equalsIgnoreCase("SHIFT")) {
-                        _lightSwitch(true,RTS);
-                    }
-                    else {
-                        if (tach.getState().equalsIgnoreCase("SHIFTBLINK")) {
-                            _lightBlink(m_blinkRate,RTS);
-                        }
-                        else
-                        if (tach.getState().equalsIgnoreCase("CRITICAL")) {
-                            _lightBlink(m_blinkRateCritical,RTS);
+                    if (!gear.equals(maxgear)) {
+                        if (tach.getState().equalsIgnoreCase("SHIFT")) {
+                            _lightSwitch(true,RTS);
                         }
                         else {
-                            _lightSwitch(false,NONE);
+                            if (tach.getState().equalsIgnoreCase("SHIFTBLINK")) {
+                                _lightBlink(m_blinkRate,RTS);
+                            }
+                            else
+                            if (tach.getState().equalsIgnoreCase("CRITICAL")) {
+                                _lightBlink(m_blinkRateCritical,RTS);
+                            }
+                            else {
+                                _lightSwitch(false,NONE);
+                            }
                         }
+                    }
+                    else {
+                        _lightSwitch(false,NONE);
                     }
                 }
                 else
