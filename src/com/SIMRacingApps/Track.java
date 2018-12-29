@@ -4,11 +4,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 
@@ -26,6 +29,7 @@ import com.owlike.genson.stream.JsonStreamException;
 import com.SIMRacingApps.SIMPlugin;
 import com.SIMRacingApps.Data;
 import com.SIMRacingApps.Util.FindFile;
+import com.SIMRacingApps.Util.TimezoneMapper;
 
 /**
  * This class contains information about a track.
@@ -1018,6 +1022,33 @@ public class Track {
         return new Data("Track/Temp",0.0,tempUOM,m_trackmap == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL).convertUOM(UOM); 
     }
     public    Data    getTemp()                   { return getTemp(""); }
+    
+    /**
+     * Returns the time zone of the track's actual location in long format (i.e. America/New_York).
+     * The State is set to the short format (i.e. EST).
+     * If no track is loaded, it returns the users current time zone.
+     * 
+     * @return The time zone of the track in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getTimeZone() {
+        _loadTrack();
+        
+        TimeZone tz = TimeZone.getDefault();
+        String timezone = tz.getID();
+        String state = Data.State.NOTAVAILABLE;
+        
+        if (SIMPlugin.isConnected() && m_trackmap != null) {
+            timezone = (String)m_trackmap.get("TimeZone"); //allow track profile to override mapper
+            if (timezone == null || !timezone.isEmpty())
+                timezone = TimezoneMapper.latLngToTimezoneString(this.getLatitude().getDouble(), this.getLongitude().getDouble());
+    
+            tz = TimeZone.getTimeZone(timezone);
+            timezone = tz.getID();
+            state = Data.State.NORMAL;
+        }
+
+        return new Data("Track/Timezone",timezone,"",state);
+    }
     
     /**
      * Returns the track's type as defined by {@link com.SIMRacingApps.Track.Type}

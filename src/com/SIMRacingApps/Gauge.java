@@ -235,6 +235,7 @@ public class Gauge {
          * The amount of front wing angle.
          */
         public static final String FRONTWING         = "FrontWing";
+        public static final String REARWING          = "RearWing";
         
         /**
          * Controls the wind shield tear off for the next pit stop. 
@@ -474,12 +475,12 @@ public class Gauge {
         public static final String RFBRAKECONNECTED     = "RFBrakeConnected";
         public static final String STARTER              = "Starter";
         public static final String THROTTLESHAPE        = "ThrottleShape";
+        public static final String TOPWING              = "TopWing";
         public static final String TRACTIONCONTROL      = "TractionControl";
         public static final String TRACTIONCONTROLFRONT = "TractionControlFront";
         public static final String TRACTIONCONTROLREAR  = "TractionControlRear";
         public static final String WEIGHTJACKERRIGHT    = "WeightJackerRight";
         public static final String WEIGHTJACKERLEFT     = "WeightJackerLeft";
-        public static final String WINGREAR             = "WingRear";
     }
 
     /**

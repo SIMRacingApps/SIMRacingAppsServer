@@ -1,6 +1,9 @@
 package com.SIMRacingApps;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import com.SIMRacingApps.SIMPlugin;
 import com.SIMRacingApps.Data;
@@ -58,6 +61,24 @@ public class Session {
 
     private SIMPlugin m_SIMPlugin;
     private Car defaultCar = null;
+
+    protected String _getShortTimeZone(Date d, String longTimeZone) {
+        TimeZone tz = TimeZone.getTimeZone(longTimeZone);
+        String name = tz.getDisplayName(tz.inDaylightTime(d), TimeZone.SHORT);
+        return name;
+    }
+
+    protected String _getTimeZoneOffset(Date d, String longTimeZone) {
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(longTimeZone));
+        cal.setTime(d);
+        int zone_offset = cal.get(Calendar.ZONE_OFFSET) + cal.get(Calendar.DST_OFFSET);
+        String offset = String.format("%s%02d%02d",
+                        zone_offset >= 0 ? "+" : "-",
+                        Math.abs(zone_offset) / 1000 / 60 / 60,
+                        (Math.abs(zone_offset) / 1000) % 60
+                        );
+        return offset;
+    }
     
     public Session(SIMPlugin SIMPlugin) {
         m_SIMPlugin = SIMPlugin;
@@ -932,13 +953,23 @@ public class Session {
     public    Data    setReplayPosition(String command)          { /*String*/      return new Data("Session/setReplayPosition",command,"String",Data.State.NOTAVAILABLE); }
     
     /**
-     * Returns the time the current session started as the number of seconds since Jan 1, 1970.
+     * Returns the time the current session started as the number of seconds since Jan 1, 1970 UTC.
+     * It may be adjusted by the SIM to reflect a virtual date/time being simulated.
+     * But, that will be in UTC as well. The offset of the time zone is in the State in the format of +/-HHMM.
+     * 
+     * You can use the com.SIMRacingApps.Track.getTimeZone() to display the track's time zone,
+     * but to convert to the time zone of the track use the offset returned in the Data.State field.
+     * This will account for daylight savings time.
      * 
      * <p>PATH = {@link #getStartTime() /Session/StartTime}
      * 
      * @return The start time in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data    getStartTime()                   { /*double*/                              return new Data("Session/StartTime",(double)System.currentTimeMillis()/1000.0,"s",Data.State.NOTAVAILABLE); }
+    public    Data    getStartTime() {
+        Data d = new Data("Session/StartTime",(double)(new Date()).getTime()/1000L,"s"); 
+        d.setState(this._getTimeZoneOffset(new Date(), TimeZone.getDefault().getID()));
+        return d;
+    }
 
     /**
      * Returns a String that is SIM specific that represents the strength of the field.
@@ -951,6 +982,30 @@ public class Session {
      */
     public    Data    getStrengthOfField()             { /*String*/                              return new Data("Session/StrengthOfField","",Data.State.NOTAVAILABLE); }
 
+    /**
+     * Returns the time of the current session as the number of seconds since Jan 1, 1970 UTC.
+     * It may be adjusted by the SIM to reflect a virtual date/time being simulated. 
+     * But, that will be in UTC as well. The offset of the time zone is in the State in the format of +/-HHMM.
+     * 
+     * You can use the com.SIMRacingApps.Track.getTimeZone() to display the track's time zone,
+     * but to convert to the time zone of the track use the offset returned in the Data.State field.
+     * This will account for daylight savings time.
+     * 
+     * <p>PATH = {@link #getTime() /Session/Time}
+     * 
+     * @return The start time in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getTime() { 
+        double startTime = getStartTime().getDouble() + getTimeElapsed().getDouble();
+        Data d = new Data("Session/Time",startTime,"s");
+        
+        d.setState((getTrack() == null 
+                ? this._getTimeZoneOffset(new Date(Math.round(startTime)*1000L), TimeZone.getDefault().getID())
+                : this._getTimeZoneOffset(new Date(Math.round(startTime)*1000L), getTrack().getTimeZone().getString())));
+
+        return d;
+    }
+    
     /**
      * Returns the number of seconds since the current session started.
      * 

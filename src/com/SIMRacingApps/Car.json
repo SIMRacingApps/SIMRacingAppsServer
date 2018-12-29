@@ -924,10 +924,10 @@
                 "IsFixed":           false
             }
         },
-        "WingRear": {
+        "RearWing": {
             "default": {
-                "Name":              "WING",
-                "TypeName":          "REAR",
+                "Name":              "REAR",
+                "TypeName":          "WING",
                 "UOM":               "deg",
                 "imperial":          "deg",
                 "metric":            "rad",
@@ -939,6 +939,24 @@
                 "CapacityMinimum":   -0.313,
                 "CapacityMaximum":   0.313,
                 "CapacityIncrement": 0.025,
+                "IsFixed":           false
+            }
+        },
+        "TopWing": {
+            "default": {
+                "Name":              "TOP",
+                "TypeName":          "WING",
+                "UOM":               "in",
+                "imperial":          "in",
+                "metric":            "mm",
+                "StateAscending":    false,
+                "Minimum":           -10.0,
+                "Maximum":           0.0,
+                "MajorIncrement":    2.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   -10.0,
+                "CapacityMaximum":   0.0,
+                "CapacityIncrement": 1.0,
                 "IsFixed":           false
             }
         },
