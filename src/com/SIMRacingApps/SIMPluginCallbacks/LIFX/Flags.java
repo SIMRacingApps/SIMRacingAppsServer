@@ -39,7 +39,7 @@ import com.SIMRacingApps.Util.State;
  *
  * @author    Jeffrey Gilliam
  * @since     1.4
- * @copyright Copyright (C) 2018 - 2018 Jeffrey Gilliam
+ * @copyright Copyright (C) 2018 - 2019 Jeffrey Gilliam
  * @license   Apache License 2.0
  */
 public class Flags extends SIMPluginCallback {

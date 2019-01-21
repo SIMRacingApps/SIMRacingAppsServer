@@ -1,5 +1,5 @@
 {
-    "Copyright":   "Copyright (C) 2015 - 2018 Jeffrey Gilliam",
+    "Copyright":   "Copyright (C) 2015 - 2019 Jeffrey Gilliam",
     "License":     "Apache License 2.0",
     "COMMENT1":    "The Lat/Lon is the center of the track around which the image is rotated",
     "COMMENT1a":   "tip: if you center the map within the browser frame, the url will change to the center of the view",

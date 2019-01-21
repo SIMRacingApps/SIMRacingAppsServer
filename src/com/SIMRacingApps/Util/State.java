@@ -9,7 +9,7 @@ import java.util.Map;
  * It also keeps track of the previous state, so even after changing the state, you can see the state you were in before the change. 
  * @author Jeffrey Gilliam
  * @since 1.0
- * @copyright Copyright (C) 2015 - 2017 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2019 Jeffrey Gilliam
  * @license Apache License 2.0
  */
 public class State {
