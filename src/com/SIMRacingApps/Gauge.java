@@ -1051,7 +1051,7 @@ public class Gauge {
      */
     public Data setValueNext(double value, String UOM) { return getValueNext(UOM); }
     public Data setValueNext(String value, String UOM) { return setValueNext(Double.parseDouble(value),UOM); }
-    public Data setValueNext(String value)             { return setValueNext(value,m_UOM); }
+    public Data setValueNext(String value)             { return setValueNext(value,m_measurementSystem); }
     public Data setValueNext()                         { return setValueNext("0"); }
 
     /**
