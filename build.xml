@@ -9,8 +9,8 @@
             logger.setMessageOutputLevel( 9 );
     </script>
     <property name="build.major" value="1" />
-    <property name="build.minor" value="8" />
-    <property name="build.prefix" value="" />
+    <property name="build.minor" value="9" />
+    <property name="build.prefix" value="BETA-" />
     <!--property name="build.prefix" value="BETA-" /-->
     <tstamp>
         <format property="build.time" pattern="yyyy.MM.dd.HH.mm.ss" />
@@ -34,7 +34,7 @@
     <property name="SIMRacingAppsSIMPluginiRacing.location" value="../SIMRacingAppsSIMPluginiRacing" />
     <property name="SIMRacingAppsWebContent.location" value="../SIMRacingAppsWebContent" />
     <property name="SIMRacingApps.github.io.location" value="../SIMRacingApps.github.io" />
-    <property name="ECLIPSE_HOME" value="O:/OneDrive/PortableApps/EclipsePortable/App/Eclipse/" />
+    <!--property name="ECLIPSE_HOME" value="O:/OneDrive/PortableApps/EclipsePortable/App/Eclipse/" /-->
     <property name="JETTY_VERSION" value="9.4.9.v20180320" />
     <property name="JETTY" value="jetty-distribution-${JETTY_VERSION}" />
     <property name="debuglevel" value="source,lines,vars" />
