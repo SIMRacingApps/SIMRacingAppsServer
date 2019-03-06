@@ -450,6 +450,7 @@ public class Gauge {
         public static final String ABS                  = "ABS";
         public static final String ANTIROLLFRONT        = "AntiRollFront";
         public static final String ANTIROLLREAR         = "AntiRollRear";
+        public static final String BOOSTLEVEL           = "BoostLevel";
         public static final String BRAKEBIASADJUSTMENT  = "BrakeBiasAdjustment";
         public static final String DIFFENTRY            = "DiffEntry";
         public static final String DIFFEXIT             = "DiffExit";

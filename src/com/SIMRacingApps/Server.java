@@ -718,7 +718,8 @@ public class Server {
             String ip = Server.getArg("ip", "" );
             try {
 
-                  String hostname = InetAddress.getLocalHost().getHostName();
+                  String hostname = Server.getArg("hostname",InetAddress.getLocalHost().getHostName());
+                  Server.logger().info("Hostname = " + hostname);
                   InetAddress[] addresses = InetAddress.getAllByName(hostname);
                   for (InetAddress addr : addresses) {
                       String host = addr.getHostAddress();
