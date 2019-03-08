@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.logging.Level;
 
 import com.sun.jna.Native;
@@ -234,6 +235,10 @@ public class Windows {
         }
         public ByteBuffer getByteBuffer(long offset, long length) {
             return m_pointer.getByteBuffer(offset, length);
+        }
+        public <T extends com.sun.jna.Structure> T asStructure(
+            Function<com.sun.jna.Pointer,T> structureCreator) {
+            return structureCreator.apply(m_pointer);
         }
     }
     
