@@ -61,6 +61,7 @@ public class Session {
 
     private SIMPlugin m_SIMPlugin;
     private Car defaultCar = null;
+    private Track defaultTrack = null;
 
     protected String _getShortTimeZone(Date d, String longTimeZone) {
         TimeZone tz = TimeZone.getTimeZone(longTimeZone);
@@ -1033,7 +1034,7 @@ public class Session {
      * Each SIM will have to provide an override that does not return a null
      * @return An instance of {@link com.SIMRacingApps.Track}
      */
-    public    Track   getTrack()                       { /*Track*/                               return null; }
+    public    Track   getTrack()                       { /*Track*/                               return defaultTrack != null ? defaultTrack : (defaultTrack = new Track(m_SIMPlugin)); }
     
     /**
      * Returns the type of the current session as defined by {@link com.SIMRacingApps.Session.Type}

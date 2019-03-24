@@ -637,7 +637,7 @@ public class SIMPlugin {
      */
     public Session getSession() { 
         if (m_session == null) {
-            new Session(this);
+            m_session = new Session(this);
         }
         return m_session;
     }
