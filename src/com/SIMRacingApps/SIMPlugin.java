@@ -266,7 +266,7 @@ public class SIMPlugin {
      * @return The SIM name in a {@link com.SIMRacingApps.Data} container.
      */
     public Data getSIMName() {
-        return new Data("SIMPluginName",m_SIMName,"string");
+        return new Data("SIMPluginName",m_SIMName,"string",Data.State.NORMAL);
     }
 
     private String m_Play = "";
