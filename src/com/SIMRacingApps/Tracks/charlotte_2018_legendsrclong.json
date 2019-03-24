@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2019 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    35.351669,
+    "Longitude":   -80.682891,
+    "North":       166.0,
+    "Resolution":  1.9,
+    "Images": {
+        "SAT":     "charlotte-sat.png",
+        "MAP":     "charlotte-map.png"
+    },
+    "MergePoint":  13.1,
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  90.0,
+    "GPX": {
+        "ONTRACK":   "charlotte_2018_legendsrclong-ONTRACK.gpx",
+        "ONPITROAD": "charlotte_2018_legendsrclong-ONPITROAD.gpx"        
+    }
+}
