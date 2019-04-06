@@ -1487,9 +1487,16 @@ public class Car {
      * See {@link com.SIMRacingApps.Car#getMessages()}
      */
     public final static class Message {
-        public static final String REPAIR           = "REPAIR";
-        public static final String PITSPEEDLIMITER  = "PITSPEEDLIMITER";
-        public static final String TOWING           = "TOWING";
+        public static final String REPAIR               = "REPAIR";
+        public static final String PITSERVICEINPROGRESS = "PITSERVICEINPROGRESS";
+        public static final String PITSPEEDLIMITER      = "PITSPEEDLIMITER";
+        public static final String STRAIGHTENUP         = "STRAIGHTENUP";
+        public static final String TOOFARBACK           = "TOOFARBACK";
+        public static final String TOOFARFORWARD        = "TOOFARFORWARD";
+        public static final String TOOFARLEFT           = "TOOFARLEFT";
+        public static final String TOOFARRIGHT          = "TOOFARRIGHT";
+        public static final String TOOMUCHDAMAGE        = "TOOMUCHDAMAGE";
+        public static final String TOWING               = "TOWING";
     }
     
     /**

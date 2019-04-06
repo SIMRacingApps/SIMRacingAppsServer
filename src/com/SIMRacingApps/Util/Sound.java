@@ -52,9 +52,9 @@ public class Sound {
     public Sound(String deviceName, String filename) {
         Sound.loadMixers();
         try {
+            m_file = new FindFile(filename);
             m_clip = _getClip(deviceName);
-            if (m_clip != null) {
-                m_file = new FindFile(filename);
+            if (m_clip != null && m_file != null) {
                 m_audioStream = AudioSystem.getAudioInputStream(m_file.getBufferedInputStream());
                 m_clip.open(m_audioStream);
                 m_length = (double)m_clip.getMicrosecondLength() / 1000000.0;
@@ -228,6 +228,16 @@ public class Sound {
                 m_lastTimePlayed = System.currentTimeMillis();
             }
         }
+    }
+    
+    /**
+     * Returns true if clip is currently playing
+     * @return Returns true if clip is currently playing
+     */
+    public boolean isPlaying() {
+        if (m_clip != null)
+            return m_clip.isActive();
+        return false;
     }
     
     /**
