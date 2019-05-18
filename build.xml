@@ -9,8 +9,8 @@
             logger.setMessageOutputLevel( 9 );
     </script>
     <property name="build.major" value="1" />
-    <property name="build.minor" value="9" />
-    <property name="build.prefix" value="" />
+    <property name="build.minor" value="10" />
+    <property name="build.prefix" value="BETA-" />
     <!--property name="build.prefix" value="BETA-" /-->
     <tstamp>
         <format property="build.time" pattern="yyyy.MM.dd.HH.mm.ss" />

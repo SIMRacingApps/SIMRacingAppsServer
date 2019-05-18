@@ -410,8 +410,13 @@ public class listings extends HttpServlet {
                                         is_p.close();
                                     }
                                 }
+                                else {
+                                    _loadListUser(folder+"/"+l.getName(),list);
+                                }
                             }
-                            catch (FileNotFoundException e) {}
+                            catch (FileNotFoundException e) {
+                                _loadListUser(folder+"/"+l.getName(),list);
+                            }
                         }
                     }
                 }            
