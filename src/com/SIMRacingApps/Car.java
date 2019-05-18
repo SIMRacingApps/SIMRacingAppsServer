@@ -698,6 +698,38 @@ public class Car {
     }    
 
     /**
+     * Returns the Latitudinal Acceleration.
+     * 
+     * <p>PATH = {@link #getLatitudeAcceleration(String) /Car/(CARIDENTIFIER)/LatitudeAcceration/(UOM)}
+     * 
+     * @since 1.10
+     * @param UOM           (Optional) A unit of measure to return. Set to null or a blank string to use car's UOM.
+     * @return The latitudinal acceleration in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getLatitudeAcceleration(String UOM) {
+        return new Data("Car/"+m_carIdentifier+"/LatitudeAcceleration",0.0,"m/s2",Data.State.NORMAL).convertUOM(UOM);
+    }
+    public Data getLatitudeAcceleration() {
+        return getLatitudeAcceleration("m/s2");
+    }
+    
+    /**
+     * Returns the Longitudinal Acceleration.
+     * 
+     * <p>PATH = {@link #getLongitudeAcceleration(String) /Car/(CARIDENTIFIER)/LongitudeAcceration/(UOM)}
+     * 
+     * @since 1.10
+     * @param UOM           (Optional) A unit of measure to return. Set to null or a blank string to use car's UOM.
+     * @return The longitudinal acceleration in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getLongitudeAcceleration(String UOM) {
+        return new Data("Car/"+m_carIdentifier+"/LongitudeAcceleration",0.0,"m/s2",Data.State.NORMAL).convertUOM(UOM);
+    }
+    public Data getLongitudeAcceleration() {
+        return getLongitudeAcceleration("m/s2");
+    }
+    
+    /**
      * Returns an instance of the Gauge Type specified for this car.
      * If the car does not contain a gauge of this type, it returns a generic gauge.
      * @param gaugeType One of the enumerated types defined by {@link com.SIMRacingApps.Gauge.Type}
