@@ -13,7 +13,6 @@
         "SAT":     "bristol-sat.png",
         "MAP":     "bristol-map.png"
     },
-    "North":       30.0,
     "FinishLine":  270.0,
     "ONTRACK": {
         "0.0": { "Latitude": 36.515982747255 , "Longitude": -82.256138966958 },
@@ -1754,7 +1753,6 @@
         "60.7": { "Latitude": 36.514679013196 , "Longitude": -82.257072474841 },
         "60.8": { "Latitude": 36.514674146862 , "Longitude": -82.257069014124 },
         "60.9": { "Latitude": 36.514667658370 , "Longitude": -82.257064325394 },
-        "Status ONTRACK": { "Latitude": 36.514662882138 , "Longitude": -82.257060753016 },
         "61.0": { "Latitude": 36.514662882138 , "Longitude": -82.257060753016 },
         "61.1": { "Latitude": 36.514658015769 , "Longitude": -82.257057180638 },
         "61.2": { "Latitude": 36.514651617414 , "Longitude": -82.257052380246 },

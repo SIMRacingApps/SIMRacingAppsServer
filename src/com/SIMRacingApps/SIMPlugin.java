@@ -165,7 +165,7 @@ public class SIMPlugin {
      * 
      */
     protected SIMPlugin() throws SIMPluginException {
-        Boolean teamspeak = Server.getArg("teamspeak", true);
+        Boolean teamspeak = Server.getArg("teamspeak", true) && !Server.getArg("safemode", false);
         if (teamspeak) {
             String teamspeakClient = Server.getArg("teamspeak-client", "localhost");
             m_teamspeak = new TeamSpeak(this,teamspeakClient);
