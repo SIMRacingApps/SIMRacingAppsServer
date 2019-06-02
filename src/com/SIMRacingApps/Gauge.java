@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import com.SIMRacingApps.Data;
+import com.SIMRacingApps.SIMPlugin.SIMPluginException;
 
 /**
  * The Gauge class is used to monitor anything on the car that has a value, or has a value that can be set on the next pit stop.
@@ -1270,6 +1271,15 @@ public class Gauge {
             }
         }
     }
-  
+
+    @Override
+    public String toString() {
+        String s = "{}";
+        try {
+            //cheat and let the plugin serialize this.
+            s = this.m_car.m_SIMPlugin.getData("Car/"+m_carIdentifier+"/Gauge/"+m_type).getString();
+        } catch (SIMPluginException e) {}
+        return s;
+    }
 }
 

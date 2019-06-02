@@ -609,7 +609,7 @@ public class DataService {
                                 
                                 //if callback starts with an exclamation point, then that means do not load it
                                 //this way the built in callbacks can be turned off.
-                                if (okToLoad && !callback.startsWith("!"))
+                                if (!Server.getArg("safemode", false) && okToLoad && !callback.startsWith("!"))
                                     m_SIMPlugin.addCallback(callback);
                             }
                         }
