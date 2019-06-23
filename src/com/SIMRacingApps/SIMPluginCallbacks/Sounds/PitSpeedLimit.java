@@ -25,7 +25,7 @@ import com.SIMRacingApps.Util.Sound;
  *    sound-volume = 100.0
  * </pre>
  * Setting the volume zero(0) will disable the sounds.
- * The volume is a percentage from 0.0 to 1.0.
+ * The volume is a percentage from 0.0 to 1.0 or 1.1 to 100.0
  *
  * @author Jeffrey Gilliam
  * @since 1.0
