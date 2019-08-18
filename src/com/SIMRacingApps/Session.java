@@ -360,8 +360,8 @@ public class Session {
                 cartoproject = carIdentifier1;
             }
             else {
-                lap2 = _car2.getLap(Car.LapType.CURRENT);
-                lap1 = _car1.getLap(Car.LapType.CURRENT);
+                lap2 = _car2.getLap(Car.LapType.COMPLETED);
+                lap1 = _car1.getLap(Car.LapType.COMPLETED);
                 
                 //use the fastest car 
                 if (car1Speed > car2Speed)
@@ -460,7 +460,7 @@ public class Session {
             int position = 0;
             int refposition = 0;
 
-            if (getCar("REFERENCE").getId().getInteger() == _car2.getId().getInteger()) {
+            if (getCar("REFERENCE").getId().getInteger() == _car2.getId().getInteger() || carIdentifier2.startsWith("LEADER")) {
 //            if (car.equalsIgnoreCase("ME") || car.equalsIgnoreCase("REFERENCE")) {
                 position = 0;
             }
@@ -469,15 +469,15 @@ public class Session {
                 position = Integer.parseInt(carIdentifier2.substring(3));
             }
             else
-            if (carIdentifier2.startsWith("RL") || carIdentifier2.startsWith("RP") || carIdentifier2.startsWith("RC")) {
+            if (carIdentifier2.startsWith("RL") || carIdentifier2.startsWith("RP") || carIdentifier2.startsWith("RC") || carIdentifier2.startsWith("PC")) {
                 position = Integer.parseInt(carIdentifier2.substring(2));
             }
             else
-            if (carIdentifier2.startsWith("R") || carIdentifier2.startsWith("P")) {
+            if (carIdentifier2.startsWith("R") || carIdentifier2.startsWith("P") || carIdentifier2.startsWith("I")) {
                 position = Integer.parseInt(carIdentifier2.substring(1));
             }
 
-            if (getCar("REFERENCE").getId().getInteger() == _car1.getId().getInteger()) {
+            if (getCar("REFERENCE").getId().getInteger() == _car1.getId().getInteger() || carIdentifier1.startsWith("LEADER")) {
 //            if (refcar.equalsIgnoreCase("ME") || refcar.equalsIgnoreCase("REFERENCE")) {
                 refposition = 0;
 //if (position == 1) {  
@@ -489,11 +489,11 @@ public class Session {
                 refposition = Integer.parseInt(carIdentifier1.substring(3));
             }
             else
-            if (carIdentifier1.startsWith("RL") || carIdentifier1.startsWith("RP") || carIdentifier1.startsWith("RC")) {
+            if (carIdentifier1.startsWith("RL") || carIdentifier1.startsWith("RP") || carIdentifier1.startsWith("RC") || carIdentifier1.startsWith("PC")) {
                 refposition = Integer.parseInt(carIdentifier1.substring(2));
             }
             else
-            if (carIdentifier1.startsWith("R") || carIdentifier1.startsWith("P")) {
+            if (carIdentifier1.startsWith("R") || carIdentifier1.startsWith("P") || carIdentifier1.startsWith("I")) {
                 refposition = Integer.parseInt(carIdentifier1.substring(1));
             }
 
