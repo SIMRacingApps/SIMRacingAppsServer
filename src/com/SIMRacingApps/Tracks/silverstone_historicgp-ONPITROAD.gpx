@@ -1,12 +1,8 @@
 <?xml version="1.0"?>
 <gpx xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxedw="http://www.gpxeditor.co.uk/xmlschemas/WaypointExtension/v1" xmlns:gpxedts="http://www.gpxeditor.co.uk/xmlschemas/TrackSegExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" creator="GPXEditor" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
-  <wpt lat="52.07441" lon="-1.02204">
-    <name>Silverstone Circuit</name>
-    <point>axy|HvrfE</point>
-  </wpt>
   <rte>
     <name>Untitled</name>
-    <rtept lat="52.0785709401026" lon="-1.0169380903244">
+    <rtept lat="52.0785577526385" lon="-1.01715132594109">
       <name />
       <cmt />
     </rtept>
@@ -70,7 +66,7 @@
       <name />
       <cmt />
     </rtept>
-    <rtept lat="52.0716688306621" lon="-1.00986778736114">
+    <rtept lat="52.0716688306621" lon="-1.00986778736115">
       <name />
       <cmt />
     </rtept>
@@ -318,7 +314,7 @@
       <name />
       <cmt />
     </rtept>
-    <rtept lat="52.0785709401026" lon="-1.01694881916046">
+    <rtept lat="52.0785577526385" lon="-1.01714998483658">
       <name />
       <cmt />
     </rtept>

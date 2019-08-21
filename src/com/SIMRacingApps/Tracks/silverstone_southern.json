@@ -5,7 +5,7 @@
     "Longitude":   -1.0146634,
     "North":       180.0,
     "Resolution":  5.9,
-    "MergePoint":  8.5,
+    "MergePoint":  10.0,
     "Images": {
         "SAT":     "silverstone-sat.png",
         "MAP":     "silverstone-map.png"

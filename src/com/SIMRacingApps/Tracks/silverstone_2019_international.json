@@ -5,7 +5,7 @@
     "Longitude":   -1.0146634,
     "North":       180.0,
     "Resolution":  5.9,
-    "MergePoint":  8.5,
+    "MergePoint":  20.0,
     "Images": {
         "SAT":     "silverstone-sat.png",
         "MAP":     "silverstone-map.png"
@@ -13,9 +13,9 @@
     "DistanceUOM": "km",
     "TempUOM":     "C",
     "SpeedUOM":    "kph",
-    "FinishLine":  180.0,
+    "FinishLine":  135.0,
     "GPX": {
-        "ONTRACK":   "silverstone_international-ONTRACK.gpx",
-        "ONPITROAD": "silverstone_international-ONPITROAD.gpx"        
+        "ONTRACK":   "silverstone_2019_international-ONTRACK.gpx",
+        "ONPITROAD": "silverstone_2019_international-ONPITROAD.gpx"        
     }
 }
