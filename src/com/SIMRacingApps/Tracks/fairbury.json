@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2019 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    40.739947,
+    "Longitude":   -88.514662,
+    "North":       90.0,
+    "Resolution":  0.5,
+    "MergePoint":  93.0,
+    "Images": {
+        "SAT":     "fairbury-sat.png",
+        "MAP":     "fairbury-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "fairbury-ONTRACK.gpx",
+        "ONPITROAD": "fairbury-ONPITROAD.gpx"        
+    }
+}

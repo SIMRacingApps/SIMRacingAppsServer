@@ -471,6 +471,7 @@ public class Gauge {
         public static final String HYSDEPLOYTRIM        = "HYSDeployTrim";
         public static final String HYSREGENGAIN         = "HYSRegenGain";
         public static final String INLAPMODE            = "InLapMode";
+        public static final String LAUNCHRPM            = "LaunchRPM";
         public static final String LOWFUELACCEPT        = "LowFuelAccept";
         public static final String PEAKBRAKEBIAS        = "PeakBrakeBias";
         public static final String PITSPEEDLIMITER      = "PitSpeedLimiter";

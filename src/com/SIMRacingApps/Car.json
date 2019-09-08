@@ -20,6 +20,21 @@
                 "StateAscending":    true
             }
         },
+        "LaunchRPM": {
+            "default": {
+                "Name":              "LAUNCH",
+                "TypeName":          "RPM",
+                "UOM":               "rev/min",
+                "imperial":          "rev/min",
+                "metric":            "rev/min",
+                "Multiplier":        1.0,
+                "Minimum":           0.0,
+                "Maximum":           7.0,
+                "MajorIncrement":    1000.0,
+                "MinorIncrement":    200.0,
+                "StateAscending":    true
+            }
+        },
         "Speedometer": {
             "default": {
                 "Name":              "SPEED",
