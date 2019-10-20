@@ -1,0 +1,19 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2019 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "North":       166.0,
+    "Resolution":  1.9,
+    "MergePoint":  13.0,
+    "Images": {
+        "SAT":     "charlotte-sat.png",
+        "MAP":     "charlotte-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "charlotte_2018_2019_roval-ONTRACK.gpx",
+        "ONPITROAD": "charlotte_2018_2019_roval-ONPITROAD.gpx"        
+    }
+}

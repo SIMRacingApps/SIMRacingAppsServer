@@ -445,7 +445,7 @@ public class Track {
      * @param relativeTo The point, as a percentage, to use to find the next merge point after. Range 0.0 to 100.0.
      * @return The merge point.
      */
-    public double getMergePoint(double relativeTo) {
+    public double _getMergePoint(double relativeTo) {
         _loadTrack();
         if (m_trackmap == null) return 0.0;
         Object mergePoint = m_trackmap.get("MergePoint");

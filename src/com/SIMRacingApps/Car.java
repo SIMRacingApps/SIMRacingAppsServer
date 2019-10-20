@@ -1515,6 +1515,34 @@ public class Car {
     }
 
     /**
+     * Returns the merge point latitude.
+     * 
+     * <p>PATH = {@link #getMergePointLatitude() /Car/(CARIDENTIFIER)/MergePointLatitude}
+     * 
+     * @return The merge point latitude.
+     */
+    public Data getMergePointLatitude() {
+        Data d = new Data("Car/"+m_carIdentifier+"/MergePointLatidute",0.0,"deg",Data.State.NOTAVAILABLE);
+        double lat = m_SIMPlugin.getSession().getTrack().getLatitude("ONTRACK", getMergePoint().getDouble(), "deg").getDouble();
+        d.setValue(lat);
+        return d;
+    }
+
+    /**
+     * Returns the merge point longitude.
+     * 
+     * <p>PATH = {@link #getMergePointLongitude() /Car/(CARIDENTIFIER)/MergePointLongitude}
+     * 
+     * @return The merge point longitude.
+     */
+    public Data getMergePointLongitude() {
+        Data d = new Data("Car/"+m_carIdentifier+"/MergePointLongidute",0.0,"deg",Data.State.NOTAVAILABLE);
+        double lon = m_SIMPlugin.getSession().getTrack().getLongitude("ONTRACK", getMergePoint().getDouble(), "deg").getDouble();
+        d.setValue(lon);
+        return d;
+    }
+    
+    /**
      * This class enumerates the various messages that a SIM can raise that applies to a specific car.
      * See {@link com.SIMRacingApps.Car#getMessages()}
      */
