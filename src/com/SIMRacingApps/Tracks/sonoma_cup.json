@@ -5,7 +5,7 @@
     "Longitude":   -122.4575807,
     "North":       50.0,
     "Resolution":  2.9,
-    "MergePoint":  8.5,
+    "MergePoint":  7.0,
     "Images": {
         "SAT":     "sonoma-sat.png",
         "MAP":     "sonoma-map.png"

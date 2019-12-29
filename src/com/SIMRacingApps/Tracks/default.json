@@ -10,9 +10,8 @@
     "North":       166.0,
     "COMMENT3":    "Resolution is the number of meters per pixel. Considering the size is 800x480 pixels",
     "Resolution":  2.5,
-    "COMMENT4":    "MergePoint is the point at which you are legally able to reenter the track after pitting",
-    "COMMENT5":    "If the GPX File has a point named MergePoint, it is used instead",
-    "MergePoint":  38.5,
+    "COMMENT4":    "MergePoint is the point at which you are legally able to reenter the track after pitting. Some tracks have blue cone",
+    "MergePoint":  0.1,
     "COMMENT6":    "Images map to the Layer Name to show (MAP,OSM). Must have at least MAP",
     "Images": {
         "MAP":     "default.png",
@@ -27,7 +26,6 @@
     "COMMENT9":    "GPX is the file saved from http://www.gpxeditor.co.uk of the GPS coordinates.",
     "COMMENT9a":   "Right Click, Draw New, Route. Draw the points starting at the finish line and ending at the finish line",
     "COMMENT9b":   "Save as GPX file associated to the names here",
-    "COMMENT9c":   "ONTRACK should have at least one of the points named MergePoint. But you can have multiple, Bristol for example",
     "GPX": {
         "ONTRACK":   "default-ONTRACK.gpx",
         "ONPITROAD": "default-ONPITROAD.gpx"        

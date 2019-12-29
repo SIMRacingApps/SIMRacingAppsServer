@@ -5,7 +5,7 @@
     "Longitude":   -77.9730808,
     "North":       341.0,
     "Resolution":  2.9,
-    "MergePoint":  99.5,
+    "MergePoint":  99.51,
     "Images": {
         "SAT":     "summit-sat.png",
         "MAP":     "summit-map.png"

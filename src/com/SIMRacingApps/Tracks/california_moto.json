@@ -5,7 +5,7 @@
     "Longitude":   -117.5005502,
     "North":       270.0,
     "Resolution":  2.7,
-    "MergePoint":  20.6,
+    "MergePoint":  15.0,
     "Images": {
         "SAT":     "california-sat.png",
         "MAP":     "california-map.png"

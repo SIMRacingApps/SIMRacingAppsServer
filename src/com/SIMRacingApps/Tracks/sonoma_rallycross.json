@@ -3,6 +3,7 @@
     "License":     "Apache License 2.0",
     "North":       50.0,
     "Resolution":  2.9,
+    "MergePoint":  59.7,
     "Images": {
         "SAT":     "sonoma-sat.png",
         "MAP":     "sonoma-map.png"

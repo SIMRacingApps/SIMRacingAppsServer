@@ -5,6 +5,7 @@
     "Longitude":   6.9488127,
     "North":       315.0,
     "Resolution":  22.5,
+    "MergePoint":  1.0,
     "Images": {
         "SAT":     "nurburgring_combined-SAT.png",
         "MAP":     "nurburgring_combined-MAP.png"

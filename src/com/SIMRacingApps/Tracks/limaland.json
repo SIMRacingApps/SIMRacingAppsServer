@@ -6,6 +6,7 @@
     "COMMENT3":    "Resolution is the number of meters per pixel. Considering the size is 800x480 pixels",
     "Resolution":  0.4,
     "COMMENT6":    "Images map to the Layer Name to show (MAP,OSM). Must have at least MAP",
+    "MergePoint":  36.2,
     "Images": {
         "MAP":     "limaland-map.png",
         "SAT":     "limaland-map.png"
@@ -19,7 +20,6 @@
     "COMMENT9":    "GPX is the file saved from http://www.gpxeditor.co.uk of the GPS coordinates.",
     "COMMENT9a":   "Right Click, Draw New, Route. Draw the points starting at the finish line and ending at the finish line",
     "COMMENT9b":   "Save as GPX file associated to the names here",
-    "COMMENT9c":   "ONTRACK should have at least one of the points named MergePoint. But you can have multiple, Bristol for example",
     "GPX": {
         "ONTRACK":   "limaland-ONTRACK.gpx",
         "ONPITROAD": "limaland-ONPITROAD.gpx"        

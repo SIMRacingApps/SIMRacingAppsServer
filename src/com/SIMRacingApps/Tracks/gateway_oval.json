@@ -9,7 +9,7 @@
         "SAT":     "gateway-sat.png",
         "MAP":     "gateway-map.png"
     },
-    "MergePoint":  34.9,
+    "MergePoint":  34.8,
     "DistanceUOM": "mile",
     "TempUOM":     "F",
     "SpeedUOM":    "mph",

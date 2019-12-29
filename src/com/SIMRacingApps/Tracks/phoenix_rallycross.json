@@ -3,6 +3,7 @@
     "License":     "Apache License 2.0",
     "North":       110.0,
     "Resolution":  1.4,
+    "MergePoint":  7.6,
     "Images": {
         "SAT":     "phoenix-sat.png",
         "MAP":     "phoenix-map.png"

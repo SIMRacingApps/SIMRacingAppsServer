@@ -8,7 +8,7 @@
     "Longitude":   -82.2570724,
     "North":       30.0,
     "Resolution":  0.8,
-    "MergePoint":  [44.5,94.5],
+    "MergePoint":  [37.7,87.4],
     "Images": {
         "SAT":     "bristol-sat.png",
         "MAP":     "bristol-map.png"

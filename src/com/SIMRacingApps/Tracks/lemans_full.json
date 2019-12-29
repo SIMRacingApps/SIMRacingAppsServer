@@ -12,7 +12,7 @@
     "Resolution":  14.5,
     "COMMENT4":    "MergePoint is the point at which you are legally able to reenter the track after pitting",
     "COMMENT5":    "If the GPX File has a point named MergePoint, it is used instead",
-    "MergePoint":  8.5,
+    "MergePoint":  4.1,
     "COMMENT6":    "Images map to the Layer Name to show (MAP,OSM). Must have at least MAP",
     "Images": {
         "MAP":     "lemans-MAP.png"

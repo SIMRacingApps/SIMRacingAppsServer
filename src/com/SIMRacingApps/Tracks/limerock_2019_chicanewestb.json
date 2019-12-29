@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2019 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    41.9271129,
+    "Longitude":   -73.3836812,
+    "North":       66.0,
+    "Resolution":  2.3,
+    "MergePoint":  7.1,
+    "Images": {
+        "SAT":     "limerock-sat.png",
+        "MAP":     "limerock-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  90.0,
+    "GPX": {
+        "ONTRACK":   "limerock_2019_chicanewestb-ONTRACK.gpx",
+        "ONPITROAD": "limerock_2019_chicanewestb-ONPITROAD.gpx"        
+    }
+}

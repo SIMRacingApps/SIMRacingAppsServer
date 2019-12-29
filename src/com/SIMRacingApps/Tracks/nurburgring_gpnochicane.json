@@ -3,6 +3,7 @@
     "License":     "Apache License 2.0",
     "North":       315.0,
     "Resolution":  5.5,
+    "MergePoint":  10.8,
     "Images": {
         "SAT":     "nurburgring_gp-SAT.png",
         "MAP":     "nurburgring_gp-MAP.png"

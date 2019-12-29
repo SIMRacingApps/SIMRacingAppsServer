@@ -5,7 +5,7 @@
     "Longitude":   -76.3866193,
     "North":       316.5,
     "Resolution":  0.8,
-    "MergePoint":  38.5,
+    "MergePoint":  44.2,
     "Images": {
         "SAT":     "langley-map.png",
         "MAP":     "langley-sat.png"

@@ -5,7 +5,7 @@
     "Longitude":   -79.9054505,
     "North":       255.0,
     "Resolution":  1.7,
-    "MergePoint":  43.7,
+    "MergePoint":  36.1,
     "Images": {
         "SAT":     "darlington-sat.png",
         "MAP":     "darlington-map.png"

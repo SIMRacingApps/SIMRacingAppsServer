@@ -5,7 +5,7 @@
     "Longitude":   -82.6369582,
     "North":       315.0,
     "Resolution":  3.1,
-    "MergePoint":  15.7,
+    "MergePoint":  13.2,
     "Images": {
         "SAT":     "midohio-sat.png",
         "MAP":     "midohio-map.png"

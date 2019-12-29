@@ -6,8 +6,7 @@
     "COMMENT3":    "Resolution is the number of meters per pixel. Considering the size is 800x480 pixels",
     "Resolution":  3.5,
     "COMMENT4":    "MergePoint is the point at which you are legally able to reenter the track after pitting",
-    "COMMENT5":    "If the GPX File has a point named MergePoint, it is used instead",
-    "MergePoint":  38.5,
+    "MergePoint":  6.7,
     "COMMENT6":    "Images map to the Layer Name to show (MAP,OSM). Must have at least MAP",
     "Images": {
         "MAP":     "belleisle-map.png",

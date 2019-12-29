@@ -5,7 +5,7 @@
     "Longitude":   -78.6745053,
     "North":       25.0,
     "Resolution":  3.5,
-    "MergePoint":  11.7,
+    "MergePoint":  10.5,
     "Images": {
         "SAT":     "mosport-sat.png",
         "MAP":     "mosport-map.png"

@@ -5,7 +5,7 @@
     "Longitude":   9.2876809,
     "North":       175.0,
     "Resolution":  5.8,
-    "MergePoint":  7.9,
+    "MergePoint":  4.2,
     "Images": {
         "SAT":     "monza-sat.png",
         "MAP":     "monza-map.png"

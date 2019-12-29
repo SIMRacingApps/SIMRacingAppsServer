@@ -3,6 +3,7 @@
     "License":     "Apache License 2.0",
     "Resolution":  3.8,
     "North":       248.0,
+    "MergePoint":  16.7,
     "Images": {
         "SAT":     "pocono-sat.png",
         "MAP":     "pocono-map.png"

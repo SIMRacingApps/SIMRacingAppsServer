@@ -5,7 +5,7 @@
     "Longitude":   -2.616806,
     "North":       10.0,
     "Resolution":  5.0,
-    "MergePoint":  25.0,
+    "MergePoint":  10.8,
     "Images": {
         "SAT":     "oulton-map.png",
         "MAP":     "oulton-sat.png"

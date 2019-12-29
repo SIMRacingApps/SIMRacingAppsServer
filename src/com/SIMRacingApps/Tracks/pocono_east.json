@@ -5,7 +5,7 @@
     "Longitude":   -75.5081646,
     "Resolution":  3.8,
     "North":       248.0,
-    "MergePoint":  7.2,
+    "MergePoint":  5.6,
     "Images": {
         "SAT":     "pocono-sat.png",
         "MAP":     "pocono-map.png"

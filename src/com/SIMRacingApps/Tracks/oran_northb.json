@@ -5,7 +5,7 @@
     "Longitude":   150.7334,
     "North":       298.5,
     "Resolution":  1.8,
-    "MergePoint":  4.0,
+    "MergePoint":  2.2,
     "Images": {
         "MAP":     "oran-map.png",
         "SAT":     "oran-sat.png",

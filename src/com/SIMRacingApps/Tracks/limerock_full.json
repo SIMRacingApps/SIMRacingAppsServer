@@ -5,7 +5,7 @@
     "Longitude":   -73.3836812,
     "North":       66.0,
     "Resolution":  2.3,
-    "MergePoint":  9.9,
+    "MergePoint":  8.1,
     "Images": {
         "SAT":     "limerock-sat.png",
         "MAP":     "limerock-map.png"

@@ -5,7 +5,7 @@
     "Longitude":   -115.0103358,
     "North":       130.0,
     "Resolution":  2.2,
-    "MergePoint":  43.3,
+    "MergePoint":  39.0,
     "Images": {
         "SAT":     "vegas-sat.png",
         "MAP":     "vegas-map.png"

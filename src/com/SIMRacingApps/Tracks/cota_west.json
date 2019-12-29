@@ -5,7 +5,7 @@
     "Longitude":   -97.6343061,
     "North":       270.0,
     "Resolution":  4.0,
-    "MergePoint":  7.2,
+    "MergePoint":  15.3,
     "Images": {
         "SAT":     "cota-map.png",
         "MAP":     "cota-sat.png"

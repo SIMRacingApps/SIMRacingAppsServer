@@ -5,7 +5,7 @@
     "Longitude":   -112.310556,
     "North":       110.0,
     "Resolution":  1.4,
-    "MergePoint":  15.8,
+    "MergePoint":  13.8,
     "Images": {
         "SAT":     "phoenix-sat.png",
         "MAP":     "phoenix-map.png"

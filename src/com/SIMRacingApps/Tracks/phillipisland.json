@@ -5,7 +5,7 @@
     "Longitude":   145.2343164,
     "North":       190.0,
     "Resolution":  3.5,
-    "MergePoint":  25.0,
+    "MergePoint":  2.0,
     "Images": {
         "SAT":     "phillipisland-map.png",
         "MAP":     "phillipisland-sat.png"

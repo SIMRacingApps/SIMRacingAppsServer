@@ -5,7 +5,7 @@
     "Longitude":   -88.514662,
     "North":       90.0,
     "Resolution":  0.5,
-    "MergePoint":  93.0,
+    "MergePoint":  98.0,
     "Images": {
         "SAT":     "fairbury-sat.png",
         "MAP":     "fairbury-map.png"

@@ -5,7 +5,7 @@
     "Longitude":   149.5538202,
     "North":       349.5,
     "Resolution":  5.0,
-    "MergePoint":  25.0,
+    "MergePoint":  7.2,
     "Images": {
         "SAT":     "bathurst-map.png",
         "MAP":     "bathurst-sat.png"

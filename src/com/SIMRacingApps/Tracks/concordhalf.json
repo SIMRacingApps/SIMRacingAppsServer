@@ -5,7 +5,7 @@
     "Longitude":   -80.5215144,
     "North":       26.0,
     "Resolution":  0.8,
-    "MergePoint":  38.5,
+    "MergePoint":  23.2,
     "Images": {
         "SAT":     "concordhalf-map.png",
         "MAP":     "concordhalf-sat.png"

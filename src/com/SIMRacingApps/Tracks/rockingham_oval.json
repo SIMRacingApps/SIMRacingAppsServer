@@ -9,7 +9,7 @@
         "SAT":     "rockingham-sat.png",
         "MAP":     "rockingham-map.png"
     },
-    "MergePoint":  44.1,
+    "MergePoint":  37.8,
     "DistanceUOM": "mile",
     "TempUOM":     "F",
     "SpeedUOM":    "mph",

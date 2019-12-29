@@ -152,7 +152,7 @@ public class Track {
 //            }
 //        }
 
-        String trackpath = "com/SIMRacingApps/Tracks/" + trackname.replace(' ', '_') + ".json";
+        String trackpath = "com/SIMRacingApps/Tracks/" + Server.getArg(trackname.replace(' ', '_'),trackname.replace(' ', '_')) + ".json";
         Server.logger().info(String.format("Loading Track Map %s", trackpath));
         
         try {
@@ -273,10 +273,17 @@ public class Track {
                             double prevPercent = 0.0;
                             prevRec = new Rec(0.0,0.0,0.0,270.0);
                             
+                            //most tracks are setup for 100% from start to finish
+                            //nurburg tourist doesn't start and end at the same place
+                            //it is 109.2% long
+                            double maxPercent = m_trackmap.containsKey("MaxPercent") 
+                                              ? (double)m_trackmap.get("MaxPercent") / 100.0
+                                              : 1.0;
+                            
                             for (int i=0; i < records.size(); i++) {
                                 Rec rec = records.get(i);
                                 cumlativeDistance += records.get(i).distance;
-                                rec.percent = cumlativeDistance / totalDistance;
+                                rec.percent = (cumlativeDistance / totalDistance) * maxPercent;
                                 
                                 while (i > 0 
                                 &&     prevPercent + .001 < rec.percent
@@ -364,6 +371,12 @@ public class Track {
         return true;
     }
 
+    public double _maxPercentage() {
+        return m_trackmap.containsKey("MaxPercent") 
+             ? (double)m_trackmap.get("MaxPercent") / 100.0
+             : 1.0;
+    }
+    
     //http://www.movable-type.co.uk/scripts/latlong.html
     private static double _distance(double lat1, double lon1, double lat2, double lon2) {
         //System.err.printf("lat1=%f,lon1=%f,lat2=%f,lon2=%f%n" , lat1,lon1,lat2,lon2);
@@ -391,7 +404,8 @@ public class Track {
 
     private static double _rad2deg(double rad) {
         return (rad / Math.PI) * 180.0;
-    }    
+    }
+    
     /**
      * Forces a reload of the track's JSON files. 
      * Normally the JSON files are only read once and cached.
@@ -408,6 +422,7 @@ public class Track {
      *     "Longitude":   -80.682891,       //center to rotate on
      *     "Resolution":  1.9,              //meters per pixed @ 800x480
      *     "MergePoint":  38.5,             //percentage from finish line where you are safe to merge from pit road to the track
+     *     "MaxPercentage": 100.0,          //Normalize the percentage for distance according to this
      *     "DistanceUOM": "mile",           //the unit of measure to show distance in
      *     "TempUOM":     "F",              //the unit of measure to show temperature in
      *     "SpeedUOM":    "mph",            //the unit of measure to show speed in
@@ -676,7 +691,7 @@ public class Track {
     /**
      * Returns the Latitude of the requested position based on percentage traveled from the start/finish line.
      * Can return the coordinate based on 3 locations, CENTER, ONTRACK and ONPITROAD.
-     * You can get the start/finish line by passing in ONTRACK with a percentage of zero.
+     * You can get the start/finish line by passing in ONTRACK with a percentage of 100.
      * <p>
      * If a SIM can return the exact coordinates, then it should override this functions and return them.
      * Otherwise, the percentage is used to approximate the position.
@@ -686,7 +701,7 @@ public class Track {
      * @param location (Optional), The location of where you want the percentage to apply to, CENTER, ONTRACK, or ONPITROAD. 
      *        Defaults to CENTER.
      * @param percentage (Optional), The percentage traveled from the start/finish line. 
-     *        Range 0.0 to 100.0. 
+     *        Range 0.0 to 100.0 or MaxPercentage. 
      *        Defaults to 0.0.
      * @param UOM (optional), The UOM to return the Latitude in. 
      *        Defaults to degrees.
@@ -758,7 +773,7 @@ public class Track {
     /**
      * Returns the Longitude of the requested position based on percentage traveled from the start/finish line.
      * Can return the coordinate based on 3 locations, CENTER, ONTRACK and ONPITROAD.
-     * You can get the start/finish line by passing in ONTRACK with a percentage of 0.0.
+     * You can get the start/finish line by passing in ONTRACK with a percentage of 100.0.
      * <p>
      * If a SIM can return the exact coordinates, then it should override this functions and return them.
      * Otherwise, the percentage is used to approximate the position.
@@ -768,7 +783,7 @@ public class Track {
      * @param location (Optional), The location of where you want the percentage to apply to, CENTER, ONTRACK, or ONPITROAD. 
      *        Defaults to CENTER.
      * @param percentage (Optional), The percentage traveled from the start/finish line. 
-     *        Range 0.0 to 100.0. 
+     *        Range 0.0 to 100.0 or MaxPercentage. 
      *        Defaults to 0.0.
      * @param UOM (optional), The UOM to return the Longitude in. 
      *        Defaults to degrees.

@@ -5,7 +5,7 @@
     "Longitude":   -88.0569541,
     "North":       215.0,
     "Resolution":  2.4,
-    "MergePoint":  40.8,
+    "MergePoint":  38.2,
     "Images": {
         "SAT":     "chicagoland-sat.png",
         "MAP":     "chicagoland-map.png"

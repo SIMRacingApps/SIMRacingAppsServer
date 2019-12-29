@@ -5,7 +5,7 @@
     "Longitude":   -79.2045974,
     "North":       207.0,
     "Resolution":  4.0,
-    "MergePoint":  43.3,
+    "MergePoint":  3.1,
     "Images": {
         "SAT":     "virginia-sat.png",
         "MAP":     "virginia-map.png"

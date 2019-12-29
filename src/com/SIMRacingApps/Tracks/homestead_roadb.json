@@ -5,7 +5,7 @@
     "Longitude":   -80.4087777,
     "North":       116.3,
     "Resolution":  1.8,
-    "MergePoint":  12.0,
+    "MergePoint":  9.7,
     "Images": {
         "SAT":     "homestead-sat.png",
         "MAP":     "homestead-map.png"

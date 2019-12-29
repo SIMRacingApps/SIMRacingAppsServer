@@ -3,6 +3,7 @@
     "License":     "Apache License 2.0",
     "North":       144.0,
     "Resolution":  3.1,
+    "MergePoint":  71.6,
     "Images": {
         "SAT":     "daytona-sat.png",
         "MAP":     "daytona-map.png"

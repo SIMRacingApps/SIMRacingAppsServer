@@ -3,6 +3,7 @@
     "License":     "Apache License 2.0",
     "North":       71.5,
     "Resolution":  1.9,
+    "MergePoint":  64.4,
     "Images": {
         "SAT":     "atlanta-sat.png",
         "MAP":     "atlanta-map.png"

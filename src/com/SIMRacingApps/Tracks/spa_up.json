@@ -3,6 +3,7 @@
     "License":     "Apache License 2.0",
     "North":       40.0,
     "Resolution":  7.0,
+    "MergePoint":  7.3,
     "Images": {
         "SAT":     "spa-map.png",
         "MAP":     "spa-sat.png"

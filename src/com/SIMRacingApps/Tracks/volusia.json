@@ -3,6 +3,7 @@
     "License":     "Apache License 2.0",
     "North":       260.0,
     "Resolution":  0.8,
+    "MergePoint":  20.0,
     "Images": {
         "SAT":     "volusia-sat.png",
         "MAP":     "volusia-map.png"

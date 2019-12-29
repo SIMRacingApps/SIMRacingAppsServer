@@ -3,6 +3,7 @@
     "License":     "Apache License 2.0",
     "North":       268.0,
     "Resolution":  1.0,
+    "MergePoint":  28.0,
     "Images": {
         "SAT":     "knoxville-sat.png",
         "MAP":     "knoxville-map.png"

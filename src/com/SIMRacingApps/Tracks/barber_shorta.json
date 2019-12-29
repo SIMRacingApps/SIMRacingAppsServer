@@ -5,7 +5,7 @@
     "Longitude":   -86.6191663,
     "North":       134.0,
     "Resolution":  2.2,
-    "MergePoint":  16.6,
+    "MergePoint":  12.9,
     "Images": {
         "SAT":     "barber-map.png",
         "MAP":     "barber-sat.png"

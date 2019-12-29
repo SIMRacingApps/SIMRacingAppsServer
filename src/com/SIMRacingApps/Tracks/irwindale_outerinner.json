@@ -5,7 +5,7 @@
     "Longitude":   -117.9878141,
     "North":       67.0,
     "Resolution":  0.8,
-    "MergePoint":  1.2,
+    "MergePoint":  99.0,
     "Images": {
         "SAT":     "irwindale-sat.png",
         "MAP":     "irwindale-map.png"

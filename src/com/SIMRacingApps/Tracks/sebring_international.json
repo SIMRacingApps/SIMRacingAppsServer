@@ -5,7 +5,7 @@
     "Longitude":   -81.3516765,
     "North":       270.0,
     "Resolution":  3.9,
-    "MergePoint":  25.0,
+    "MergePoint":  7.6,
     "Images": {
         "SAT":     "sebring-sat.png",
         "MAP":     "sebring-map.png"

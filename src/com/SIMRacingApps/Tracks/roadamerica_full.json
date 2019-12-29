@@ -5,7 +5,7 @@
     "Longitude":   -87.9960132,
     "North":       2.0,
     "Resolution":  4.4,
-    "MergePoint":  7.4,
+    "MergePoint":  6.0,
     "Images": {
         "SAT":     "roadamerica-sat.png",
         "MAP":     "roadamerica-map.png"

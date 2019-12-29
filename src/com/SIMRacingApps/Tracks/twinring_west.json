@@ -5,7 +5,7 @@
     "Longitude":   140.2302199,
     "North":       245.0,
     "Resolution":  3.6,
-    "MergePoint":  12.7,
+    "MergePoint":  6.8,
     "Images": {
         "SAT":     "twinring-sat.png",
         "MAP":     "twinring-map.png"

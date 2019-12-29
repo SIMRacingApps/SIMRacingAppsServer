@@ -5,7 +5,7 @@
     "Longitude":   -71.8246867,
     "North":       173.0,
     "Resolution":  0.9,
-    "MergePoint":  49.6,
+    "MergePoint":  44.6,
     "Images": {
         "SAT":     "thompson-sat.png",
         "MAP":     "thompson-map.png"

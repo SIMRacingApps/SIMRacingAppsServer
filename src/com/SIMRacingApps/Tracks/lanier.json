@@ -5,7 +5,7 @@
     "Longitude":   -83.8128944,
     "North":       36.4,
     "Resolution":  0.5,
-    "MergePoint":  15.8,
+    "MergePoint":  39.0,
     "Images": {
         "SAT":     "lanier-sat.png",
         "MAP":     "lanier-map.png"

@@ -5,7 +5,7 @@
     "Longitude":   -86.2340317,
     "North":       180.0,
     "Resolution":  3.4,
-    "MergePoint":  16.4,
+    "MergePoint":  34.5,
     "Images": {
         "SAT":     "indianapolis_sat.png",
         "MAP":     "indianapolis_map.png"

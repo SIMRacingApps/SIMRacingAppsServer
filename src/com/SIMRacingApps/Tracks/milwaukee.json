@@ -5,7 +5,7 @@
     "Longitude":   -88.011065,
     "North":       180.0,
     "Resolution":  1.6,
-    "MergePoint":  39.7,
+    "MergePoint":  36.0,
     "Images": {
         "SAT":     "milwaukee-sat.png",
         "MAP":     "milwaukee-map.png"

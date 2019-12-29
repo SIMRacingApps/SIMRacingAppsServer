@@ -12,7 +12,7 @@
     "Resolution":  4.7,
     "COMMENT4":    "MergePoint is the point at which you are legally able to reenter the track after pitting",
     "COMMENT5":    "If the GPX File has a point named MergePoint, it is used instead",
-    "MergePoint":  38.5,
+    "MergePoint":  9.3,
     "COMMENT6":    "Images map to the Layer Name to show (SAT,MAP,OSM,MAPQUEST). Must have at least SAT and MAP",
     "Images": {
         "SAT":     "imola-sat.png",

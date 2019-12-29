@@ -3,6 +3,7 @@
     "License":     "Apache License 2.0",
     "North":       166.0,
     "Resolution":  1.9,
+    "MergePoint":  12.3,
     "Images": {
         "SAT":     "charlotte-sat.png",
         "MAP":     "charlotte-map.png"

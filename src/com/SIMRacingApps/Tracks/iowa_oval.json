@@ -3,6 +3,7 @@
     "License":     "Apache License 2.0",
     "North":       218.0,
     "Resolution":  1.4,
+    "MergePoint":  43.7,
     "Images": {
         "SAT":     "iowa-sat.png",
         "MAP":     "iowa-map.png"

@@ -243,7 +243,7 @@ public class Car {
      * @param SIMPlugin An instance of SIMPlugin.
      * @param id        A numeric value used by the SIM to identify a car
      * @param name      The name of the car as returned by the SIM
-     * @param carPath   The relative path to the car's .json file provided by the SIM
+     * @param carPath   The relative path to the car's .json file provided by the SIM. Allow settings to remap it.
      */
     public Car(SIMPlugin SIMPlugin, int id, String name, String carPath) {
         this.m_SIMPlugin = SIMPlugin;

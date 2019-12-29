@@ -5,7 +5,7 @@
     "Longitude":   -87.3082137,
     "North":       269.0,
     "Resolution":  0.8,
-    "MergePoint":  38.5,
+    "MergePoint":  38.4,
     "Images": {
         "SAT":     "fiveflags-sat.png",
         "MAP":     "fiveflags-map.png"

@@ -9,7 +9,7 @@
         "SAT":     "charlotte-sat.png",
         "MAP":     "charlotte-map.png"
     },
-    "MergePoint":  13.1,
+    "MergePoint":  98.0,
     "DistanceUOM": "mile",
     "TempUOM":     "F",
     "SpeedUOM":    "mph",

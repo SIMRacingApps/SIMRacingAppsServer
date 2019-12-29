@@ -5,7 +5,7 @@
     "Longitude":   136.5317019,
     "North":       270.0,
     "Resolution":  4.5,
-    "MergePoint":  8.5,
+    "MergePoint":  2.9,
     "Images": {
         "SAT":     "suzuka-sat.png",
         "MAP":     "suzuka-map.png"

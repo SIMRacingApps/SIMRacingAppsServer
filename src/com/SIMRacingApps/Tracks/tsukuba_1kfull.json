@@ -5,6 +5,7 @@
     "North":       340.0,
     "COMMENT3":    "Resolution is the number of meters per pixel. Considering the size is 800x480 pixels",
     "Resolution":  0.6,
+    "MergePoint":  2.9,
     "COMMENT6":    "Images map to the Layer Name to show (MAP,OSM). Must have at least MAP",
     "Images": {
         "MAP":     "tsukuba1k.png",

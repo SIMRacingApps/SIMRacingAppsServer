@@ -5,7 +5,7 @@
     "Longitude":   -77.4194073,
     "North":       -75.0,
     "Resolution":  1.1,
-    "MergePoint":  45.6,
+    "MergePoint":  43.5,
     "Images": {
         "SAT":     "richmond-sat.png",
         "MAP":     "richmond-map.png"

@@ -5,7 +5,7 @@
     "Longitude":   -83.8154135,
     "North":       5.0,
     "Resolution":  3.9,
-    "MergePoint":  20.0,
+    "MergePoint":  13.5,
     "Images": {
         "SAT":     "roadatlanta-sat.png",
         "MAP":     "roadatlanta-map.png"
