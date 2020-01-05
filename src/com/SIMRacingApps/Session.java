@@ -35,6 +35,7 @@ public class Session {
     /**
      * This class enumerates the values returned by {@link com.SIMRacingApps.Session#getType()}
      * <ul>
+     * <li>UNKNOWN</li>
      * <li>OPEN_QUALIFY</li>
      * <li>LONE_QUALIFY</li>
      * <li>OFFLINE</li>
@@ -53,6 +54,26 @@ public class Session {
         public final static String RACE             = "RACE";
     }
 
+    /**
+     * This class enumerates the values return by {@link com.SIMRacingApps.Session#getStatus()}
+     * <ul>
+     * <li>UNKNOWN</li>
+     * <li>ENGINES_STARTED</li>
+     * <li>GREEN</li>
+     * <li>CAUTION</li>
+     * <li>RED</li>
+     * <li>FINISHED</li>
+     * </ul>
+     */
+    public final static class Status {
+        public final static String UNKNOWN          = "UNKNOWN";
+        public final static String ENGINES_STARTED  = "ENGINES_STARTED"; 
+        public final static String GREEN            = "GREEN"; 
+        public final static String CAUTION          = "CAUTION";
+        public final static String RED              = "RED";
+        public final static String FINISHED         = "FINISHED"; 
+    }
+    
     /** number of laps to return if the session has unlimited laps */
     public static final int UNLIMITEDLAPS = 9999;
 
@@ -972,6 +993,27 @@ public class Session {
         return d;
     }
 
+    /**
+     * Returns the status of the session as one of the following defined in 
+     * {@link com.SIMRacingApps.Session.Status}.
+     * <ul>
+     * <li>UNKNOWN</li>
+     * <li>ENGINES_STARTED</li>
+     * <li>GREEN</li>
+     * <li>CAUTION</li>
+     * <li>RED</li>
+     * <li>FINISHED</li>
+     * </ul>
+     * <p>PATH = {@link #getStatus() /Session/Status} 1.12
+     * 
+     * @since 1.12
+     * @return The status in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getStatus() {
+        Data d = new Data("Session/Status",Status.UNKNOWN,"",Data.State.NOTAVAILABLE); 
+        return d;
+    }
+    
     /**
      * Returns a String that is SIM specific that represents the strength of the field.
      * This implies a SIM has some sort of ranking system.
