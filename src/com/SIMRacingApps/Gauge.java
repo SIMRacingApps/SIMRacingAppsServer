@@ -43,7 +43,7 @@ import com.SIMRacingApps.SIMPlugin.SIMPluginException;
  * See {@link com.SIMRacingApps.Gauge.Type} for each gauges documentation for the states it supports.
  * @author Jeffrey Gilliam
  * @since 1.4
- * @copyright Copyright (C) 2015 - 2019 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2020 Jeffrey Gilliam
  * @license Apache License 2.0
  * 
  */

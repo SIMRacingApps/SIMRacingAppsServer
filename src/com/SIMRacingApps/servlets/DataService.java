@@ -24,7 +24,7 @@ import com.SIMRacingApps.Server;
  * <p>
  * Other configuration options are available and must be called before your first call to getJSON(). 
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2019 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2020 Jeffrey Gilliam
  * @since 1.0
  * @license Apache License 2.0
  */
