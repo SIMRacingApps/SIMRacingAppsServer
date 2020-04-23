@@ -119,6 +119,11 @@ Jeffrey\ Gilliam = Jeff Gilliam
 John\ Doe27 = >>John Doe
 Young\ Gun = !!Danger Danger
 
+#####################################################################
+### Control if you see the iRating that started the race, 
+### or the changes throughout the race.
+#####################################################################
+dynamic-irating = Y
 
 #####################################################################
 ### MSPEC Shift Light's COMM Port Assignments
