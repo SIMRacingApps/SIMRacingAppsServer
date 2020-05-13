@@ -493,6 +493,20 @@ public class Car {
     }
 
     /**
+     * Returns the change of rating of the current driver of the car as the race progresses.
+     * Each SIM can define how a rating should be formed, so do not assume it is number.
+     * Do not try to parse it to break it down, as a specific format is not guaranteed.
+     * The rating delta is simply meant to be displayed.
+     * 
+     * <p>PATH = {@link #getDriverRatingDelta() /Car/(CARIDENTIFIER)/DriverRatingDelta}
+     * 
+     * @return The rating in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getDriverRatingDelta() {
+        return new Data("Car/"+m_carIdentifier+"/DriverRatingDelta","0","ratingdelta");
+    }
+
+    /**
      * Returns the number of laps you can run on the existing fuel in the tank.
      * 
      * <p>PATH = {@link #getFuelLaps(int) /Car/(CARIDENTIFIER)/FuelLaps/(LAPSTOAVERAGE)}
@@ -2088,6 +2102,18 @@ public class Car {
         return setChatFlag((new Data("",onOffFlag)).getBoolean());
     }
 
+
+    /**
+     * Tell the SIM to reload the paint files for this car.
+     * If SIM does not support this capability, then the NOTAVAILABLE state will be returned.
+     * 
+     * <p>PATH = {@link #setReloadPaint() /Session/setReloadPaint}
+     * 
+     * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data setReloadPaint() {
+        return new Data("Car/"+m_carIdentifier+"/setReloadPaint","","String",Data.State.NOTAVAILABLE);
+    }
 
     /**
      * Disqualify this car but leave them in the session. 

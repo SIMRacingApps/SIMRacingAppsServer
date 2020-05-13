@@ -1249,4 +1249,17 @@ public class Session {
     public    Data setCautionFlag() {
         return new Data("Session/setCautionFlag","","String",Data.State.NOTAVAILABLE);
     }
+    
+    /**
+     * Tell the SIM to reload the paint files for all cars.
+     * If SIM does not support this capability, then the NOTAVAILABLE state will be returned.
+     * 
+     * <p>PATH = {@link #setReloadPaint() /Session/setReloadPaint}
+     * 
+     * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data setReloadPaint() {
+        return new Data("Session/setReloadPaint","","String",Data.State.NOTAVAILABLE);
+    }
+
 }
