@@ -1,5 +1,7 @@
 package com.SIMRacingApps;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1046,6 +1048,38 @@ public class Session {
                 ? this._getTimeZoneOffset(new Date(Math.round(startTime)*1000L), TimeZone.getDefault().getID())
                 : this._getTimeZoneOffset(new Date(Math.round(startTime)*1000L), getTrack().getTimeZone().getString())));
 
+        return d;
+    }
+    
+    /**
+     * Returns the time of the current session in the time zone of the track using the following format.
+     * 
+     * YYYYMMDDHHMMSS
+     * 
+     * It may be adjusted by the SIM to reflect a virtual date/time being simulated. 
+     * 
+     * You can use the com.SIMRacingApps.Track.getTimeZone() to display the track's time zone.
+     * 
+     * <p>PATH = {@link #getTimeString() /Session/TimeString}
+     * 
+     * @return The start time in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getTimeString() {
+        Data d = new Data("Session/TimeString","","");
+        Data t = getTime();
+        long seconds = t.getLong();
+        String tz = t.getState();
+
+        Date dt = new Date(seconds*1000L);
+        
+        //displaying this date on IST timezone
+        DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+        String track_tz = this.m_SIMPlugin.getSession().getTrack().getTimeZone().getString();
+        df.setTimeZone(TimeZone.getTimeZone(track_tz));
+        String tracktime = df.format(dt);
+
+        d.setValue(tracktime);
+        d.setState(tz);
         return d;
     }
     
