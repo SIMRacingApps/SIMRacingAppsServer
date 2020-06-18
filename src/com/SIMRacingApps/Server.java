@@ -175,6 +175,7 @@ public class Server {
      * @param trace An array to the stack trace.
      */
     public static synchronized void logStackTrace(Level level, String message, StackTraceElement[] trace) {
+        logger().log(level,"logStackTrace(Level,String,StackTraceElement[])");
         if (message == null) {
             logger().log(level,"logStackTrace(Level,String,StackTraceElement[]): message is null");
             return;
@@ -209,7 +210,7 @@ public class Server {
         StackTraceElement[] trace = exception.getStackTrace();
         logStackTrace(level,message,trace);
         if (message != null && !message.isEmpty())
-            logger().log(level,exception.getLocalizedMessage() + " " + message);
+            logger().log(level,"exception.getLocalizedMessage(): " + exception.getLocalizedMessage() + " " + message);
     }
 
     /**

@@ -741,6 +741,17 @@ public class Session {
     public    Data    getMessages()                       { /*String*/                              return new Data("Session/Messages",";DISCONNECTED;","",Data.State.NORMAL); }
     
     /**
+     * Returns the name of the session. This name is SIM dependent and should not be used for decision making, only display.
+     * 
+     * <p>PATH = {@link #getName(String) /Session/Name/(session)}
+     * 
+     * @param session (optional) The session identifier. Defaults to current session.
+     * @return A list of messages in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getName(String session)            { /*String*/                              return new Data("Session/Name","UNKNOWN","",Data.State.NORMAL); }
+    public    Data    getName()                          { /*String*/                              return getName(""); }
+
+    /**
      * Returns the number of car classes.
      * 
      * See {@link com.SIMRacingApps.Session#getNumberOfCarClasses()}

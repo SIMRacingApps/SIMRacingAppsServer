@@ -1493,6 +1493,14 @@ public class Car {
     public Data getManufacturerLogo() {
         return new Data("Car/"+m_carIdentifier+"/ManufacturerLogo",m_mfrLogo,"",Data.State.NORMAL);
     }
+
+    public Data _getDataPublisherMaxTires() {
+        SIMPluginCallback callback = this.m_SIMPlugin.getCallback("DataPublisher.Post");
+        if (callback != null) {
+            return ((com.SIMRacingApps.SIMPluginCallbacks.DataPublisher.Post)callback).getMaxTires();
+        }
+        return null;
+    }
     
     /**
      * Returns the maximum number of tire sets for this session.
@@ -1509,11 +1517,14 @@ public class Car {
      */
     public Data getMaxTires() {
         Data d = new Data("Car/"+m_carIdentifier+"/MaxTires",99,Data.State.NOTAVAILABLE);
-        SIMPluginCallback callback = this.m_SIMPlugin.getCallback("DataPublisher.Post");
-        if (callback != null) {
-            Data max = ((com.SIMRacingApps.SIMPluginCallbacks.DataPublisher.Post)callback).getMaxTires();
-            d.setValue(max.getValue(),max.getUOM(),max.getState());
+        String sessionType = m_SIMPlugin.getSession().getType().getString();
+        if (sessionType.equals(Session.Type.RACE)) {
+            Data maxTires = _getDataPublisherMaxTires();
+            if (maxTires != null) {
+                d.setValue(maxTires.getValue(),maxTires.getUOM(),maxTires.getState());
+            }
         }
+//d.setState(Data.State.NORMAL);  //just for testing
         return d;
     }
     

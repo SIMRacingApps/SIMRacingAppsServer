@@ -565,7 +565,6 @@ public class Gauge {
     protected Map<String,TreeMap<Double,StateRange>> m_states = null;
     protected String m_reader;
     protected int m_lapChanged;
-    protected int m_usedCount;
     
     @SuppressWarnings("unused")
     private Gauge() {}
@@ -612,8 +611,6 @@ public class Gauge {
         this.m_states = new HashMap<String,TreeMap<Double,StateRange>>();
         this.m_reader = "";
         this.m_lapChanged = 1;
-        this.m_usedCount = 1;
-
         
         //now read the json profiles, gauges passed in first, then default, then overrides from the SIM
         ArrayList<Map<String, Map<String, Map<String, Object>>>> gaugesList = new ArrayList<Map<String, Map<String, Map<String, Object>>>>();
@@ -943,10 +940,22 @@ public class Gauge {
      * @since 1.2
      * @return The number of times this gauge was changed.
      */
-    public Data getCount() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Count",m_usedCount,"",Data.State.NORMAL); }
+    public Data getCount() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Count",1,"",Data.State.NOTAVAILABLE); }
+    
+    /**
+     * Returns the number of times this gauge can be changed.
+     * By default, a gauge will return the NOTAVAILABLE status unless a specific gauge overrides it.
+     * 
+     * <p>PATH = {@link #getMaxCount() /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/MaxCount} 1.13
+     * 
+     * @since 1.13
+     * @return The number of times this gauge can be changed.
+     */
+    public Data getMaxCount() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/MaxCount",999,"",Data.State.NOTAVAILABLE); }
     
     /**
      * Returns the number of laps since the object for this gauge was changed.
+     * By default, a gauge will return the NOTAVAILABLE status unless a specific gauge overrides it.
      * 
      * <p>PATH = {@link #getLaps(int) /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/Laps/(CURRENTLAP)}
      * 

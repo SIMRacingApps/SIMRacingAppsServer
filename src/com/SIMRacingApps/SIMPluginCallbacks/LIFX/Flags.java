@@ -25,6 +25,7 @@ import com.SIMRacingApps.Util.State;
  * LIFX-Flags = Y
  * LIFX-token = YourToken
  * LIFX-flags-brightness = 1.0
+ * LIFX-always-green = Y
  * </pre>
  * To obtain a token, go to https://cloud.lifx.com and login to your account.
  * Then click on your name in the upper right corner of the screen and select "settings".
@@ -104,6 +105,7 @@ public class Flags extends SIMPluginCallback {
         Subscribe("/Session/IsWhiteFlag");
         Subscribe("/Session/IsCheckeredFlag");
         Subscribe("/Session/IsRedFlag");
+        Subscribe("/Session/Status");
 	}
 	
 	/**
@@ -272,7 +274,7 @@ public class Flags extends SIMPluginCallback {
             
             isYellow = data.get("/Car/REFERENCE/IsYellowFlag").getBoolean() || data.get("/Session/IsCautionFlag").getBoolean();
             isBlue   = data.get("/Car/REFERENCE/IsBlueFlag").getBoolean();
-            isGreen  = data.get("/Session/IsGreenFlag").getBoolean();
+            isGreen  = data.get("/Session/IsGreenFlag").getBoolean() || (Server.getArg("LIFX-always-green", true) && data.get("/Session/Status").equals("GREEN"));
             isWhite  = data.get("/Session/IsWhiteFlag").getBoolean();
             isRed    = data.get("/Session/IsRedFlag").getBoolean();
             //isCheckered = data.get("Session/IsCheckeredFlag").getBoolean();
