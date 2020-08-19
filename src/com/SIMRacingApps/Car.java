@@ -2042,6 +2042,7 @@ public class Car {
      * Sets a black flag for this car/driver.
      * Can be number of seconds or laps. 
      * Defaults to zero seconds, stop and go.
+     * If seconds is negative, the SIM should issue a drive through.
      * This command is SIM specific and requires special privileges to succeed.
      * 
      * <p>PATH = {@link #setBlackFlag(int,String) /Car/(CARIDENTIFIER)/setBlackFlag/(SECONDS/LAPS)/(UOM)}

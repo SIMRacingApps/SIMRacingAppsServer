@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2020 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    29.1854545,
+    "Longitude":   -81.0691383,
+    "North":       144.0,
+    "Resolution":  3.1,
+    "MergePoint":  14.5,
+    "Images": {
+        "SAT":     "daytona_2011-sat.png",
+        "MAP":     "daytona_2011-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "daytona_2011_roadnascar2020-ONTRACK.gpx",
+        "ONPITROAD": "daytona_2011_roadnascar2020-ONPITROAD.gpx"        
+    }
+}
