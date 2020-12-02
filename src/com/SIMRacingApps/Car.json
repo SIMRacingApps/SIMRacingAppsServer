@@ -78,6 +78,29 @@
                 }
             }
         },
+        "TireCompound": {
+            "default": {
+                "Name":              "TIRE",
+                "TypeName":          "COMPOUND",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "Minimum":           0.0,
+                "Maximum":           0.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   0.0,
+                "CapacityIncrement": 1.0,
+                "StateAscending":    true,
+                "OnResetChange":     true,
+                "IsFixed":           false,
+                "IsChangable":       true,
+                "States": {
+                    "0": {"Start":  -1.0, "End": 99999.0, "Name": "Car/Gauge/TireCompound", "Value": ""}
+                }
+            }
+        },
         "WaterTemp": {
             "default": {
                 "Name":              "WATER",

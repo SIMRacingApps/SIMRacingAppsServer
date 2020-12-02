@@ -270,6 +270,12 @@ public class Gauge {
         public static final String STEERING        = "Steering";
 
         /**
+         * The type of compound the tire is made out of.
+         * Possible values are blank (Unknown), S (Soft), M (Medium), H (Hard)
+         */
+        public static final String TIRECOMPOUND  = "TireCompound";
+        
+        /**
          * The amount of cold pressure in the LF tire. 
          */
         public static final String TIREPRESSURELF  = "TirePressureLF";
