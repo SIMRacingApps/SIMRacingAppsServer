@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2020 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    45.190385,
+    "Longitude":   -92.587972,
+    "North":       173.0,
+    "Resolution":  0.6,
+    "MergePoint":  35.8,
+    "Images": {
+        "SAT":     "cedarlake-sat.png",
+        "MAP":     "cedarlake-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "cedarlake-ONTRACK.gpx",
+        "ONPITROAD": "cedarlake-ONPITROAD.gpx"        
+    }
+}

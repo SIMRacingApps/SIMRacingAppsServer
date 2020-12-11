@@ -1,0 +1,22 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2020 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    51.3563006,
+    "Longitude":   0.2628292,
+    "North":       25.0,
+    "Resolution":  3.2,
+    "MergePoint":  8.3,
+    "Images": {
+        "SAT":     "brandshatch-map.png",
+        "MAP":     "brandshatch-sat.png"
+    },
+    "DistanceUOM": "km",
+    "TempUOM":     "C",
+    "SpeedUOM":    "kph",
+    "FinishLine":  0.0,
+    "GPX": {
+        "Comment":   "You cannot get on Pit Road, you can only be in your pits",
+        "ONTRACK":   "brandshatch_rallycross-ONTRACK.gpx",
+        "ONPITROAD": "brandshatch_rallycross-ONTRACK.gpx"        
+    }
+}

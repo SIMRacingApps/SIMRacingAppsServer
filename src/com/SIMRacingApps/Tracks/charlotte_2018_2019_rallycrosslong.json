@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2020 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    35.35167,
+    "Longitude":   -80.68289,
+    "North":       166.0,
+    "Resolution":  1.9,
+    "MergePoint":  83.8,
+    "Images": {
+        "SAT":     "charlotte-sat.png",
+        "MAP":     "charlotte-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  100.0,
+    "GPX": {
+        "ONTRACK":   "charlotte_2018_2019_rallycrosslong-ONTRACK.gpx",
+        "ONPITROAD": "charlotte_2018_2019_rallycrosslong-ONPITROAD.gpx"        
+    }
+}
