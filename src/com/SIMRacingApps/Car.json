@@ -17,7 +17,12 @@
                 "Maximum":           11.0,
                 "MajorIncrement":    1.0,
                 "MinorIncrement":    0.2,
-                "StateAscending":    true
+                "StateAscending":    true,
+                "xStates": {
+                    "SHIFTLIGHTS": {"Start": 3880.0, "End": 4700.0},
+                    "SHIFT":       {"Start": 4700.0, "End": 4730.0},
+                    "SHIFTBLINK":  {"Start": 4730.0, "End": 99999999.0}
+                }
             }
         },
         "LaunchRPM": {
