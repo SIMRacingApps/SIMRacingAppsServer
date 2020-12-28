@@ -218,6 +218,7 @@
             "Metric":   "M",
             "Imperial": "IN", 
             "Conversions": {
+                "KM":   0.001
             }
         },
         "MILE": {       
@@ -248,7 +249,10 @@
             "Metric":   "MIN",
             "Imperial": "MIN", 
             "Conversions": {
-                "SEC":  60.0
+                "SEC":  0.01666666,
+                "S":    0.01666666,
+                "H":    60.0,
+                "HR":   60.0
             }
         },
         "MM": {      
@@ -258,7 +262,8 @@
             "Metric":   "MM",
             "Imperial": "IN", 
             "Conversions": {
-                "IN":   0.0393700787402
+                "IN":   0.0393700787402,
+                "M":    0.001
             }
         },
         "MPH": {      
@@ -334,6 +339,15 @@
             "Conversions": {
             }
         },
+        "REVS/SEC": {      
+            "Abbr":     "rps",       
+            "Singular": "Revolutions Per Second",   
+            "Plural":   "Revolutions Per Second", 
+            "Metric":   "REVS/SEC",
+            "Imperial": "REVS/SEC", 
+            "Conversions": {
+            }
+        },
         "S": {      
             "Abbr":     "s",         
             "Singular": "Second",                   
@@ -341,6 +355,9 @@
             "Metric":   "S",
             "Imperial": "S", 
             "Conversions": {
+                "MIN":  60.0,
+                "H":    3600.0,
+                "HR":   3600.0
             }
         },
         "SEC": {      
@@ -350,6 +367,9 @@
             "Metric":   "SEC",
             "Imperial": "SEC", 
             "Conversions": {
+                "MIN":  60.0,
+                "H":    3600.0,
+                "HR":   3600.0
             }
         },
         "": {      

@@ -178,6 +178,11 @@ public class Gauge {
         public static final String TACHOMETER      = "Tachometer";
         
         /**
+         * The rate of acceleration expressed as the rate of RPMs over time.
+         */
+        public static final String ACCELOMETER     = "Accelometer";
+        
+        /**
          * The percentage of tape currently on the front grill.
          */
         public static final String TAPE            = "Tape";
