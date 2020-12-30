@@ -310,6 +310,23 @@ public class Sound {
             } catch (LineUnavailableException e) {}
         }
         
+        //See if user put the device in brackets. If so, just take everything inside them
+        if (clip == null) {
+            String a1[] = name.split("\\[");
+            if (a1.length >= 2) {
+                String a2[] = a1[1].split("\\]");
+                if (a2.length >= 2) {
+                    mixer = m_clipMixers.get(a2[0].toUpperCase().trim());
+                    if (mixer != null) {
+                        Line.Info clipInfo = new Line.Info(Clip.class);
+                        try {
+                            clip = (Clip) mixer.getLine(clipInfo);
+                        } catch (LineUnavailableException e) {}
+                    }
+                }
+            }
+        }
+        
         //if there's no clip, try the global device
         if (clip == null) {
             mixer = m_clipMixers.get(Server.getArg("sound-device","").toUpperCase().trim());
@@ -318,6 +335,24 @@ public class Sound {
                 try {
                     clip = (Clip) mixer.getLine(clipInfo);
                 } catch (LineUnavailableException e) {}
+            }
+        }
+
+        //See if user put the device in brackets. If so, just take everything inside them
+        if (clip == null) {
+            String s = Server.getArg("sound-device","");
+            String a1[] = s.split("\\[");
+            if (a1.length >= 2) {
+                String a2[] = a1[1].split("\\]");
+                if (a2.length >= 2) {
+                    mixer = m_clipMixers.get(a2[0].toUpperCase().trim());
+                    if (mixer != null) {
+                        Line.Info clipInfo = new Line.Info(Clip.class);
+                        try {
+                            clip = (Clip) mixer.getLine(clipInfo);
+                        } catch (LineUnavailableException e) {}
+                    }
+                }
             }
         }
         
