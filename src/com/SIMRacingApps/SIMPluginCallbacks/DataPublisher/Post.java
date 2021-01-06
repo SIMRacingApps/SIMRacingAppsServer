@@ -445,6 +445,20 @@ public class Post extends SIMPluginCallback {
         return true;
     }
     /**
+     * Gets the entire results structure.
+     * 
+     * <p>PATH = {@link #getResults() /SIMPluginCallback/DataPublisher/Post/Results}
+     * 
+     * @return The entire results in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getResults() {
+        Data d = new Data ("DataPublisher/Post/Results","");
+        synchronized (m_genson) {
+            d.setValue(m_results,"",Data.State.NORMAL);
+        }
+        return d;
+    }
+    /**
      * Gets the max value for a tire.
      * 
      * <p>PATH = {@link #getMaxTires() /SIMPluginCallback/DataPublisher/Post/MaxTires}
