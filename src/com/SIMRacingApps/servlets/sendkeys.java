@@ -19,7 +19,7 @@ import com.SIMRacingApps.Util.SendKeys;
  * Remember that data stuffed in the URL has to be encoded.
  * The servlet, returns the keys that were sent as a plain/text stream.
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2020 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2021 Jeffrey Gilliam
  * @since 1.0
  * @license Apache License 2.0
  */

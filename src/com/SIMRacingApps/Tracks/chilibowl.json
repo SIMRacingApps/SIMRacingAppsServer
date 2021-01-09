@@ -1,5 +1,5 @@
 {
-    "Copyright":   "Copyright (C) 2015 - 2020 Jeffrey Gilliam",
+    "Copyright":   "Copyright (C) 2015 - 2021 Jeffrey Gilliam",
     "License":     "Apache License 2.0",
     "COMMENT2":    "North is angle you want the track's north to point to, where 270 is straight up and 90 is down",
     "North":       270.0,

@@ -32,7 +32,7 @@ import com.SIMRacingApps.SIMPluginCallbacks.SIMPluginCallback;
  * <a href="http://www.silabs.com/Support%20Documents/TechnicalDocs/an197.pdf"></a>
  * @author Jeffrey Gilliam
  * @since 1.0
- * @copyright Copyright (C) 2015 - 2020 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2021 Jeffrey Gilliam
  * @license Apache License 2.0
  */
 public class ShiftLight extends SIMPluginCallback {
