@@ -1000,6 +1000,10 @@ public class Server {
                             a.add("-noclickthrough");
                         }
                         
+                        if (getArg("electron-startminimized",false)) {
+                            a.add("-startminimized");
+                        }
+                        
                         if (getArg("electron-showappsontaskbar",false)) {
                             a.add("-showappsontaskbar");
                         }
