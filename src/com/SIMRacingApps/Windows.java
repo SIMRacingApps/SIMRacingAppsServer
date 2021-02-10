@@ -29,12 +29,14 @@ public class Windows {
 
         HANDLE OpenFileMapping(int lfProtect, boolean bInherit, String lpName);
         HANDLE OpenEvent(int i, boolean bManualReset, String lpName );
-        boolean SetConsoleTitle(String lpTitle);
+        //WinNT.BOOL SetConsoleTitle(String lpTitle);
         
         //https://msdn.microsoft.com/en-us/library/windows/desktop/aa363428%28v=vs.85%29.aspx
-        boolean PurgeComm(HANDLE hFile, WinNT.DWORD dwFlags);
+        WinNT.BOOL PurgeComm(HANDLE hFile, WinNT.DWORD dwFlags);
         //https://msdn.microsoft.com/en-us/library/windows/desktop/aa363254%28v=vs.85%29.aspx
-        boolean EscapeCommFunction(HANDLE hFile, WinNT.DWORD dwFunc);
+        WinNT.BOOL EscapeCommFunction(HANDLE hFile, WinNT.DWORD dwFunc);
+        WinNT.BOOL GetProcessAffinityMask(HANDLE hProcess, ULONG_PTRByReference lpProcessAffinityMask, ULONG_PTRByReference lpSystemAffinityMask);
+        WinNT.BOOL SetProcessAffinityMask(HANDLE hProcess, ULONG_PTR dwProcessAffinityMask);
     }
 
     /** Extends the User32 interface and add the methods we need that are not already there in jna 4.0.0 */
@@ -344,7 +346,7 @@ public class Windows {
             return null;
         
         //https://msdn.microsoft.com/en-us/library/windows/desktop/aa363428%28v=vs.85%29.aspx
-        if (!myKernel32.instance.PurgeComm(h,new WinNT.DWORD(0x000F/*PURGE_RXABORT|PURGE_RXCLEAR|PURGE_TXABORT|PURGE_TXCLEAR*/))) {
+        if (!myKernel32.instance.PurgeComm(h,new WinNT.DWORD(0x000F/*PURGE_RXABORT|PURGE_RXCLEAR|PURGE_TXABORT|PURGE_TXCLEAR*/)).booleanValue()) {
             m_lastError = Kernel32.INSTANCE.GetLastError();
             Kernel32.INSTANCE.CloseHandle(h);
             return null;
@@ -374,12 +376,12 @@ public class Windows {
         
         //try to lower the RTS line to see if the handle is valid.
         //https://msdn.microsoft.com/en-us/library/windows/desktop/aa363254%28v=vs.85%29.aspx
-        if (!myKernel32.instance.EscapeCommFunction(h,new WinNT.DWORD(4 /*WinNT.CLRRTS*/))) {
+        if (!myKernel32.instance.EscapeCommFunction(h,new WinNT.DWORD(4 /*WinNT.CLRRTS*/)).booleanValue()) {
             m_lastError = Kernel32.INSTANCE.GetLastError();
             Kernel32.INSTANCE.CloseHandle(h);
             return null;
         }
-        if (!myKernel32.instance.EscapeCommFunction(h,new WinNT.DWORD(6 /*WinNT.CLRDTR*/))) {
+        if (!myKernel32.instance.EscapeCommFunction(h,new WinNT.DWORD(6 /*WinNT.CLRDTR*/)).booleanValue()) {
             m_lastError = Kernel32.INSTANCE.GetLastError();
             Kernel32.INSTANCE.CloseHandle(h);
             return null;
@@ -477,12 +479,12 @@ public class Windows {
         }
         
         //https://msdn.microsoft.com/en-us/library/windows/desktop/aa363254%28v=vs.85%29.aspx
-        boolean b = myKernel32.instance.EscapeCommFunction(
+        WinNT.BOOL b = myKernel32.instance.EscapeCommFunction(
                 hCommPort.get(),
                 flag ? new WinNT.DWORD(3 /*WinNT.SETRTS*/) : new WinNT.DWORD(4 /*WinNT.CLRRTS*/)
         );
         m_lastError = Kernel32.INSTANCE.GetLastError();
-        return b;
+        return b.booleanValue();
     }
     
     /**
@@ -498,12 +500,12 @@ public class Windows {
         }
         
         //https://msdn.microsoft.com/en-us/library/windows/desktop/aa363254%28v=vs.85%29.aspx
-        boolean b = myKernel32.instance.EscapeCommFunction(
+        WinNT.BOOL b = myKernel32.instance.EscapeCommFunction(
                 hCommPort.get(),
                 flag ? new WinNT.DWORD(5 /*WinNT.SETDTR*/) : new WinNT.DWORD(6 /*WinNT.CLRDTR*/)
         );
         m_lastError = Kernel32.INSTANCE.GetLastError();
-        return b;
+        return b.booleanValue();
     }
     
     /**
@@ -607,6 +609,46 @@ public class Windows {
         if (h != null) {
             Kernel32.INSTANCE.WaitForSingleObject(h.get(), timeout);
             m_lastError = Kernel32.INSTANCE.GetLastError();
+        }
+    }
+    
+    /**
+     * Tells windows what cores I'm allowed to run on.
+     * @param cores_to_reserve The number of cores to reserve.
+     */
+    public static void setAffinity(int cores_to_reserve) {
+        if (cores_to_reserve > 0) {
+            WinNT.HANDLE h = Kernel32.INSTANCE.GetCurrentProcess();
+            int pid = Kernel32.INSTANCE.GetCurrentProcessId();
+            WinNT.ULONG_PTRByReference mask = new WinNT.ULONG_PTRByReference();
+            WinNT.ULONG_PTRByReference systemMask = new WinNT.ULONG_PTRByReference();
+            myKernel32.instance.GetProcessAffinityMask(h,mask,systemMask);
+            m_lastError = Kernel32.INSTANCE.GetLastError();
+            if (m_lastError != 0) {
+                Server.logger().warning(String.format("GetProcessAffinityMask() returned %d, %s" 
+                        , m_lastError
+                        , Windows.getLastErrorMessage())
+                );
+                return;
+            }
+            Server.logger().info(String.format("Getting Affinity for PID %d is 0x%x, %sb and for system is 0x%x, %sb"
+                    , pid
+                    , mask.getValue().longValue()
+                    , Long.toBinaryString(mask.getValue().longValue())
+                    , systemMask.getValue().longValue()
+                    , Long.toBinaryString(systemMask.getValue().longValue())
+            ));
+            long coresMask = 0xFFFFFFFF << cores_to_reserve;
+            WinNT.ULONG_PTR newMask = new WinNT.ULONG_PTR(mask.getValue().longValue() & coresMask);
+            Server.logger().info(String.format("Setting Affinity for PID %d to 0x%x, %sb", pid, newMask.longValue(), Long.toBinaryString(newMask.longValue())));
+            myKernel32.instance.SetProcessAffinityMask(h,newMask);
+            m_lastError = Kernel32.INSTANCE.GetLastError();
+            if (m_lastError != 0) {
+                Server.logger().warning(String.format("SetProcessAffinityMask() returned %d, %s" 
+                        , m_lastError
+                        , Windows.getLastErrorMessage())
+                );
+            }
         }
     }
 }

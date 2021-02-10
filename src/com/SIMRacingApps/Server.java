@@ -89,7 +89,7 @@ public class Server {
     private static Map<String,String> m_args = new HashMap<String,String>();
     private static Genson m_genson = new Genson();
     private static Properties m_version = new Properties();
-    
+    private static int RESERVED_CORES = 2;    
     public static String getLog() {
         return m_log + "-0.log.txt";
     }
@@ -828,6 +828,7 @@ public class Server {
                     + String.format("%n%-35s %s", "OS Architecture:", System.getProperty("os.arch"))
                     + String.format("%n%-35s %s", "OS Processor:", processor)
                     + String.format("%n%-35s %d", "OS AvailableCores:", Runtime.getRuntime().availableProcessors())
+                    + String.format("%n%-35s %d", "ARGS Reserved Cores:", Server.getArg("reserved cores",RESERVED_CORES))
                     + String.format("%n%-35s %.2f GHz", "OS Processor Speed:", dGHz)
                     + OSInfo
                     + String.format("%n*************************************************************************************************")
@@ -844,7 +845,13 @@ public class Server {
             } catch (IOException | SIMPluginException e) {
                 Server.logStackTrace(Level.WARNING, "while getting version",e);
             }
-            
+
+            //reserve the cores, but only if there enough to reserve
+            int cores_to_reserve = Runtime.getRuntime().availableProcessors() > Server.getArg("reserved-cores",RESERVED_CORES) 
+                                 ? Server.getArg("reserved-cores",RESERVED_CORES) 
+                                 : 0;
+            Windows.setAffinity(cores_to_reserve);
+
             //Check if electron can be installed. If so, check version and install it, if needed.
             //default to false here so existing users will not get a surprise.
             //But, in the default settings.txt, I will have it set to true for new users.
