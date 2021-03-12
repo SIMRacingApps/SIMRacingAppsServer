@@ -174,7 +174,22 @@ public class FindFile {
      */
     public static String getUserDocumentsPath() {
         if (m_documents == null) {
+            //TODO: Should I look at the OneDrive entry first?
+            //      The OneDrive key from the web is different from mine.
             m_documents = Advapi32Util.registryGetStringValue(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders", "Personal");
+            if (m_documents == null) {
+                m_documents = Advapi32Util.registryGetStringValue(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders", "Personal");
+                if (m_documents == null) {
+                    Server.logger().log(Level.SEVERE, "Advapi32Util.registryGetStringValue(HKEY_CURRENT_USER, \"Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\", \"Personal\") returned NULL");
+                    System.out.println("Advapi32Util.registryGetStringValue(HKEY_CURRENT_USER, \"Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Explorer\\\\User Shell Folders\", \"Personal\") returned NULL");
+                    //if we cannot get this, we have to exit because we don't know where to store our data.
+                    System.exit(1);
+                }
+            }
+            
+            if (m_documents.contains("%USERPROFILE%")) {
+                m_documents = m_documents.replace("%USERPROFILE%", System.getenv("USERPROFILE"));
+            }
         }
         return m_documents;
     }
