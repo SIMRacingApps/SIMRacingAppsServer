@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2021 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    38.16254,
+    "Longitude":   -122.4575807,
+    "North":       50.0,
+    "Resolution":  2.9,
+    "MergePoint":  6.1,
+    "Images": {
+        "SAT":     "sonoma-sat.png",
+        "MAP":     "sonoma-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  270.0,
+    "GPX": {
+        "ONTRACK":   "sonoma_indycar-ONTRACK.gpx",
+        "ONPITROAD": "sonoma_indycar-ONPITROAD.gpx"        
+    }
+}
