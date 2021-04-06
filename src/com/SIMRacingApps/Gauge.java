@@ -797,6 +797,7 @@ public class Gauge {
       */
     public Data getCapacityMaximum(String UOM) { return _getReturnValue(m_capacityMaximum,UOM); }
     public Data getCapacityMaximum()           { return getCapacityMaximum(m_measurementSystem); }
+    public Data getCapacityMaximumRaw()        { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/CapacityMaximum",m_capacityMaximum,m_UOM).convertUOM(m_measurementSystem); }
 
     /**
       * Returns the minimum number that this gauge will accept when calling {@link com.SIMRacingApps.Gauge#setValueNext(double,String)}
@@ -809,6 +810,8 @@ public class Gauge {
       */
     public Data getCapacityMinimum(String UOM) { return _getReturnValue(m_capacityMinimum,UOM); }
     public Data getCapacityMinimum()           { return getCapacityMinimum(m_measurementSystem); }
+    public Data getCapacityMinimumRaw()        { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/CapacityMinimum",m_capacityMinimum,m_UOM).convertUOM(m_measurementSystem); }
+    
 
     /**
       * Returns the increment value that the gauge uses when you call {@link com.SIMRacingApps.Gauge#incrementValueNext(String)} 

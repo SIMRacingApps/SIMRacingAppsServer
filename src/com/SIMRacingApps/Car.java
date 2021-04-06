@@ -2446,39 +2446,56 @@ public class Car {
             //stockcars_chevyss-ShiftLightShift = 7000
             //stockcars_chevyss-ShiftLightBlink = 8000
             
-            double DriverCarSLFirstRPM = Server.getArg(
-                                            String.format(              "%s-%s-ShiftLightStart-%s-%d", track,car,gear.getValueCurrent().getString(),power.getValueCurrent().getInteger()),
-                                            Server.getArg(String.format("%s-%s-ShiftLightStart-%s",    track,car,gear.getValueCurrent().getString()),
-                                            Server.getArg(String.format("%s-%s-ShiftLightStart",       track,car),
-                                            Server.getArg(String.format("%s-ShiftLightStart-%s-%d",          car,gear.getValueCurrent().getString(),power.getValueCurrent().getInteger()),
-                                            Server.getArg(String.format("%s-ShiftLightStart-%s",             car,gear.getValueCurrent().getString()),
-                                            Server.getArg(String.format("%s-ShiftLightStart",                car),      -1.0)
-                                         )))));
-            double DriverCarSLShiftRPM = Server.getArg(
-                                            String.format(              "%s-%s-ShiftLightShift-%s-%d", track,car,gear.getValueCurrent().getString(),power.getValueCurrent().getInteger()),
-                                            Server.getArg(String.format("%s-%s-ShiftLightShift-%s",    track,car,gear.getValueCurrent().getString()),
-                                            Server.getArg(String.format("%s-%s-ShiftLightShift",       track,car),
-                                            Server.getArg(String.format("%s-ShiftLightShift-%s-%d",          car,gear.getValueCurrent().getString(),power.getValueCurrent().getInteger()),
-                                            Server.getArg(String.format("%s-ShiftLightShift-%s",             car,gear.getValueCurrent().getString()),
-                                            Server.getArg(String.format("%s-ShiftLightShift",                car),      -1.0)
-                                         )))));
-            double DriverCarSLBlinkRPM = Server.getArg(
-                                            String.format(              "%s-%s-ShiftLightBlink-%s-%d", track,car,gear.getValueCurrent().getString(),power.getValueCurrent().getInteger()),
-                                            Server.getArg(String.format("%s-%s-ShiftLightBlink-%s",    track,car,gear.getValueCurrent().getString()),
-                                            Server.getArg(String.format("%s-%s-ShiftLightBlink",       track,car),
-                                            Server.getArg(String.format("%s-ShiftLightBlink-%s-%d",          car,gear.getValueCurrent().getString(),power.getValueCurrent().getInteger()),
-                                            Server.getArg(String.format("%s-ShiftLightBlink-%s",             car,gear.getValueCurrent().getString()),
-                                            Server.getArg(String.format("%s-ShiftLightBlink",                car),      -1.0)
-                                         )))));
+            double DriverCarSLFirstRPM = -1.0;
+            double DriverCarSLShiftRPM = -1.0;
+            double DriverCarSLBlinkRPM = -1.0;
             
-            if (DriverCarSLFirstRPM > 0.0 && DriverCarSLShiftRPM > 0.0 && DriverCarSLBlinkRPM > 0.0) {
-                gauge._addStateRange("","SHIFTLIGHTS",            DriverCarSLFirstRPM,                  DriverCarSLShiftRPM, "rev/min");
-                gauge._addStateRange("","SHIFT",                  DriverCarSLShiftRPM,                  DriverCarSLBlinkRPM, "rev/min");
-                gauge._addStateRange("","SHIFTBLINK",             DriverCarSLBlinkRPM,                  999999.0,            "rev/min");
+            Integer enginePower = power.getCapacityMinimum().getInteger(); 
+            do {
+                Data gearBox = gear.getCapacityMinimumRaw();
+                do {
+                    
+                    String sGear = gearBox.getString();
+                    DriverCarSLFirstRPM = Server.getArg(
+                            String.format(              "%s-%s-ShiftLightStart-%s-%d", track,car,sGear,enginePower),
+                            Server.getArg(String.format("%s-%s-ShiftLightStart-%s",    track,car,sGear),
+                            Server.getArg(String.format("%s-%s-ShiftLightStart",       track,car),
+                            Server.getArg(String.format("%s-ShiftLightStart-%s-%d",    car,sGear,enginePower),
+                            Server.getArg(String.format("%s-ShiftLightStart-%s",       car,sGear),
+                            Server.getArg(String.format("%s-ShiftLightStart",          car),      -1.0)
+                         )))));
+                    DriverCarSLShiftRPM = Server.getArg(
+                            String.format(              "%s-%s-ShiftLightShift-%s-%d", track,car,sGear,enginePower),
+                            Server.getArg(String.format("%s-%s-ShiftLightShift-%s",    track,car,sGear),
+                            Server.getArg(String.format("%s-%s-ShiftLightShift",       track,car),
+                            Server.getArg(String.format("%s-ShiftLightShift-%s-%d",    car,sGear,enginePower),
+                            Server.getArg(String.format("%s-ShiftLightShift-%s",       car,sGear),
+                            Server.getArg(String.format("%s-ShiftLightShift",          car),      -1.0)
+                         )))));
+                    DriverCarSLBlinkRPM = Server.getArg(
+                            String.format(              "%s-%s-ShiftLightBlink-%s-%d", track,car,sGear,enginePower),
+                            Server.getArg(String.format("%s-%s-ShiftLightBlink-%s",    track,car,sGear),
+                            Server.getArg(String.format("%s-%s-ShiftLightBlink",       track,car),
+                            Server.getArg(String.format("%s-ShiftLightBlink-%s-%d",    car,sGear,enginePower),
+                            Server.getArg(String.format("%s-ShiftLightBlink-%s",       car,sGear),
+                            Server.getArg(String.format("%s-ShiftLightBlink",          car),      -1.0)
+                         )))));
 
-                Server.logger().info(String.format("Shift Point from user: First=%.0f, Shift=%.0f, Blink=%.0f",
-                        DriverCarSLFirstRPM,DriverCarSLShiftRPM,DriverCarSLBlinkRPM));
-            }
+                    if (DriverCarSLFirstRPM > 0.0 && DriverCarSLShiftRPM > 0.0 && DriverCarSLBlinkRPM > 0.0) {
+                        gauge._addStateRange("","SHIFTLIGHTS",            DriverCarSLFirstRPM,                  DriverCarSLShiftRPM, "rev/min");
+                        gauge._addStateRange("","SHIFT",                  DriverCarSLShiftRPM,                  DriverCarSLBlinkRPM, "rev/min");
+                        gauge._addStateRange("","SHIFTBLINK",             DriverCarSLBlinkRPM,                  999999.0,            "rev/min");
+                    
+                        Server.logger().info(String.format("Shift Point from user(Gear=%s,Power=%d): First=%.0f, Shift=%.0f, Blink=%.0f",
+                                sGear,enginePower,
+                                DriverCarSLFirstRPM,DriverCarSLShiftRPM,DriverCarSLBlinkRPM));
+                    }
+
+                    gearBox.setValue( gearBox.getInteger() + gear.getCapacityIncrement().getInteger() );
+                } while (gearBox.getInteger() <= gear.getCapacityMaximum().getInteger());
+                    
+                enginePower += power.getCapacityIncrement().getInteger();
+            } while (enginePower <= power.getCapacityMaximum().getInteger());
         }
         catch (NumberFormatException e) {}
     }
