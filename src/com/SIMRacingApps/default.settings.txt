@@ -214,8 +214,8 @@ pit-count-down-replay = false
 ### Double backslashes are required for the directory separator.
 ### Remove the hash(#) to uncomment the line to use 
 #####################################################################
-#pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\JJ Spotter Pack v6.70\\n%d.wav
-#pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\JJ Spotter-Cuss Pack v6.70\\n%d.wav
+#pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\JJ Spotter Pack v7.10\\n%d.wav
+#pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\JJ Spotter-Cuss Pack v7.10\\n%d.wav
 #pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\Dale Jr Spotter Pack\\n%d_A1.wav
 
 #####################################################################
