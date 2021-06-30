@@ -194,6 +194,34 @@ public class FindFile {
         return m_documents;
     }
     
+    private static String m_appData = null;
+    
+    /**
+     * Returns the path to the App Data folder, and makes sure it exists.
+     * @return The path to the App Data folder.
+     */
+    
+    public static String getAppData() {
+        if (m_appData == null) {
+            
+            String localAppData = System.getenv("LOCALAPPDATA");
+            
+            
+            if (localAppData != null && !localAppData.isEmpty()) {
+                m_appData = localAppData + "\\SIMRacingApps";
+            }
+            else {
+                m_appData = FindFile.getUserPath()[0];
+            }
+            
+            m_appData = Server.getArg("app-data", m_appData);
+            
+            new File(m_appData).mkdirs();
+        }
+        
+        return m_appData;
+    }
+    
 //    private static String[] m_userPath = (System.getProperty("user.home")+File.separator+"SIMRacingApps").split("[;]");
     private static String[] m_userPath = null;
 

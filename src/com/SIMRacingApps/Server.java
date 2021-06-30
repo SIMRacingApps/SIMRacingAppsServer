@@ -875,7 +875,7 @@ public class Server {
                     }
                     
                     try {
-                        File installedPackageJsonFile = new File(FindFile.getUserPath()[0]+"/electron-apps/package.json");
+                        File installedPackageJsonFile = new File(FindFile.getAppData()+"/electron-apps/package.json");
                         is_p = new FileInputStream(installedPackageJsonFile);
                         if (is_p != null) {
                             @SuppressWarnings("unchecked")
@@ -886,11 +886,12 @@ public class Server {
                     }
                     catch (FileNotFoundException e) {}
 
+                    logger().info("electron-apps: "+FindFile.getAppData()+"/electron-apps");
                     logger().info("Electron: Source Version = "+jarVersion+", Destination Version = "+installedJarVersion);
 
                     //if the versions are not equal, we need to install
                     if (!jarVersion.equals(installedJarVersion) || getArg("electron-force-update",false)) {
-                        File exe = new File(getArg("electron-path",FindFile.getUserPath()[0]+"/electron-apps/electron/SIMRacingApps-electron.exe"));
+                        File exe = new File(getArg("electron-path",FindFile.getAppData()+"/electron-apps/electron/SIMRacingApps-electron.exe"));
                         
                         ProcessBuilder processBuilder = new ProcessBuilder("tasklist.exe");
                         Process process = processBuilder.start();
@@ -914,12 +915,12 @@ public class Server {
                                     name = entries.nextElement().getName();
                                     if (name.startsWith("electron-apps/")) {
                                         if (name.endsWith("/")) {
-                                            new File(FindFile.getUserPath()[0]+"/"+name).mkdirs();
+                                            new File(FindFile.getAppData()+"/"+name).mkdirs();
                                         }
                                         else {
                                             is_p = classFromJar.getClass().getClassLoader().getResourceAsStream(name);
                                             if (is_p != null) {
-                                                File dest = new File(FindFile.getUserPath()[0]+"/"+name);
+                                                File dest = new File(FindFile.getAppData()+"/"+name);
                                                 Server.logger().info("Electron: Installing "+dest.toString());
                                                 FindFile.copy(is_p,new File(name),dest);
                                                 is_p.close();;
@@ -941,7 +942,8 @@ public class Server {
             
             if (getArg("electron-autostart",false)) {
                 try {
-                    File exe = new File(getArg("electron-path",FindFile.getUserPath()[0]+"/electron-apps/electron/SIMRacingApps-electron.exe"));
+                    File exe = new File(getArg("electron-path",
+                                        getArg("electron-apps",FindFile.getAppData()+"/electron-apps")+"/electron/SIMRacingApps-electron.exe"));
                     
                     ProcessBuilder processBuilder = new ProcessBuilder("tasklist.exe");
                     Process process = processBuilder.start();
@@ -956,7 +958,7 @@ public class Server {
                     }
                     else
                     if (exe.canExecute()) {
-                        File dir = new File(FindFile.getUserPath()[0]+"/electron-apps");
+                        File dir = new File(exe.getParent());
                         List<String> a = new ArrayList<String>();
                         String s;
                         
@@ -973,7 +975,7 @@ public class Server {
 //                                                     //use to be require for transparency, that's no longer the case as of electron 1.6
 //                        }
                         
-                        a.add(Server.getArg("electron-apps",FindFile.getUserPath()[0]+"/electron-apps"));
+                        a.add(getArg("electron-apps",FindFile.getAppData()+"/electron-apps"));
                         
                         if (!(s = getArg("electron-client-options","")).isEmpty()) {
                             String[] sa = s.split(" ");
@@ -1021,6 +1023,7 @@ public class Server {
                         pb.directory(dir);
                         electronProcess = pb.start();
                         logger().info("Electron: Started with " + a.toString() );
+                        //watch for output from Electron and write it to the log
                         while (electronProcess.isAlive()) {
                             BufferedReader stdin = new BufferedReader(
                                     new InputStreamReader(
@@ -1040,12 +1043,14 @@ public class Server {
                                 logger().warning("Electron: "+line);
                             Thread.sleep(1000);
                         }
-                        logger().info("Electron: Stopped" );
-                        DataService.stop();
-                        Thread.sleep(5000);
-                        logger().info("Server: Exiting");
-                        Thread.sleep(1000);
-                        System.exit(0);
+                        if (getArg("electron-kills-server",true)) {
+                            logger().info("Electron: Stopped" );
+                            DataService.stop();
+                            Thread.sleep(5000);
+                            logger().info("Server: Exiting");
+                            Thread.sleep(1000);
+                            System.exit(0);
+                        }
                     }
                     else {
                         logger().warning("Electron: " + exe.toString() + " not found");
