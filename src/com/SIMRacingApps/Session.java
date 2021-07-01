@@ -1296,6 +1296,30 @@ public class Session {
     }
     
     /**
+     * Sets the Pits to be closed. 
+     * This command is SIM specific and requires special privileges to succeed.
+     * 
+     * <p>PATH = {@link #setPitClose() /Session/setPitClose}
+     * 
+     * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data setPitClose() {
+        return new Data("Session/setPitClose","","String",Data.State.NOTAVAILABLE);
+    }
+
+    /**
+     * Sets the Pits to be open. 
+     * This command is SIM specific and requires special privileges to succeed.
+     * 
+     * <p>PATH = {@link #setPitOpen() /Session/setPitOpen}
+     * 
+     * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data setPitOpen() {
+        return new Data("Session/setPitOpen","","String",Data.State.NOTAVAILABLE);
+    }
+
+    /**
      * Tell the SIM to reload the paint files for all cars.
      * If SIM does not support this capability, then the NOTAVAILABLE state will be returned.
      * 
