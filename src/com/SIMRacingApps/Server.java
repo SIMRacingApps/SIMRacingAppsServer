@@ -273,7 +273,7 @@ public class Server {
      */
     public static String getArg(String arg) {
         if (m_args.containsKey(arg.toLowerCase()))
-            return m_args.get(arg.toLowerCase());
+            return m_args.get(arg.toLowerCase()).trim();
         return "";
     }
     
