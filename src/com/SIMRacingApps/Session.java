@@ -1294,7 +1294,43 @@ public class Session {
     public    Data setCautionFlag() {
         return new Data("Session/setCautionFlag","","String",Data.State.NOTAVAILABLE);
     }
-    
+
+    /**
+     * Sets the number of caution laps. Default is 2 laps. 
+     * This command is SIM specific and requires special privileges to succeed.
+     * 
+     * <p>PATH = {@link #setCautionLaps() /Session/setCautionLaps}
+     * 
+     * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data setCautionLaps(String laps) {
+        return new Data("Session/setCautionLaps/"+laps,"","String",Data.State.NOTAVAILABLE);
+    }
+    public    Data setCautionLaps(int laps) {
+        return setCautionLaps(Integer.toString(laps));
+    }
+    public    Data setCautionLaps() {
+        return setCautionLaps("2");
+    }
+
+    /**
+     * Add or subtract laps to the current caution laps. Default is to add 1 lap.
+     * This command is SIM specific and requires special privileges to succeed.
+     * 
+     * <p>PATH = {@link #setCautionLapsAdjust() /Session/setCautionLapsAdjust}
+     * 
+     * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data setCautionLapsAdjust(String laps) {
+        return new Data("Session/setCautionLapsAdjust/"+laps,"","String",Data.State.NOTAVAILABLE);
+    }
+    public    Data setCautionLapsAdjust(int laps) {
+        return setCautionLapsAdjust(Integer.toString(laps));
+    }
+    public    Data setCautionLapsAdjust() {
+        return setCautionLapsAdjust("1");
+    }
+
     /**
      * Sets the Pits to be closed. 
      * This command is SIM specific and requires special privileges to succeed.
