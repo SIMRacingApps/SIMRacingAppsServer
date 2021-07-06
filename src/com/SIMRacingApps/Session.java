@@ -1299,15 +1299,20 @@ public class Session {
      * Sets the number of caution laps. Default is 2 laps. 
      * This command is SIM specific and requires special privileges to succeed.
      * 
-     * <p>PATH = {@link #setCautionLaps() /Session/setCautionLaps}
+     * <p>PATH = {@link #setCautionLaps(int) /Session/setCautionLaps/(LAPS)}
      * 
+     * @param laps The number of laps for the caution.
      * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data setCautionLaps(String laps) {
-        return new Data("Session/setCautionLaps/"+laps,"","String",Data.State.NOTAVAILABLE);
-    }
     public    Data setCautionLaps(int laps) {
-        return setCautionLaps(Integer.toString(laps));
+        return new Data("Session/setCautionLaps/"+Integer.toString(laps),"","String",Data.State.NOTAVAILABLE);
+    }
+    public    Data setCautionLaps(String laps) {
+        Data d = new Data("Session/setCautionLaps/"+laps,"","String",Data.State.NOTAVAILABLE);
+        try {
+            d = setCautionLaps(Integer.parseInt(laps));
+        } catch (NumberFormatException e) {}
+        return d;
     }
     public    Data setCautionLaps() {
         return setCautionLaps("2");
@@ -1317,15 +1322,20 @@ public class Session {
      * Add or subtract laps to the current caution laps. Default is to add 1 lap.
      * This command is SIM specific and requires special privileges to succeed.
      * 
-     * <p>PATH = {@link #setCautionLapsAdjust() /Session/setCautionLapsAdjust}
+     * <p>PATH = {@link #setCautionLapsAdjust(int) /Session/setCautionLapsAdjust/(LAPS)}
      * 
+     * @param laps +/- the number of laps to add to the current caution laps.
      * @return The string sent to SIM in a {@link com.SIMRacingApps.Data} container.
      */
-    public    Data setCautionLapsAdjust(String laps) {
-        return new Data("Session/setCautionLapsAdjust/"+laps,"","String",Data.State.NOTAVAILABLE);
-    }
     public    Data setCautionLapsAdjust(int laps) {
-        return setCautionLapsAdjust(Integer.toString(laps));
+        return new Data("Session/setCautionLapsAdjust/"+Integer.toString(laps),"","String",Data.State.NOTAVAILABLE);
+    }
+    public    Data setCautionLapsAdjust(String laps) {
+        Data d = new Data("Session/setCautionLapsAdjust/"+laps,"","String",Data.State.NOTAVAILABLE);
+        try {
+            d = setCautionLapsAdjust(Integer.parseInt(laps));
+        } catch (NumberFormatException e) {}
+        return d;
     }
     public    Data setCautionLapsAdjust() {
         return setCautionLapsAdjust("1");
