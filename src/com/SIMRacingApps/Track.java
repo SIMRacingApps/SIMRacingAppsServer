@@ -865,13 +865,12 @@ public class Track {
      * The format follows how SVG defines a path with a Start, MoveTo, End.
      * If needed, there could be more than one segment if it is not continuous.
      * <p>
-     * The results are returned in the following format. Type values are: -1.0 move to, 0.0 line to and 1.0 close. 
+     * The results are returned in the following format. Type values are: -1.0 move to, 0.0 line to. 
+     * NOTE: I use to use the close Type, but not all Start/Finish lines are at the same place on all tracks.
      * <pre>
      * [
      *     { "Type": -1.0,  "Lat": 0.0, "Lon": 0.0 },
      *     { "Type":  0.0,  "Lat": 0.0, "Lon": 0.0 },
-     *     ...
-     *     { "Type":  1.0,  "Lat": 0.0, "Lon": 0.0 }
      * ]
      * </pre>
      * <p>PATH = {@link #getName() /Track/Path}
@@ -911,7 +910,7 @@ public class Track {
                 if (segments.size() == 0 && location.toUpperCase().equals("ONTRACK")) {
                     segment = new HashMap<String,Double>();
                     segment.put("Start", 0.0);
-                    segment.put("End",   100.0);
+                    segment.put("End",   this._maxPercentage() * 100.0);
                     segments.add(segment);
                 }
                 
@@ -937,25 +936,26 @@ public class Track {
                         }
                         path.add(point);
                         
-                        //protect from infinite loop. There should never be more than 1000.
-                        if (++count > 1000)
+                        //protect from infinite loop. There should never be more than 6000.
+                        if (++count > 6000)
                             break;
                         
                         if (Math.round(d*10.0) == Math.round(segment.get("End")*10.0))
                             break;
                         
-                        if (Math.round(d*10.0) == 1000.0)
+                        if (Math.round(d*10.0) == 6000.0)
                             d = 0.0 - 0.1;
                     }
-        
-                    if (count > 0) {  //if has a start add an end
-                        Map<String,Double> point = new HashMap<String,Double>();
-                        
-                        point.put("Lat",  0.0);
-                        point.put("Lon",  0.0);
-                        point.put("Type", 1.0 );
-                        path.add(point);
-                    }
+
+//Removed as all tracks are not connected start and end. Example drag strips or Mount Washington.
+//                    if (count > 0) {  //if has a start add an end
+//                        Map<String,Double> point = new HashMap<String,Double>();
+//                        
+//                        point.put("Lat",  0.0);
+//                        point.put("Lon",  0.0);
+//                        point.put("Type", 1.0 );
+//                        path.add(point);
+//                    }
                 }
                 
                 m_trackpaths.put(location+"/"+UOM, path);   //put it in the cache
