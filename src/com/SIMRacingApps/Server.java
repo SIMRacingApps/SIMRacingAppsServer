@@ -828,7 +828,7 @@ public class Server {
                     + String.format("%n%-35s %s", "OS Architecture:", System.getProperty("os.arch"))
                     + String.format("%n%-35s %s", "OS Processor:", processor)
                     + String.format("%n%-35s %d", "OS AvailableCores:", Runtime.getRuntime().availableProcessors())
-                    + String.format("%n%-35s %d", "ARGS Reserved Cores:", Server.getArg("reserved cores",RESERVED_CORES))
+                    + String.format("%n%-35s %d", "ARGS Reserved Cores:", Server.getArg("reserved-cores",RESERVED_CORES))
                     + String.format("%n%-35s %.2f GHz", "OS Processor Speed:", dGHz)
                     + OSInfo
                     + String.format("%n*************************************************************************************************")
