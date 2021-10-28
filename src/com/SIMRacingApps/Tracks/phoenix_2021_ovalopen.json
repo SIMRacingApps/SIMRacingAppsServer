@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2021 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    33.374484,
+    "Longitude":   -112.310556,
+    "North":       110.0,
+    "Resolution":  1.4,
+    "MergePoint":  15.8,
+    "Images": {
+        "SAT":     "phoenix_2012-sat.png",
+        "MAP":     "phoenix_2012-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  130.0,
+    "GPX": {
+        "ONTRACK":   "phoenix_2021_oval-ONTRACK.gpx",
+        "ONPITROAD": "phoenix_2021_oval-ONPITROAD.gpx"        
+    }
+}
