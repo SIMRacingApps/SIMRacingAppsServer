@@ -464,6 +464,7 @@ public class Gauge {
         public static final String ANTIROLLREAR         = "AntiRollRear";
         public static final String BOOSTLEVEL           = "BoostLevel";
         public static final String BRAKEBIASADJUSTMENT  = "BrakeBiasAdjustment";
+        public static final String BRAKEBIASFINEADJUSTMENT  = "BrakeBiasFineAdjustment";
         public static final String DIFFENTRY            = "DiffEntry";
         public static final String DIFFEXIT             = "DiffExit";
         public static final String DIFFMIDDLE           = "DiffMiddle";
@@ -574,6 +575,7 @@ public class Gauge {
     protected boolean m_isDirty;
     protected boolean m_onResetChange;
     protected Map<String,TreeMap<Double,StateRange>> m_states = null;
+	protected ArrayList<String> m_stateRangeList = null;
     protected String m_reader;
     protected int m_lapChanged;
     
@@ -620,8 +622,23 @@ public class Gauge {
         this.m_capacityMaximum = new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/CapacityMaximum",100.0,"",Data.State.NORMAL);
         this.m_capacityIncrement = new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/CapacityIncrement",1.0,"",Data.State.NORMAL);
         this.m_states = new HashMap<String,TreeMap<Double,StateRange>>();
+		this.m_stateRangeList = new ArrayList<String>();
         this.m_reader = "";
         this.m_lapChanged = 1;
+
+        //list all the values for state ranges so that we can look for user overrides
+		m_stateRangeList.add("NORMAL");
+		m_stateRangeList.add("CRITICAL");
+		m_stateRangeList.add("WARNING");
+        m_stateRangeList.add("APPROACHINGLIMIT");
+		m_stateRangeList.add("LIMIT");
+		m_stateRangeList.add("OVERLIMIT");
+		m_stateRangeList.add("WAYOVERLIMIT");
+		
+		//These have their own overrides in the settings, but duplicated here for completeness.
+        m_stateRangeList.add("SHIFT");
+        m_stateRangeList.add("SHIFTLIGHTS");
+        m_stateRangeList.add("SHIFTBLINK");
         
         //now read the json profiles, gauges passed in first, then default, then overrides from the SIM
         ArrayList<Map<String, Map<String, Map<String, Object>>>> gaugesList = new ArrayList<Map<String, Map<String, Map<String, Object>>>>();
@@ -1265,35 +1282,172 @@ public class Gauge {
             if ((b = (Boolean)trackmap.get("IsChangable"))      != null) _setIsChangable(b);
             if ((b = (Boolean)trackmap.get("OnResetChange"))    != null) _setOnResetChange(b);
             if ((s = (String)trackmap.get("Reader"))            != null) m_reader = s;
-    
+        }
+        
+        //User Overrides
+        //{Car}-{Gauge}-{Track}{EngineState}-{Attribute}
+        
+        String argPrefix = (m_car.m_name+"-"+m_type+"-"+trackName+stateName+"-").replace(" ", "_");
+            
+if (m_type.equals("WaterTemp"))
+    m_type = m_type;
+
+        m_name = Server.getArg(argPrefix+"Name",m_name); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"Name",m_name));
+        m_typeName = Server.getArg(argPrefix+"TypeName",m_typeName); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"TypeName",m_typeName));
+        m_UOM = Server.getArg(argPrefix+"UOM",m_UOM); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"UOM",m_UOM));
+        m_imperial = Server.getArg(argPrefix+"imperial",m_imperial); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"imperial",m_imperial));
+        m_metric = Server.getArg(argPrefix+"metric",m_metric); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"metric",m_metric));
+        m_stateAscending = Server.getArg(argPrefix+"StateAscending",m_stateAscending); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"StateAscending",m_stateAscending?"true":"false"));
+        m_multiplier = Server.getArg(argPrefix+"Multiplier",m_multiplier); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"Multiplier",m_multiplier));
+        _setMinimum(Server.getArg(argPrefix+"Minimum",getMinimum().getDouble()),m_UOM); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"Minimum",getMinimum().getDouble()));
+        _setMaximum(Server.getArg(argPrefix+"Maximum",getMaximum().getDouble()),m_UOM); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"Maximum",getMaximum().getDouble()));
+        _setMajorIncrement(Server.getArg(argPrefix+"MajorIncrement",getMajorIncrement().getDouble()),m_UOM); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"MajorIncrement",getMajorIncrement().getDouble()));
+        _setMinorIncrement(Server.getArg(argPrefix+"MinorIncrement",getMinorIncrement().getDouble()),m_UOM); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"MinorIncrement",getMinorIncrement().getDouble()));
+        _setCapacityMinimum(Server.getArg(argPrefix+"CapacityMinimum",getCapacityMinimum().getDouble()),m_UOM); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityMinimum",getCapacityMinimum().getDouble()));
+        _setCapacityMaximum(Server.getArg(argPrefix+"CapacityMaximum",getCapacityMaximum().getDouble()),m_UOM); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityMaximum",getCapacityMaximum().getDouble()));
+        _setCapacityIncrement(Server.getArg(argPrefix+"CapacityIncrement",getCapacityIncrement().getDouble()),m_UOM); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityIncrement",getCapacityIncrement().getDouble()));
+        _setIsFixed(Server.getArg(argPrefix+"IsFixed",getIsFixed().getBoolean())); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"IsFixed",getIsFixed().getString()));
+        _setIsChangable(Server.getArg(argPrefix+"IsChangable",getIsChangeable().getBoolean())); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"IsChangable",getIsChangeable().getString()));
+        _setOnResetChange(Server.getArg(argPrefix+"OnResetChange",getOnResetChange().getBoolean())); 
+        if (m_car.isME())
+            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"OnResetChange",getOnResetChange().getString()));
+        
+        if (trackmap != null) {
             @SuppressWarnings("unchecked")
             Map<String,Map<String,Object>> states = (Map<String,Map<String,Object>>)trackmap.get("States");
             if (states != null) {
                 Iterator<Entry<String, Map<String, Object>>> itr = states.entrySet().iterator();
                 while (itr.hasNext()) {
                     Entry<String, Map<String,Object>> state = itr.next();
+                    double start = (Double)state.getValue().get("Start");
+                    double end   = (Double)state.getValue().get("End");
+                    
+                    //User overrides
+                    //{Car}-{Gauge}-{Track}{EngineState}-States-{StateName}-{Attribute}
+                    
+                    start = Server.getArg(argPrefix+"States-"+state.getKey()+"-"+"Start",start);
+                    if (m_car.isME())
+                        Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix+"States-"+state.getKey()+"-","Start",start));
+                    end   = Server.getArg(argPrefix+"States-"+state.getKey()+"-"+"End",end);
+                    if (m_car.isME())
+                        Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix+"States-"+state.getKey()+"-","End",end));
+                    
+                    
                     if (state.getValue().get("Value") != null) {
+                        String name = (String)state.getValue().get("Name");
+                        String value = (String)state.getValue().get("Value");
+                        
+                        //user Overrides
+                        name  = Server.getArg(argPrefix+"States-"+state.getKey()+"-"+"Name",name);
+                        if (m_car.isME())
+                            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix+"States-"+state.getKey()+"-","Name",name));
+                        value = Server.getArg(argPrefix+"States-"+state.getKey()+"-"+"Value",value);
+                        if (m_car.isME())
+                            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix+"States-"+state.getKey()+"-","Value",value));
+
                         _addStateRange(
                             stateName,
                             state.getKey(),
-                            (Double)state.getValue().get("Start"),
-                            (Double)state.getValue().get("End"),
+                            start,
+                            end,
                             m_UOM,
-                            new Data((String)state.getValue().get("Name"),state.getValue().get("Value"),"",Data.State.NORMAL)
+                            new Data(name,value,"",Data.State.NORMAL)
                         );
                     }
                     else {
                         _addStateRange(
                                 stateName,
                                 state.getKey(),
-                                (Double)state.getValue().get("Start"),
-                                (Double)state.getValue().get("End"),
+                                start,
+                                end,
                                 m_UOM
                         );
                     }
                 }
             }
         }
+		
+		//now look for user overrides in the State Ranges
+		for (int i=0; i < m_stateRangeList.size(); i++) {
+		    String state = m_stateRangeList.get(i);
+		    String start = "";
+			String end   = "";
+			String name  = "";
+			String value = "";
+			
+			
+			//User overrides
+			//{Car}-{Gauge}-{Track}{TrackState}-States-{StateName}-{Attribute}
+			start = Server.getArg(argPrefix+"States-"+state+"-"+"Start",start);
+			end   = Server.getArg(argPrefix+"States-"+state+"-"+"End",end);
+            name  = Server.getArg(argPrefix+"States-"+state+"-"+"Name",name);
+            value = Server.getArg(argPrefix+"States-"+state+"-"+"Value",value);
+            
+            try {
+                if (!start.isEmpty() && !end.isEmpty()) {
+                    if (m_car.isME())
+                        Server.logger().fine(String.format("Adding Gauge Value: %s%s = %s",argPrefix+"States-"+state+"-","Start",start));
+                    if (m_car.isME())
+                        Server.logger().fine(String.format("Adding Gauge Value: %s%s = %s",argPrefix+"States-"+state+"-","End",end));
+                    if (!value.isEmpty()) {
+                        if (m_car.isME())
+                            Server.logger().fine(String.format("Adding Gauge Value: %s%s = %s",argPrefix+"States-"+state+"-","Name",name));
+                        if (m_car.isME())
+                            Server.logger().fine(String.format("Adding Gauge Value: %s%s = %s",argPrefix+"States-"+state+"-","Value",value));
+                        _addStateRange(
+                                stateName,
+                                state,
+                                Double.parseDouble(start),
+                                Double.parseDouble(end),
+                                m_UOM,
+                                new Data(name,value,"",Data.State.NORMAL)
+                            );
+                    }
+                    else {
+                        _addStateRange(
+                                stateName,
+                                state,
+                                Double.parseDouble(start),
+                                Double.parseDouble(end),
+                                m_UOM
+                        );
+                    }
+    			}
+            }
+            catch (NumberFormatException e) {}
+		}
     }
 
     @Override

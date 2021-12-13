@@ -148,6 +148,32 @@ MSPEC-ShiftLight = N
 mspec-speeding = Y
 
 #####################################################################
+### Any value for the Gauge Profiles can be overridden here. 
+### For a reference of the existing values, look at these 2 links. 
+###    https://github.com/SIMRacingApps/SIMRacingAppsServer/blob/master/src/com/SIMRacingApps/Car.json
+###    https://github.com/SIMRacingApps/SIMRacingAppsSIMPluginiRacing/tree/master/src/com/SIMRacingApps/SIMPlugins/iRacing/Cars
+###    https://github.com/SIMRacingApps/SIMRacingAppsServer/tree/master/src/com/SIMRacingApps/Tracks
+###
+### The syntax of the variables are as follows. For details see the Wiki at
+###    https://github.com/SIMRacingApps/SIMRacingApps/wiki/How-to-override-car-profile-gauge-values-in-settings
+###
+###    {Car}-{Gauge}-{Track}-{Attribute} = {value}
+###    {Car}-{Gauge}-{Track}-{Gear}-{Attribute} = {value}
+###    {Car}-{Gauge}-{Track}-{Gear}-{PowerLevel}-{Attribute} = {value}
+###    {Car}-{Gauge}-{Track}-States-{StateName}-{Attribute} = {value}
+###    {Car}-{Gauge}-{Track}-{Gear}-States-{StateName}-{Attribute} = {value}
+###    {Car}-{Gauge}-{Track}-{Gear}-{PowerLevel}-States-{StateName}-{Attribute} = {value}
+###
+### Examples: (Remove leading # sign to activate)
+#stockcars2_camaro2019-WaterTemp-default-States-WARNING-Start = 240.0
+#stockcars2_camaro2019-WaterTemp-default-States-WARNING-End = 276.0
+#stockcars2_camaro2019-WaterTemp-default-States-CRITICAL-Start = 276.0
+#stockcars2_camaro2019-WaterTemp-default-States-CRITICAL-End = 9999.0
+#####################################################################
+
+
+
+#####################################################################
 ### RPMs for the Shift Lights can be overridden here.
 ### You can override by track, car, gear and engine power.
 ### Track, Gear and Power are optional.

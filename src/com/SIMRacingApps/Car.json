@@ -1021,6 +1021,24 @@
                 "IsFixed":           false
             }
         },
+        "BrakeBiasFineAdjustment": {
+            "default": {
+                "Name":              "BRAKE BIAS FINE ADJ",
+                "TypeName":          "",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           -3.0,
+                "Maximum":           3.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    0.1,
+                "CapacityMinimum":   -3.0,
+                "CapacityMaximum":   3.0,
+                "CapacityIncrement": 0.1,
+                "IsFixed":           false
+            }
+        },
         "Tape": {
             "default": {
                 "Name":              "TAPE",
