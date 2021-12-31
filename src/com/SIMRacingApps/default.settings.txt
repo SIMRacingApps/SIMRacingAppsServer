@@ -107,6 +107,14 @@ SimPlugins =
 log = SIMRacingApps
 level = INFO
 
+
+#####################################################################
+### This is the number of laps to add to the remaining laps used
+### when calculating the amount of fuel needed to finish. Use it
+### for Green/White/Checkered, or timed races.
+#####################################################################
+fuel-level-needed-buffer-laps = 1
+
 #####################################################################
 ### Allows REFERENCE car to follow the car the camera is focused on.
 #####################################################################

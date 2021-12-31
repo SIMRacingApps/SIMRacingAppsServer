@@ -30,7 +30,7 @@ public class Car {
     public static String [] Tires = {"LF","LR","RF","RR"};
 
     private static final int DEFAULT_LAPS_FUEL_MILAGE       = 0;    //zero means use worse lap, average means average
-    private static final double FUELLEVELNEEDED_BUFFER_LAPS = 0.0;  //number of laps to add to the remaining laps as a buffer. TODO: GWC could generate the need to add 2 or more laps
+    private static final double FUELLEVELNEEDED_BUFFER_LAPS = 1.0;  //number of laps to add to the remaining laps as a buffer. TODO: GWC could generate the need to add 2 or more laps
     protected SIMPlugin m_SIMPlugin                         = null;
     
     //just to make things a little easier, I will just make these protected instead of getters and setters
@@ -625,7 +625,7 @@ public class Car {
             }
             
             if (lapsRemaining > 0.0 && fuelperlap.getDouble() > 0.0) {
-                double fueltoadd = (fuelperlap.getDouble() * (lapsRemaining + FUELLEVELNEEDED_BUFFER_LAPS));
+                double fueltoadd = (fuelperlap.getDouble() * (lapsRemaining + Server.getArg("fuel-level-needed-buffer-laps",FUELLEVELNEEDED_BUFFER_LAPS)));
 
                 fuelneeded.setValue(fueltoadd > 0.0 ? fueltoadd : 0.0);
                 fuelneeded.setState(Data.State.NORMAL);
