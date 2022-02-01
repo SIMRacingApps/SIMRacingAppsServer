@@ -29,7 +29,7 @@ import com.SIMRacingApps.Data.State;
  * NOTE: When it's changed, all connected clients will assume the new reference car.
  * @author Jeffrey Gilliam
  * @since 1.0
- * @copyright Copyright (C) 2015 - 2021 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2022 Jeffrey Gilliam
  * @license Apache License 2.0
  */
 public class Session {

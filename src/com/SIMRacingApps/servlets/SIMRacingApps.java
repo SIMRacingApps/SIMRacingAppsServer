@@ -31,7 +31,7 @@ import com.SIMRacingApps.Util.FindFile;
  * <p>
  * http://localhost/SIMRacingApps/com/SIMRacingApps/Tracks/daytona.png
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2021 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2022 Jeffrey Gilliam
  * @since 1.1
  * @license Apache License 2.0
  */

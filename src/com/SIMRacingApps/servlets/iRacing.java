@@ -22,7 +22,7 @@ import com.SIMRacingApps.Server;
  * It simply passes the portion of the URL that comes after /iRacing to the iRacing server.
  * What gets returned is defined by iRacing, so consult their documentation as needed.
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2021 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2022 Jeffrey Gilliam
  * @since 1.1
  * @license Apache License 2.0
  */
