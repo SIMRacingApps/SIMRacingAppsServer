@@ -235,17 +235,23 @@ minimum-speed-percentage   = 110
 ### If the device is not specified, it uses the 
 ### overall master sound-device.
 ### The volume is a percentage of the master "sound-volume" setting.
+### NOTE: As of iRacing's March 2022 build, they now have their own count down.
+###       Therefore, the count down is disabled by default, but the pit position calls are still enabled.
+###       You can disable the iRacing spotter, or set it to "Low" and still use SRA with these settings.
 #####################################################################
 Sounds-PitCountDown = Y
+pit-count-down-enabled = N
+pit-count-down-pit-position-enabled = Y
 #pit-count-down-device = 
 pit-count-down-volume = 100
 pit-count-down-play10 = Y
 pit-count-down-play0  = Y
 pit-count-down-start  = 5
 pit-count-down-replay = false
+
 #####################################################################
 ### Some known patterns to spotter packs. Your version may vary. 
-### Double backslashes are required for the directory separator.
+### Double backslashes are required for the folder separator.
 ### Remove the hash(#) to uncomment the line to use 
 #####################################################################
 #pit-count-down-pattern = C:\\Program Files (x86)\\iRacing\\sound\\spcc\\JJ Spotter Pack v7.10\\n%d.wav

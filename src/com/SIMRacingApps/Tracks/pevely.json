@@ -4,18 +4,18 @@
     "COMMENT1":    "The Lat/Lon is the center of the track around which the image is rotated",
     "COMMENT1a":   "tip: if you center the map within the browser frame, the url will change to the center of the view",
     "COMMENT1b":   "If a WayPoint is found in the GPX file named Center, it will override these values",
-    "Latitude":    35.351669,
-    "Longitude":   -80.682891,
+    "Latitude":    38.269607,
+    "Longitude":   -90.401673,
     "COMMENT2":    "North is angle you want the track's north to point to, where 270 is straight up and 90 is down",
-    "North":       166.0,
+    "North":       162.0,
     "COMMENT3":    "Resolution is the number of meters per pixel. Considering the size is 800x480 pixels",
-    "Resolution":  2.5,
+    "Resolution":  0.5,
     "COMMENT4":    "MergePoint is the point at which you are legally able to reenter the track after pitting. Some tracks have blue cone",
-    "MergePoint":  0.1,
+    "MergePoint":  50.0,
     "COMMENT6":    "Images map to the Layer Name to show (MAP,OSM). Must have at least MAP",
     "Images": {
-        "MAP":     "default-map.png",
-        "SAT":     "default-sat.png"
+        "MAP":     "pevely-map.png",
+        "SAT":     "pevely-sat.png"
     },
     "COMMENT7":    "The following units of measures should be in the track's country's native measurement system",
     "DistanceUOM": "mile",
@@ -27,7 +27,7 @@
     "COMMENT9a":   "Right Click, Draw New, Route. Draw the points starting at the finish line and ending at the finish line",
     "COMMENT9b":   "Save as GPX file associated to the names here",
     "GPX": {
-        "ONTRACK":   "default-ONTRACK.gpx",
-        "ONPITROAD": "default-ONPITROAD.gpx"        
+        "ONTRACK":   "pevely-ONTRACK.gpx",
+        "ONPITROAD": "pevely-ONPITROAD.gpx"        
     }
 }

@@ -17,10 +17,12 @@ import com.SIMRacingApps.Util.Sound;
  *    pit-count-down-device = A Sound Device
  *    pit-count-down-volume = 100.0
  *    pit-count-down-start  = 5
- *    pit-count-down-stop   = 4
+ *    pit-count-down-stop   = 0
  *    pit-count-down-play10 = Y
  *    pit-count-down-replay = N
- *    pit-count-down-play0  = N
+ *    pit-count-down-play0  = Y
+ *    pit-count-down-enabled = N
+ *    pit-count-down-pit-position-enabled = Y
  *    pit-count-down-pattern = com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/n%d.wav
  *        #some know patterns to spotter packs. Your version may vary
  *        C:\\Program Files (x86)\\iRacing\\sound\\spcc\\JJ Spotter Pack v6.51\\n%d.wav
@@ -55,6 +57,8 @@ public class PitCountDown extends SIMPluginCallback {
     private final boolean m_replay;
     private final int m_startCount;
     private final int m_stopCount;
+    private final boolean m_playCountDown;
+    private final boolean m_playPitPosition;
     
     private Double m_volume;
     
@@ -83,6 +87,8 @@ public class PitCountDown extends SIMPluginCallback {
         m_replay              = Server.getArg("pit-count-down-replay",false);
 		m_startCount          = (int)Math.min(10.0, Math.max(0.0, (double)Server.getArg("pit-count-down-start",5)));
         m_stopCount           = (int)Math.min(10.0, Math.max(0.0, (double)Server.getArg("pit-count-down-stop",0)));
+        m_playCountDown       = Server.getArg("pit-count-down-enabled",false);
+        m_playPitPosition     = Server.getArg("pit-count-down-pit-position-enabled",true);
         
 		String defaultPattern = "com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/n%d.wav";
 		String soundPattern   = Server.getArg("pit-count-down-pattern",defaultPattern);
@@ -109,7 +115,7 @@ public class PitCountDown extends SIMPluginCallback {
         m_clipStopRightThere.setVolume(m_volume);
         m_clipStopRightThere.setMinTimeBetweenPlays(50);
         
-        for (int i=0; m_startCount > 0.0 && i <= 10; i++) {
+        for (int i=0; i <= 10; i++) {
             Sound clip = new Sound(m_device,String.format(soundPattern,i));
             if (!clip.getErrorMessage().isEmpty())
                 clip = new Sound(m_device,String.format(defaultPattern,i));
@@ -224,58 +230,59 @@ public class PitCountDown extends SIMPluginCallback {
             if (status.equals(Car.Status.LEAVINGPITS) || status.equals(Car.Status.INVALID))
                 m_beenOnTrack = false;
             
-            if (messages.contains(Car.Message.TOOFARBACK) && !this.m_clipTooFarBack.isPlaying()) {
-                if (m_currentPitPositionClip != null)
-                    m_currentPitPositionClip.stop();
-                m_currentPitPositionClip = this.m_clipTooFarBack;
-                m_currentPitPositionClip.play();
-            }
-            else
-            if (messages.contains(Car.Message.TOOFARFORWARD) && !this.m_clipTooFarForward.isPlaying()) {
-                if (m_currentPitPositionClip != null)
-                    m_currentPitPositionClip.stop();
-                m_currentPitPositionClip = this.m_clipTooFarForward;
-                m_currentPitPositionClip.play();
-            }
-            else
-            if (messages.contains(Car.Message.TOOFARLEFT) && !this.m_clipTooFarLeft.isPlaying()) {
-                if (m_currentPitPositionClip != null)
-                    m_currentPitPositionClip.stop();
-                m_currentPitPositionClip = this.m_clipTooFarLeft;
-                m_currentPitPositionClip.play();
-            }
-            else
-            if (messages.contains(Car.Message.TOOFARRIGHT) && !this.m_clipTooFarRight.isPlaying()) {
-                if (m_currentPitPositionClip != null)
-                    m_currentPitPositionClip.stop();
-                m_currentPitPositionClip = this.m_clipTooFarRight;
-                m_currentPitPositionClip.play();
-            }
-            else
-            if (messages.contains(Car.Message.STRAIGHTENUP) && !this.m_clipStraightenUp.isPlaying()) {
-                if (m_currentPitPositionClip != null)
-                    m_currentPitPositionClip.stop();
-                m_currentPitPositionClip = this.m_clipStraightenUp;
-                m_currentPitPositionClip.play();
-            }
-            else
-            if (messages.contains(Car.Message.TOOMUCHDAMAGE)) {
-                if (m_currentPitPositionClip != null) {
-                    m_currentPitPositionClip.stop();
-                    m_currentPitPositionClip = null;
+            if (m_playPitPosition) {
+                if (messages.contains(Car.Message.TOOFARBACK) && !this.m_clipTooFarBack.isPlaying()) {
+                    if (m_currentPitPositionClip != null)
+                        m_currentPitPositionClip.stop();
+                    m_currentPitPositionClip = this.m_clipTooFarBack;
+                    m_currentPitPositionClip.play();
                 }
-            }
-            else
-            if (messages.contains(Car.Message.PITSERVICEINPROGRESS) && !this.m_clipStopRightThere.isPlaying()) {
-                if (m_currentPitPositionClip != null) {
-                    m_currentPitPositionClip.stop();
-                    m_currentPitPositionClip = null;
-                    this.m_clipStopRightThere.play();
+                else
+                if (messages.contains(Car.Message.TOOFARFORWARD) && !this.m_clipTooFarForward.isPlaying()) {
+                    if (m_currentPitPositionClip != null)
+                        m_currentPitPositionClip.stop();
+                    m_currentPitPositionClip = this.m_clipTooFarForward;
+                    m_currentPitPositionClip.play();
                 }
-            }
+                else
+                if (messages.contains(Car.Message.TOOFARLEFT) && !this.m_clipTooFarLeft.isPlaying()) {
+                    if (m_currentPitPositionClip != null)
+                        m_currentPitPositionClip.stop();
+                    m_currentPitPositionClip = this.m_clipTooFarLeft;
+                    m_currentPitPositionClip.play();
+                }
+                else
+                if (messages.contains(Car.Message.TOOFARRIGHT) && !this.m_clipTooFarRight.isPlaying()) {
+                    if (m_currentPitPositionClip != null)
+                        m_currentPitPositionClip.stop();
+                    m_currentPitPositionClip = this.m_clipTooFarRight;
+                    m_currentPitPositionClip.play();
+                }
+                else
+                if (messages.contains(Car.Message.STRAIGHTENUP) && !this.m_clipStraightenUp.isPlaying()) {
+                    if (m_currentPitPositionClip != null)
+                        m_currentPitPositionClip.stop();
+                    m_currentPitPositionClip = this.m_clipStraightenUp;
+                    m_currentPitPositionClip.play();
+                }
+                else
+                if (messages.contains(Car.Message.TOOMUCHDAMAGE)) {
+                    if (m_currentPitPositionClip != null) {
+                        m_currentPitPositionClip.stop();
+                        m_currentPitPositionClip = null;
+                    }
+                }
+                else
+                if (messages.contains(Car.Message.PITSERVICEINPROGRESS) && !this.m_clipStopRightThere.isPlaying()) {
+                    if (m_currentPitPositionClip != null) {
+                        m_currentPitPositionClip.stop();
+                        m_currentPitPositionClip = null;
+                        this.m_clipStopRightThere.play();
+                    }
+                }
+            }            
             
-            
-            if (m_beenOnTrack) {  //This is to stop it from playing when you start the race or qualifying from pit road
+            if (m_beenOnTrack && m_playCountDown) {  //This is to stop it from playing when you start the race or qualifying from pit road
                 if (m_currentPitPositionClip == null
                 &&  (status.equals(Car.Status.ONPITROAD) 
                 ||   status.equals(Car.Status.ENTERINGPITSTALL)
