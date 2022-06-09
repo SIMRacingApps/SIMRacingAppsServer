@@ -237,10 +237,10 @@ minimum-speed-percentage   = 110
 ### The volume is a percentage of the master "sound-volume" setting.
 ### NOTE: As of iRacing's March 2022 build, they now have their own count down.
 ###       Therefore, the count down is disabled by default, but the pit position calls are still enabled.
-###       You can disable the iRacing spotter, or set it to "Low" and still use SRA with these settings.
+###       As of the June 2022 build, you can disable iRacing's count down in their settings
 #####################################################################
 Sounds-PitCountDown = Y
-pit-count-down-enabled = N
+pit-count-down-enabled = Y
 pit-count-down-pit-position-enabled = Y
 #pit-count-down-device = 
 pit-count-down-volume = 100
