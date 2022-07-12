@@ -542,7 +542,7 @@ public class Track {
      * Can return the coordinate based on 2 locations, ONTRACK and ONPITROAD.
      * You can get the bearing at the start/finish line by passing in ONTRACK with a percentage of zero.
      * <p>
-     * Zero degrees is north, 90 is east, 180 is south and 270 is west.
+     * 270 degrees is north, 0 is east, 90 is south and 180 is west.
      * <p>
      * If a SIM can return the exact bearing, then it should override this functions and return them.
      * Otherwise, the percentage is used to approximate the position.
@@ -561,7 +561,7 @@ public class Track {
      */
     public    Data    getBearing(String location, Double percentage, String UOM) { /*Double*/
         _loadTrack();
-        Double bearing = 0.0; //default to true north
+        Double bearing = 270.0; //default to true north
         if (!(percentage < 0.0) && m_trackmap != null) {
             @SuppressWarnings("unchecked")
             Map<String,Map<String,Double>> map = (Map<String, Map<String, Double>>) m_trackmap.get(location.toUpperCase());
@@ -577,13 +577,16 @@ public class Track {
                             prevlatlng = map.get("99.9");
                         }
                         if (prevlatlng != null)
-                            bearing = _bearing(prevlatlng.get("Latitude"),prevlatlng.get("Longitude"),latlng.get("Latitude"),latlng.get("Longitude"));
+                            bearing = _bearing(prevlatlng.get("Latitude"),prevlatlng.get("Longitude"),latlng.get("Latitude"),latlng.get("Longitude")) + 270.0;
                     }
                 }
                 else
                     Server.logger().fine(String.format(m_us,"TrackMap(%s) missing %.1f",location,percentage));
             }
         }
+        
+        if (bearing >= 360.0)
+        	bearing -= 360.0;
 
         return new Data("Track/Bearing/"+location,bearing,"deg",Data.State.NORMAL).convertUOM(UOM); 
     }

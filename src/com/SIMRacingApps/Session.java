@@ -988,6 +988,15 @@ public class Session {
     public    Data    setReplayPosition(String command)          { /*String*/      return new Data("Session/setReplayPosition",command,"String",Data.State.NOTAVAILABLE); }
     
     /**
+     * Returns if the SIM has own pit count down spotter enabled.
+     * 
+     * <p>PATH = {@link #getSpotterPitCountDown() /Session/SpotterPitCountDown}
+     * 
+     * @return Y if SIM is counting down, N if not in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getSpotterPitCountDown()                { /*boolean*/     return new Data("Session/SpotterPitCountDown",false,"boolean",Data.State.NOTAVAILABLE);  }
+    
+    /**
      * Returns the time the current session started as the number of seconds since Jan 1, 1970 UTC.
      * It may be adjusted by the SIM to reflect a virtual date/time being simulated.
      * But, that will be in UTC as well. The offset of the time zone is in the State in the format of +/-HHMM.

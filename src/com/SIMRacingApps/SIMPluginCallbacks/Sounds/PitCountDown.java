@@ -87,7 +87,7 @@ public class PitCountDown extends SIMPluginCallback {
         m_replay              = Server.getArg("pit-count-down-replay",false);
 		m_startCount          = (int)Math.min(10.0, Math.max(0.0, (double)Server.getArg("pit-count-down-start",5)));
         m_stopCount           = (int)Math.min(10.0, Math.max(0.0, (double)Server.getArg("pit-count-down-stop",0)));
-        m_playCountDown       = Server.getArg("pit-count-down-enabled",true);
+        m_playCountDown       = SIMPlugin.getSession().getSpotterPitCountDown().getBoolean() ? false : Server.getArg("pit-count-down-enabled",true);
         m_playPitPosition     = Server.getArg("pit-count-down-pit-position-enabled",true);
         
 		String defaultPattern = "com/SIMRacingApps/SIMPluginCallbacks/Sounds/Clips/n%d.wav";
