@@ -7,8 +7,8 @@
     "Resolution":  3.4,
     "MergePoint":  34.5,
     "Images": {
-        "SAT":     "indianapolis_sat.png",
-        "MAP":     "indianapolis_map.png"
+        "SAT":     "indianapolis-sat.png",
+        "MAP":     "indianapolis-map.png"
     },
     "DistanceUOM": "mile",
     "TempUOM":     "F",

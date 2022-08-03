@@ -68,6 +68,23 @@ public class Track {
         public static final String ROAD           = "Road";
         //TODO: Need to find all of the track categories returned by iRacing
     }
+    
+    /**
+     * An enumeration of the track locations used by the SIM.
+     */
+    public final static class TrackLocation {
+        public static final String CENTER         = "CENTER";
+        public static final String ONTRACK        = "ONTRACK";
+        public static final String ONPITROAD      = "ONPITROAD";
+    }
+
+    /**
+     * An enumeration of the track sector types returned by the SIM.
+     */
+    public final static class SectorType {
+        public static final String PERCENTAGE     = "PERCENTAGE";
+        public static final String COORDINATES    = "COORDINATES";
+    }
 
     protected transient SIMPlugin SIMPlugin = null;
     private Genson genson = new Genson();
@@ -238,7 +255,7 @@ public class Track {
                                 NodeList rtept_taglist = el.getElementsByTagName("name");
                                 if (rtept_taglist != null) {
                                     String name = ((Element)rtept_taglist.item(0)).getTextContent();
-                                    if (name.equalsIgnoreCase("Center")) {
+                                    if (name.equalsIgnoreCase(TrackLocation.CENTER)) {
                                         m_trackmap.put("Latitude", lat);
                                         m_trackmap.put("Longitude", lon);
                                         Server.logger().info(String.format(m_us,"Center = %f,%f",lat,lon));
@@ -322,7 +339,7 @@ public class Track {
                                     
                                     if (rec.name.equalsIgnoreCase("MergePoint")) {
                                         //TODO: Do I Override the MergePoint or only add it if missing. ONTRACK or ONPITROAD?
-                                        if (GPXEntry.getKey().equals("ONTRACK")) {
+                                        if (GPXEntry.getKey().equalsIgnoreCase(TrackLocation.ONTRACK)) {
                                             mergePoints.add(rec.percent * 100.0);
                                             //m_trackmap.put("MergePoint", rec.percent * 100.0);
                                             Server.logger().info(String.format(m_us,"%s.MergePoint = %f",GPXEntry.getKey(),rec.percent * 100.0));
@@ -593,7 +610,7 @@ public class Track {
     public    Data    getBearing(String location, String percentage, String UOM) { return getBearing(location,Double.parseDouble(percentage),UOM); }
     public    Data    getBearing(String location, String percentage) { return getBearing(location,Double.parseDouble(percentage),"deg"); }
     public    Data    getBearing(String location) { return getBearing(location,"0.0"); }
-    public    Data    getBearing() { return getBearing("ONTRACK"); }
+    public    Data    getBearing() { return getBearing(TrackLocation.ONTRACK); }
 
     /**
      * Returns the track category as defined by {@link com.SIMRacingApps.Track.Category}
@@ -715,7 +732,7 @@ public class Track {
         _loadTrack();
         Double lat = null;
         if (m_trackmap != null) {
-            if (location.equalsIgnoreCase("CENTER")) {
+            if (location.equalsIgnoreCase(TrackLocation.CENTER)) {
                 lat = (Double)m_trackmap.get("Latitude");
             }
             else {
@@ -738,7 +755,7 @@ public class Track {
     public    Data    getLatitude(String location, String percentage, String UOM) { return getLatitude(location,Double.parseDouble(percentage),UOM); }
     public    Data    getLatitude(String location, String percentage) { return getLatitude(location,Double.parseDouble(percentage),"deg"); }
     public    Data    getLatitude(String location) { return getLatitude(location,"0.0"); }
-    public    Data    getLatitude() { return getLatitude("CENTER"); }
+    public    Data    getLatitude() { return getLatitude(TrackLocation.CENTER); }
 
     /**
      * Returns the length of the track using the unit of measure the distance of this track is normally reported in.
@@ -797,7 +814,7 @@ public class Track {
         _loadTrack();
         Double lng = null;
         if (m_trackmap != null) {
-            if (location.equalsIgnoreCase("CENTER")) {
+            if (location.equalsIgnoreCase(TrackLocation.CENTER)) {
                 lng = (Double)m_trackmap.get("Longitude");
             }
             else {
@@ -820,7 +837,7 @@ public class Track {
     public    Data    getLongitude(String location, String percentage, String UOM) { return getLongitude(location,Double.parseDouble(percentage),UOM); }
     public    Data    getLongitude(String location, String percentage) { return getLongitude(location,Double.parseDouble(percentage),"deg"); }
     public    Data    getLongitude(String location) { return getLongitude(location,"0.0"); }
-    public    Data    getLongitude() { return getLongitude("CENTER"); }
+    public    Data    getLongitude() { return getLongitude(TrackLocation.CENTER); }
     
 
     /**
@@ -910,7 +927,7 @@ public class Track {
                 }
                 
                 //if no segments found and the location is for the track, default to 0.0 to 100.0
-                if (segments.size() == 0 && location.toUpperCase().equals("ONTRACK")) {
+                if (segments.size() == 0 && location.equalsIgnoreCase(TrackLocation.ONTRACK)) {
                     segment = new HashMap<String,Double>();
                     segment.put("Start", 0.0);
                     segment.put("End",   this._maxPercentage() * 100.0);
@@ -968,7 +985,7 @@ public class Track {
         return new Data("Track/Path/"+location, path, UOM,m_trackmap == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL);
     }
     public    Data    getPath(String location)           { return getPath(location,""); }
-    public    Data    getPath()                          { return getPath("ONTRACK"); }
+    public    Data    getPath()                          { return getPath(TrackLocation.ONTRACK); }
     
     /**
      * Returns the Pit Speed Limit for this session as reported by the SIM SIMPlugin.
@@ -1010,6 +1027,34 @@ public class Track {
         return (new Data("Track/Resolution",resolution == null ? 1.9 : resolution,"m",m_trackmap == null ? Data.State.NOTAVAILABLE : Data.State.NORMAL)).convertUOM(UOM);
     }
     public    Data    getResolution() { return getResolution(""); }
+    
+    /**
+     * Returns an array of sector starting and ending points.
+     * 
+     * If SectorType is PERCENTAGE, then with the index starting at zero, the even numbered indexes are the starting points and are inclusive.
+     * The odd numbered indexes are the ending points and are exclusive.
+     * The number of sectors can be derived by dividing the number of array entries by 2.
+     * 
+     * If SectorType is COORDINATES, then with the index starting at zero, indexes are as follows,
+     * (0=startingLat, 1=startingLon, 2=endingLat, 3=endingLon).
+     * This pattern repeats throughout the array.
+     * The number of sectors can be derived by dividing the number of array entries by 4.
+     * 
+     * If there are no sectors defined, an empty array is returned with a length of zero.
+     *
+     * <p>PATH = {@link #getSectors(String,String) /Track/Sectors/(SECTORTYPE)/(UOM)}
+     * 
+     * @param sectorType (optional) Indicates the type of the values being returned. Valid values are {@link com.SIMRacingApps.Track.SectorType}, PERCENTAGE, COORDINATES. Defaults PERCENTAGE. 
+     * @param UOM (optional) Specifies the unit of measure to return. %, RAD, DEG. Default is % and DEG.
+     * @return An array of sectors in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getSectors(String sectorType,String UOM) {
+        Data d = (new Data("Trace/Sectors",new ArrayList<Double>(),UOM,Data.State.NOTAVAILABLE)).convertUOM(UOM);
+        //TODO: Get sectors from the track.json files for SIMs that do not provide them. Otherwise the SIM needs to override this method and provide them.
+        return d;
+    }
+    public    Data    getSectors(String sectorType) { return getSectors(sectorType,sectorType.equalsIgnoreCase(SectorType.PERCENTAGE) ? "%" : "DEG"); }
+    public    Data    getSectors()                  { return getSectors(SectorType.PERCENTAGE); }
 
     /**
      * Returns the current temperature of the track.

@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2022 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    39.7948747,
+    "Longitude":   -86.2340317,
+    "North":       180.0,
+    "Resolution":  3.4,
+    "MergePoint":  18.3,
+    "Images": {
+        "SAT":     "indianapolis-sat.png",
+        "MAP":     "indianapolis-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  90.0,
+    "GPX": {
+        "ONTRACK":   "indianapolis_2022_road-ONTRACK.gpx",
+        "ONPITROAD": "indianapolis_2022_road-ONPITROAD.gpx"        
+    }
+}

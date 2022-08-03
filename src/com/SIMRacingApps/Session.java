@@ -651,6 +651,15 @@ public class Session {
     public    Data    getIsRedFlag()                   { /*Boolean*/                             return new Data("Session/IsRedFlag",false,"boolean",Data.State.NOTAVAILABLE); }
     
     /**
+     * Returns true if pit road is open.
+     * 
+     * <p>PATH = {@link #getIsPitRoadOpen() /Session/IsPitRoadOpen}
+     * 
+     * @return true if the pits are open in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getIsPitRoadOpen()               { /*Boolean*/                             return new Data("Session/IsPitRoadOpen",true,"boolean",Data.State.NOTAVAILABLE); }
+
+    /**
      * Returns true if the session is in replay mode.
      * Otherwise, false which assumes all data is live (real-time).
      * 

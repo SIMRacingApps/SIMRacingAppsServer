@@ -14,6 +14,7 @@ import com.SIMRacingApps.SIMPlugin;
 import com.SIMRacingApps.Data;
 import com.SIMRacingApps.Data.State;
 import com.SIMRacingApps.Session.CarIdentifiers;
+import com.SIMRacingApps.Track.SectorType;
 import com.SIMRacingApps.SIMPluginCallbacks.SIMPluginCallback;
 import com.SIMRacingApps.Util.FindFile;
 
@@ -1975,6 +1976,37 @@ public class Car {
      */
     public Data getRPMPitRoadSpeed() {
         return new Data("Car/"+m_carIdentifier+"/RPMPitRoadSpeed",m_pitRoadSpeedRPM,"rev/min",Data.State.NORMAL);
+    }
+    
+    /**
+     * Returns the sector number this car is currently in. Returns zero(0) if car is not on the track, else the sector number starting with 1. 
+     * 
+     * <p>PATH = {@link #getSector /Car/(CARIDENTIFIER)/Sector}
+     * 
+     * @return The sector number in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getSector() {
+        Data d = new Data("Car/"+m_carIdentifier+"/Sector",0,"",Data.State.NORMAL);
+        
+        ArrayList<Double> sectors = m_SIMPlugin.getSession().getTrack().getSectors(SectorType.PERCENTAGE).getDoubleArray();
+        double percentage         = this.getLap(LapType.COMPLETEDPERCENT).getDouble();
+        String location           = this.getStatus().getString();
+        
+        if (location.equals(Car.Status.ONTRACK)
+        ||  location.equals(Car.Status.OFFTRACK)
+        ) {
+            int sector = 0;
+            while ((sector*2) < sectors.size()-1) {
+                if (percentage >= sectors.get(sector*2) && percentage < sectors.get((sector*2)+1)) {
+                    d.setValue(sector+1);
+                    break;
+                }
+                
+                sector++;
+            }
+        }
+        
+        return d;
     }
 
     /**
