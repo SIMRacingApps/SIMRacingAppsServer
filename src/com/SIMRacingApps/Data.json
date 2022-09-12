@@ -180,6 +180,15 @@
                 "BAR":  0.01
             }
         },
+        "KWH": {      
+            "Abbr":     "kWh",       
+            "Singular": "Kilowatthour",               
+            "Plural":   "Kilowatthours", 
+            "Metric":   "KWH",
+            "Imperial": "KWH", 
+            "Conversions": {
+            } 
+        },
         "L": {      
             "Abbr":     "L",         
             "Singular": "Liter",                    
