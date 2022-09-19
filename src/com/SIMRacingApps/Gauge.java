@@ -1297,52 +1297,52 @@ if (m_type.equals("WaterTemp"))
             Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"Name",m_name));
         m_typeName = Server.getArg(argPrefix+"TypeName",m_typeName); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"TypeName",m_typeName));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"TypeName",m_typeName));
         m_UOM = Server.getArg(argPrefix+"UOM",m_UOM); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"UOM",m_UOM));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"UOM",m_UOM));
         m_imperial = Server.getArg(argPrefix+"imperial",m_imperial); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"imperial",m_imperial));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"imperial",m_imperial));
         m_metric = Server.getArg(argPrefix+"metric",m_metric); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"metric",m_metric));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"metric",m_metric));
         m_stateAscending = Server.getArg(argPrefix+"StateAscending",m_stateAscending); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"StateAscending",m_stateAscending?"true":"false"));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"StateAscending",m_stateAscending?"true":"false"));
         m_multiplier = Server.getArg(argPrefix+"Multiplier",m_multiplier); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"Multiplier",m_multiplier));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"Multiplier",m_multiplier));
         _setMinimum(Server.getArg(argPrefix+"Minimum",getMinimum().getDouble()),m_UOM); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"Minimum",getMinimum().getDouble()));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"Minimum",getMinimum().getDouble()));
         _setMaximum(Server.getArg(argPrefix+"Maximum",getMaximum().getDouble()),m_UOM); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"Maximum",getMaximum().getDouble()));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"Maximum",getMaximum().getDouble()));
         _setMajorIncrement(Server.getArg(argPrefix+"MajorIncrement",getMajorIncrement().getDouble()),m_UOM); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"MajorIncrement",getMajorIncrement().getDouble()));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"MajorIncrement",getMajorIncrement().getDouble()));
         _setMinorIncrement(Server.getArg(argPrefix+"MinorIncrement",getMinorIncrement().getDouble()),m_UOM); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"MinorIncrement",getMinorIncrement().getDouble()));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"MinorIncrement",getMinorIncrement().getDouble()));
         _setCapacityMinimum(Server.getArg(argPrefix+"CapacityMinimum",getCapacityMinimum().getDouble()),m_UOM); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityMinimum",getCapacityMinimum().getDouble()));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityMinimum",getCapacityMinimum().getDouble()));
         _setCapacityMaximum(Server.getArg(argPrefix+"CapacityMaximum",getCapacityMaximum().getDouble()),m_UOM); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityMaximum",getCapacityMaximum().getDouble()));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityMaximum",getCapacityMaximum().getDouble()));
         _setCapacityIncrement(Server.getArg(argPrefix+"CapacityIncrement",getCapacityIncrement().getDouble()),m_UOM); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityIncrement",getCapacityIncrement().getDouble()));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityIncrement",getCapacityIncrement().getDouble()));
         _setIsFixed(Server.getArg(argPrefix+"IsFixed",getIsFixed().getBoolean())); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"IsFixed",getIsFixed().getString()));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"IsFixed",getIsFixed().getString()));
         _setIsChangable(Server.getArg(argPrefix+"IsChangable",getIsChangeable().getBoolean())); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"IsChangable",getIsChangeable().getString()));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"IsChangable",getIsChangeable().getString()));
         _setOnResetChange(Server.getArg(argPrefix+"OnResetChange",getOnResetChange().getBoolean())); 
         if (m_car.isME())
-            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"OnResetChange",getOnResetChange().getString()));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %s",argPrefix,"OnResetChange",getOnResetChange().getString()));
         
         if (trackmap != null) {
             @SuppressWarnings("unchecked")
@@ -1359,10 +1359,10 @@ if (m_type.equals("WaterTemp"))
                     
                     start = Server.getArg(argPrefix+"States-"+state.getKey()+"-"+"Start",start);
                     if (m_car.isME())
-                        Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix+"States-"+state.getKey()+"-","Start",start));
+                        Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix+"States-"+state.getKey()+"-","Start",start));
                     end   = Server.getArg(argPrefix+"States-"+state.getKey()+"-"+"End",end);
                     if (m_car.isME())
-                        Server.logger().fine(String.format("Loading Gauge Value: %s%s = %f",argPrefix+"States-"+state.getKey()+"-","End",end));
+                        Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix+"States-"+state.getKey()+"-","End",end));
                     
                     
                     if (state.getValue().get("Value") != null) {
@@ -1372,10 +1372,10 @@ if (m_type.equals("WaterTemp"))
                         //user Overrides
                         name  = Server.getArg(argPrefix+"States-"+state.getKey()+"-"+"Name",name);
                         if (m_car.isME())
-                            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix+"States-"+state.getKey()+"-","Name",name));
+                            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %s",argPrefix+"States-"+state.getKey()+"-","Name",name));
                         value = Server.getArg(argPrefix+"States-"+state.getKey()+"-"+"Value",value);
                         if (m_car.isME())
-                            Server.logger().fine(String.format("Loading Gauge Value: %s%s = %s",argPrefix+"States-"+state.getKey()+"-","Value",value));
+                            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %s",argPrefix+"States-"+state.getKey()+"-","Value",value));
 
                         _addStateRange(
                             stateName,
