@@ -670,6 +670,18 @@ public class Session {
     public    Data    getIsReplay()                    { /*Boolean*/                             return new Data("Session/IsReplay",false,"boolean",Data.State.NOTAVAILABLE); }
     
     /**
+     * Returns true if the session is in replay mode and has not been rewound to a time in the past.
+     * Otherwise, false which assumes the replay is not live and is running in the past.
+     * 
+     * NOTE: If getIsReplay() returns false, then the status of this is set to OFF and the value returned is false. So check the status to be NORMAL if in replay mode.
+     * 
+     * <p>PATH = {@link #getIsReplayLive() /Session/IsReplayLive}
+     * 
+     * @return true if the green flag is out in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getIsReplayLive()                    { /*Boolean*/                         return new Data("Session/IsReplayLive",false,"boolean",Data.State.NOTAVAILABLE); }
+
+    /**
      * Returns the current lap of the race or REFERENCE car if in a different type of session.
      * <p>
      * Current lap is defined as the lap you are about to complete. 
