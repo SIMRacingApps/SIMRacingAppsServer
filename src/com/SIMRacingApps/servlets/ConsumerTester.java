@@ -19,7 +19,7 @@ import com.SIMRacingApps.Server;
  * It will be used to test the DataPublisher.Publish class.
  * It will take in the json string a log it, then return a fake return string.
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2022 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2023 Jeffrey Gilliam
  * @since 1.2
  * @license Apache License 2.0
  */

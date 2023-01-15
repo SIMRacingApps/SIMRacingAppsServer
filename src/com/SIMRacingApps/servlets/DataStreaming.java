@@ -19,7 +19,7 @@ import com.SIMRacingApps.Server;
  * Once received, the data is transmitted back to the client every "interval". The client does not have to poll for the data. 
  * "interval" is in milliseconds and defaults to 100ms. 
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2022 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2023 Jeffrey Gilliam
  * @since 1.0
  * @license Apache License 2.0
  */

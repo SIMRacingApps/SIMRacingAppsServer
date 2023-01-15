@@ -17,7 +17,7 @@ import com.SIMRacingApps.Server;
  * So, a client would need to send the "sessionid" as a message to the socket every time it wants more data.
  * 
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2022 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2023 Jeffrey Gilliam
  * @since 1.0
  * @license Apache License 2.0
  */

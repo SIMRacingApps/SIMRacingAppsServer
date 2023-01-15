@@ -23,7 +23,7 @@ import com.SIMRacingApps.Server;
  * Also, you can pass an "interval" parameter, which defaults to 100 milliseconds.
  * 
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2022 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2023 Jeffrey Gilliam
  * @since 1.0
  * @license Apache License 2.0
  */

@@ -57,7 +57,7 @@ import com.SIMRacingApps.Server;
  *  }
  * </pre>
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2022 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2023 Jeffrey Gilliam
  * @since 1.2
  * @license Apache License 2.0
  */

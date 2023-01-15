@@ -41,7 +41,7 @@ import com.SIMRacingApps.Server;
  *    {DELAY=50}{WINDOWS}rnotepad{ENTER}{DELAY 1000}hello world{ALT}ha
  * </pre> 
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2022 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2023 Jeffrey Gilliam
  * @since 1.0
  * @license Apache License 2.0
  */
