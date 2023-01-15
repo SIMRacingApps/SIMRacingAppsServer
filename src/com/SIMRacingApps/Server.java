@@ -899,7 +899,7 @@ public class Server {
                         scanner.useDelimiter("\\A");
                         String tasksList = scanner.hasNext() ? scanner.next() : "";
                         scanner.close();
-                        boolean isRunning = tasksList.contains(exe.getName());
+                        boolean isRunning = tasksList.contains(exe.getName().substring(0, 25));  //the name gets truncated to 25 characters
                         
                         if (isRunning) {
                             logger().info("Electron: " + exe.getName() + " is running. Cannot update Electron");
@@ -951,7 +951,7 @@ public class Server {
                     scanner.useDelimiter("\\A");
                     String tasksList = scanner.hasNext() ? scanner.next() : "";
                     scanner.close();
-                    boolean isRunning = tasksList.contains(exe.getName());
+                    boolean isRunning = tasksList.contains(exe.getName().substring(0, 25));  //the name gets truncated to 25 characters
                     
                     if (isRunning) {
                         logger().info("Electron: " + exe.getName() + " is already running");
