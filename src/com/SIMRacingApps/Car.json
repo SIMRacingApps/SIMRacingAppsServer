@@ -1075,6 +1075,28 @@
                 "IsFixed":           false
             }
         },
+        "ABSActive": {
+            "default": {
+                "Name":              "ABSActive",
+                "TypeName":          "",
+                "UOM":               "",
+                "imperial":          "",
+                "metric":            "",
+                "StateAscending":    false,
+                "Minimum":           0.0,
+                "Maximum":           1.0,
+                "MajorIncrement":    1.0,
+                "MinorIncrement":    1.0,
+                "CapacityMinimum":   0.0,
+                "CapacityMaximum":   1.0,
+                "CapacityIncrement": 1.0,
+                "IsFixed":           false,
+                "States": {
+                    "OFF": {"Start": -1.0, "End": 1.0, "Name": "Car/Gauge/ABSActive", "Value": "OFF"},
+                    "ON":  {"Start":  1.0, "End": 2.0, "Name": "Car/Gauge/ABSActive", "Value": "ON"}
+                }
+            }
+        },
         "AntiRollFront": {
             "default": {
                 "Name":              "ANTI ROLL",

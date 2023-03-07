@@ -73,6 +73,17 @@ public class Gauge {
         public static final String GENERIC         = "Generic";
         
         /**
+         * ABS Active returns true when the ABS system is active, else false 
+         * <p>
+         * States:
+         * <ul>
+         * <li>ON - ABS is active.</li>
+         * <li>OFF - ABS is not active.</li>
+         * </ul>
+         */
+        public static final String ABSACTIVE       = "ABSActive";
+        
+        /**
          * The fuel level. This could be real-time, estimated, or may not be possible to see until you pit. 
          * That depends on the SIM.
          * <p>
