@@ -597,6 +597,15 @@ public class Session {
     public    Data    getIsAppsHidden()                { /*Boolean*/                             return new Data("Session/IsAppsHidden",m_hideApps,"boolean",Data.State.NORMAL); }
     
     /**
+     * Returns true if the garage screen is visible so apps/widgets can hide it.
+     * 
+     * <p>PATH = {@link #getIsGarageVisible() /Session/IsGarageVisible}
+     * 
+     * @return true if the garage screen is visible in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getIsGarageVisible()                 { /*Boolean*/                             return new Data("Session/IsGarageVisible",false,"boolean",Data.State.NOTAVAILABLE); }
+
+    /**
      * Returns true if the green flag is waving.
      * 
      * <p>PATH = {@link #getIsGreenFlag() /Session/IsGreenFlag}
