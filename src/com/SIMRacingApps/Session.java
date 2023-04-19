@@ -76,6 +76,18 @@ public class Session {
         public final static String FINISHED         = "FINISHED"; 
     }
     
+    /**
+     * This class enumerates the values return by {@link com.SIMRacingApps.Session#getResrtart()}
+     * <ul>
+     * <li>DOUBLEFILE</li>
+     * <li>SINGLEFILE</li>
+     * </ul>
+     */
+    public final static class RestartMethod {
+        public final static String DOUBLEFILE       = "DOUBLEFILE";
+        public final static String SINGLEFILE       = "SINGLEFILE"; 
+    }
+    
     /** number of laps to return if the session has unlimited laps */
     public static final int UNLIMITEDLAPS = 9999;
 
@@ -972,6 +984,16 @@ public class Session {
     public    Data    getReplay()                                { /*String*/      return new Data("Session/Replay","","String",Data.State.NOTAVAILABLE); }
 
     /**
+     * Returns the type of restart, double or single file.
+     * 
+     * <p>PATH = {@link #getRestart() /Session/Restart}
+     * 
+     * @since 1.20
+     * @return A string representing the restart type in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getRestart()                                { /*String*/      return new Data("Session/Restart","","String",Data.State.NOTAVAILABLE); }
+    
+    /**
      * Tells the replay system what to do. 
      * Note, some SIMs require you to get out of the car first. 
      * <dl>
@@ -1017,6 +1039,20 @@ public class Session {
      */
     public    Data    setReplayPosition(String command)          { /*String*/      return new Data("Session/setReplayPosition",command,"String",Data.State.NOTAVAILABLE); }
     
+    /**
+     * Tells the system what type of restart you want.
+     * <dl>
+     * <dt>DOUBLEFILE</dt><dd>Restart Double File</dd>
+     * <dt>SINGLEFILE</dt><dd>Restart Single File</dd>
+     * </dl>
+     * <p>PATH = {@link #setRestart(String) /Session/setRestart/(COMMAND)}
+     * 
+     * @since 1.20
+     * @param command The restart method.
+     * @return The restart method in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    setRestart(String command)          { /*String*/      return new Data("Session/setRestart",command,"String",Data.State.NOTAVAILABLE); }
+
     /**
      * Returns if the SIM has own pit count down spotter enabled.
      * 
