@@ -77,7 +77,7 @@ public class Session {
     }
     
     /**
-     * This class enumerates the values return by {@link com.SIMRacingApps.Session#getResrtart()}
+     * This class enumerates the values return by {@link com.SIMRacingApps.Session#getRestart()}
      * <ul>
      * <li>DOUBLEFILE</li>
      * <li>SINGLEFILE</li>
