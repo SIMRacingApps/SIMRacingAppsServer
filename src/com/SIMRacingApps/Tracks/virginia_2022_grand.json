@@ -1,0 +1,21 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2023 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "Latitude":    36.5609765,
+    "Longitude":   -79.2045974,
+    "North":       207.0,
+    "Resolution":  4.0,
+    "MergePoint":  1.2,
+    "Images": {
+        "SAT":     "virginia-sat.png",
+        "MAP":     "virginia-map.png"
+    },
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "FinishLine":  180.0,
+    "GPX": {
+        "ONTRACK":   "virginia_2022_grand-ONTRACK.gpx",
+        "ONPITROAD": "virginia_2022_grand-ONPITROAD.gpx"        
+    }
+}
