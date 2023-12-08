@@ -9,7 +9,7 @@
             logger.setMessageOutputLevel( 9 );
     </script>
     <property name="build.major" value="1" />
-    <property name="build.minor" value="20" />
+    <property name="build.minor" value="21" />
     <property name="build.prefix" value="" />
     <!--property name="build.prefix" value="BETA-" /-->
     <tstamp>

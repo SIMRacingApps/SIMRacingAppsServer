@@ -1,0 +1,34 @@
+{
+    "Copyright":   "Copyright (C) 2015 - 2023 Jeffrey Gilliam",
+    "License":     "Apache License 2.0",
+    "COMMENT1":    "The Lat/Lon is the center of the track around which the image is rotated",
+    "COMMENT1a":   "tip: if you center the map within the browser frame, the url will change to the center of the view",
+    "COMMENT1b":   "If a WayPoint is found in the GPX file named Center, it will override these values",
+    "Latitude":    43.340572,
+    "Longitude":   -88.277319,
+    "COMMENT2":    "North is angle you want the track's north to point to, where 270 is straight up and 90 is down",
+    "COMMENT2a":   "load map image into GIMP. Using Image->Transform->ArbitraryRotation, rotate image to desired angle. Add what GIMP calculates to 270",
+    "North":       180.0,
+    "COMMENT3":    "Resolution is the number of meters per pixel. Considering the size is 800x480 pixels",
+    "Resolution":  0.5,
+    "COMMENT4":    "MergePoint is the point at which you are legally able to reenter the track after pitting. Some tracks have blue cone",
+    "MergePoint":  38.6,
+    "COMMENT6":    "Images map to the Layer Name to show (MAP,OSM). Must have at least MAP",
+    "Images": {
+        "MAP":     "slinger-map.png",
+        "SAT":     "slinger-sat.png"
+    },
+    "COMMENT7":    "The following units of measures should be in the track's country's native measurement system",
+    "DistanceUOM": "mile",
+    "TempUOM":     "F",
+    "SpeedUOM":    "mph",
+    "COMMENT8":    "FinishLine starts out at zero degrees, 3 o'clock. Use this to rotate it to line up with North's rotation",
+    "FinishLine":  135.0,
+    "COMMENT9":    "GPX is the file saved from http://www.gpxeditor.co.uk of the GPS coordinates.",
+    "COMMENT9a":   "Right Click, Draw New, Route. Draw the points starting at the finish line and ending at the finish line",
+    "COMMENT9b":   "Save as GPX file associated to the names here",
+    "GPX": {
+        "ONTRACK":   "slinger_figure8-ONTRACK.gpx",
+        "ONPITROAD": "slinger_figure8-ONPITROAD.gpx"        
+    }
+}
