@@ -20,7 +20,7 @@ import com.SIMRacingApps.Util.FindFile;
  * Implements the ROOT servlet to redirect to /SIMRacingApps if the resource is not found
  * 
  * @author Jeffrey Gilliam
- * @copyright Copyright (C) 2015 - 2023 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2024 Jeffrey Gilliam
  * @since 1.0
  * @license Apache License 2.0
  */

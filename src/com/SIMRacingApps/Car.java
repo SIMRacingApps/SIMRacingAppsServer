@@ -23,7 +23,7 @@ import com.SIMRacingApps.Util.FindFile;
  * Each SIM has to subclass Car and provide the SIM specific data for all methods that it has information for. 
  * @author Jeffrey Gilliam
  * @since 1.0
- * @copyright Copyright (C) 2015 - 2023 Jeffrey Gilliam
+ * @copyright Copyright (C) 2015 - 2024 Jeffrey Gilliam
  * @license Apache License 2.0
  */
 public class Car {
@@ -69,7 +69,7 @@ public class Car {
      * Defines the messages the spotter can say.
      * 
      * @author Jeffrey Gilliam
-     * @copyright Copyright (C) 2015 - 2023 Jeffrey Gilliam
+     * @copyright Copyright (C) 2015 - 2024 Jeffrey Gilliam
      * @since 1.5
      * @license Apache License 2.0
      */
