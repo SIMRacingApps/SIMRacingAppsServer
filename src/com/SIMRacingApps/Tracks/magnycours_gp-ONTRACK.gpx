@@ -2,7 +2,7 @@
 <gpx xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxedw="http://www.gpxeditor.co.uk/xmlschemas/WaypointExtension/v1" xmlns:gpxedts="http://www.gpxeditor.co.uk/xmlschemas/TrackSegExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" creator="GPXEditor" version="1.1" xmlns="http://www.topografix.com/GPX/1/1">
   <rte>
     <name>Untitled</name>
-    <rtept lat="46.8640895133996" lon="3.16370517758694">
+    <rtept lat="46.8630331707405" lon="3.16179276255932">
       <name />
       <cmt />
     </rtept>
@@ -486,7 +486,7 @@
       <name />
       <cmt />
     </rtept>
-    <rtept lat="46.8640912320031" lon="3.16370940904992">
+    <rtept lat="46.8630330554316" lon="3.16179967623132">
       <name />
       <cmt />
     </rtept>
