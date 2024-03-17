@@ -631,6 +631,16 @@ public class Track {
     public    Data    getCity()                          { /*String*/                              return new Data("Track/City","{City}","",Data.State.NOTAVAILABLE); }
     
     /**
+     * Returns the track condition as reported by the SIM SIMPlugin.
+     * Could be rubber build up, wetness, dirt.
+     * 
+     * <p>PATH = {@link #getConfiguration() /Track/Condition}
+     * 
+     * @return The conditions in a {@link com.SIMRacingApps.Data} container.
+     */
+    public    Data    getCondition()                    { /*String*/                              return new Data("Track/Condition","{TrackCondition}","",Data.State.NOTAVAILABLE); }
+    
+    /**
      * Returns the track configuration as reported by the SIM SIMPlugin.
      * 
      * <p>PATH = {@link #getConfiguration() /Track/Configuration}
