@@ -287,7 +287,7 @@ public class Gauge {
 
         /**
          * The type of compound the tire is made out of.
-         * Possible values are blank (Unknown), S (Soft), M (Medium), H (Hard)
+         * Possible values are blank (Unknown), S (SOFT), M (MED), H (HARD), W (WET), D (DRY) 
          */
         public static final String TIRECOMPOUND  = "TireCompound";
         
@@ -825,7 +825,7 @@ public class Gauge {
       */
     public Data getCapacityMaximum(String UOM) { return _getReturnValue(m_capacityMaximum,UOM); }
     public Data getCapacityMaximum()           { return getCapacityMaximum(m_measurementSystem); }
-    public Data getCapacityMaximumRaw()        { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/CapacityMaximum",m_capacityMaximum,m_UOM).convertUOM(m_measurementSystem); }
+    public Data getCapacityMaximumRaw()        { return m_capacityMaximum.convertUOM(m_measurementSystem); }
 
     /**
       * Returns the minimum number that this gauge will accept when calling {@link com.SIMRacingApps.Gauge#setValueNext(double,String)}
@@ -838,7 +838,7 @@ public class Gauge {
       */
     public Data getCapacityMinimum(String UOM) { return _getReturnValue(m_capacityMinimum,UOM); }
     public Data getCapacityMinimum()           { return getCapacityMinimum(m_measurementSystem); }
-    public Data getCapacityMinimumRaw()        { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/CapacityMinimum",m_capacityMinimum,m_UOM).convertUOM(m_measurementSystem); }
+    public Data getCapacityMinimumRaw()        { return m_capacityMinimum.convertUOM(m_measurementSystem); }
     
 
     /**
@@ -955,6 +955,28 @@ public class Gauge {
     public Data getIsDirty() { return new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/IsDirty",m_isDirty,"boolean",Data.State.NORMAL); }
 
     /**
+     * Returns the value passed in. It's a way to loop from min to max via the increments
+     * and get the translated values according to the states. 
+     * 
+     * <p>PATH = {@link #getValue(double,String,String,String) /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/Value/(VALUE)/(UOM)/(GEAR)/(ENGINEPOWER)} 1.22
+     * 
+     * @since 1.22
+     * @param enginePower (Optional) The engine power to use
+     * @param gear  (Optional) The gear to use
+     * @param UOM   (Optional) The unit of measure to return, default to the gauges UOM.
+     * @param value (Optional) The value to return. Defaults to the Capacity Minimum
+     * @return The value you passed it.
+     */
+    public Data getValue(double value, String UOM, String gear, String enginePower) { 
+        return _getReturnValue(new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/Value",value,UOM,Data.State.NORMAL),UOM,gear,enginePower); 
+    }
+    public Data getValue(String value, String UOM, String gear, String enginePower) { return getValue(Double.parseDouble(value),UOM,gear,enginePower); }
+    public Data getValue(String value, String UOM, String gear)                     { return getValue(value,UOM,gear,""); }
+    public Data getValue(String value, String UOM)                                  { return getValue(value,UOM,""); }
+    public Data getValue(String value)                                              { return getValue(value, m_measurementSystem); }
+    public Data getValue()                                                          { return getValue(m_capacityMinimum.getString()); }
+
+    /**
      * Returns the current value of the gauge. 
      * 
      * <p>PATH = {@link #getValueCurrent(String) /Car/(CARIDENTIFIER)/Gauge/(GAUGETYPE)/ValueCurrent/(UOM)}
@@ -962,7 +984,7 @@ public class Gauge {
      * @param UOM (Optional) The unit of measure to return, default to the gauges UOM.
      * @return The current value.
      */
-    public Data getValueCurrent(String UOM) { return _getReturnValue(new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/ValueCurrent",0.0,"",Data.State.NOTAVAILABLE),""); }
+    public Data getValueCurrent(String UOM) { return _getReturnValue(new Data("Car/"+m_carIdentifier+"/Gauge/"+m_type+"/ValueCurrent",0.0,UOM,Data.State.NOTAVAILABLE),""); }
     public Data getValueCurrent()           { return getValueCurrent(m_measurementSystem); }
 
     /**
@@ -1336,12 +1358,12 @@ if (m_type.equals("WaterTemp"))
         _setMinorIncrement(Server.getArg(argPrefix+"MinorIncrement",getMinorIncrement().getDouble()),m_UOM); 
         if (m_car.isME())
             Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"MinorIncrement",getMinorIncrement().getDouble()));
-        _setCapacityMinimum(Server.getArg(argPrefix+"CapacityMinimum",getCapacityMinimum().getDouble()),m_UOM); 
+        _setCapacityMinimum(Server.getArg(argPrefix+"CapacityMinimum",getCapacityMinimumRaw().getDouble()),m_UOM); 
         if (m_car.isME())
-            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityMinimum",getCapacityMinimum().getDouble()));
-        _setCapacityMaximum(Server.getArg(argPrefix+"CapacityMaximum",getCapacityMaximum().getDouble()),m_UOM); 
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityMinimum",getCapacityMinimumRaw().getDouble()));
+        _setCapacityMaximum(Server.getArg(argPrefix+"CapacityMaximum",getCapacityMaximumRaw().getDouble()),m_UOM); 
         if (m_car.isME())
-            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityMaximum",getCapacityMaximum().getDouble()));
+            Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityMaximum",getCapacityMaximumRaw().getDouble()));
         _setCapacityIncrement(Server.getArg(argPrefix+"CapacityIncrement",getCapacityIncrement().getDouble()),m_UOM); 
         if (m_car.isME())
             Server.logger().finest(String.format("Loading Gauge Value: %s%s = %f",argPrefix,"CapacityIncrement",getCapacityIncrement().getDouble()));

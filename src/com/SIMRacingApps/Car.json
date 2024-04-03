@@ -102,12 +102,7 @@
                 "IsFixed":           false,
                 "IsChangable":       true,
                 "States": {
-                    "0": {"Start":  -1.0, "End": 0.0,     "Name": "Car/Gauge/TireCompound", "Value": ""},
-                    "1": {"Start":   0.0, "End": 1.0,     "Name": "Car/Gauge/TireCompound", "Value": ""},
-                    "2": {"Start":   1.0, "End": 2.0,     "Name": "Car/Gauge/TireCompound", "Value": ""},
-                    "3": {"Start":   2.0, "End": 3.0,     "Name": "Car/Gauge/TireCompound", "Value": ""},
-                    "4": {"Start":   3.0, "End": 4.0,     "Name": "Car/Gauge/TireCompound", "Value": ""},
-                    "5": {"Start":   4.0, "End": 9999.0,  "Name": "Car/Gauge/TireCompound", "Value": ""}
+                    "": {"Start":  -1.0, "End": 9999.0,     "Name": "Car/Gauge/TireCompound", "Value": ""}
                 }
             }
         },
