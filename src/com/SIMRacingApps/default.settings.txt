@@ -347,3 +347,35 @@ LIFX-Flags = N
 LIFX-token = YourToken
 LIFX-flags-brightness = 1.0
 LIFX-flags-testmode = N
+
+#####################################################################
+### Admin Commands can be overridden here. Just remove the "#" sign at the begining of the line to make it active.
+### The following fields will be replaced in the text with the following values:
+###    [NUMBER]           = The Car Number
+###    [DRIVERNAME]       = The Driver of the car. Warning: Seems nicknames in league sessions will not work. Solution forthcoming.
+###    [TIME]             = The blank flag time in seconds, or L{laps}, or D for drive through
+###    [LAPS]             = +laps, -laps, laps to set the caution laps to
+###    [METHOD]           = Restart method, single or double
+### iRacing Reference = https://support.iracing.com/support/solutions/articles/31000133518-session-admin-chat-commands
+###   NOTE: If using [NUMBER], the @ is required on most of them, but I put it on all of them just in case. 
+###         This was changed sometime in 2023 by iRacing for team events.
+###         There's also a known issue in league session when using nicknames. The [DRIVERNAME] will not work with nicknames.
+#####################################################################
+#iracing-sendkeys-ADMIN_COMMANDS-ADMIN     = !admin [NUMBER]@
+#iracing-sendkeys-ADMIN_COMMANDS-ADVANCE   = !advance
+#iracing-sendkeys-ADMIN_COMMANDS-BLACK     = !black [NUMBER]@ [TIME]
+#iracing-sendkeys-ADMIN_COMMANDS-CHAT      = !chat [NUMBER]@
+#iracing-sendkeys-ADMIN_COMMANDS-CHATALL   = !chat
+#iracing-sendkeys-ADMIN_COMMANDS-CLEAR     = !clear [NUMBER]@
+#iracing-sendkeys-ADMIN_COMMANDS-DQ        = !dq [NUMBER]@
+#iracing-sendkeys-ADMIN_COMMANDS-EOL       = !eol [NUMBER]@
+#iracing-sendkeys-ADMIN_COMMANDS-NADMIN    = !nadmin [NUMBER]@
+#iracing-sendkeys-ADMIN_COMMANDS-NCHAT     = !nchat [NUMBER]@
+#iracing-sendkeys-ADMIN_COMMANDS-NCHATALL  = !nchat [NUMBER]@
+#iracing-sendkeys-ADMIN_COMMANDS-REMOVE    = !remove [NUMBER]@
+#iracing-sendkeys-ADMIN_COMMANDS-WAVEBY    = !waveby [NUMBER]@
+#iracing-sendkeys-ADMIN_COMMANDS-YELLOW    = !yellow
+#iracing-sendkeys-ADMIN_COMMANDS-PITCLOSE  = !pitclose
+#iracing-sendkeys-ADMIN_COMMANDS-PITOPEN   = !pitopen
+#iracing-sendkeys-ADMIN_COMMANDS-PACELAPS  = !pacelaps [LAPS]
+#iracing-sendkeys-ADMIN_COMMANDS-RESTART   = !restart [METHOD]
