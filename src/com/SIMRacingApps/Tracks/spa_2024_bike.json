@@ -1,7 +1,6 @@
 {
     "Copyright":   "Copyright (C) 2015 - 2024 Jeffrey Gilliam",
     "License":     "Apache License 2.0",
-    "Config":      "Grand Prix Pits",
     "Latitude":    50.43582,
     "Longitude":   5.96561,
     "North":       40.0,
@@ -16,7 +15,7 @@
     "SpeedUOM":    "kph",
     "FinishLine":  280.0,
     "GPX": {
-        "ONTRACK": "spa_up-ONTRACK.gpx",
-        "ONPITROAD": "spa_up-ONPITROAD.gpx"
+        "ONTRACK": "spa_2024_bike-ONTRACK.gpx",
+        "ONPITROAD": "spa_2024_bike-ONPITROAD.gpx"
     }
 }

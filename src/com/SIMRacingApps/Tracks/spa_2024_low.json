@@ -1,12 +1,11 @@
 {
     "Copyright":   "Copyright (C) 2015 - 2024 Jeffrey Gilliam",
     "License":     "Apache License 2.0",
-    "Config":      "Grand Prix Pits",
     "Latitude":    50.43582,
     "Longitude":   5.96561,
     "North":       40.0,
     "Resolution":  7.0,
-    "MergePoint":  7.3,
+    "MergePoint":  10.3,
     "Images": {
         "SAT":     "spa-map.png",
         "MAP":     "spa-sat.png"
@@ -14,9 +13,9 @@
     "DistanceUOM": "km",
     "TempUOM":     "C",
     "SpeedUOM":    "kph",
-    "FinishLine":  280.0,
+    "FinishLine":  90.0,
     "GPX": {
-        "ONTRACK": "spa_up-ONTRACK.gpx",
-        "ONPITROAD": "spa_up-ONPITROAD.gpx"
+        "ONTRACK": "spa_low-ONTRACK.gpx",
+        "ONPITROAD": "spa_low-ONPITROAD.gpx"
     }
 }
