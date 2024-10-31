@@ -1924,6 +1924,28 @@ public class Car {
     }
 
     /**
+     * Returns the number of seconds remaining on the push to pass counter.
+     * 
+     * <p>PATH = {@link #getPushToPassRemaining() /Car/(CARIDENTIFIER)/PushToPassRemaining}
+     * 
+     * @return The number of seconds in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getPushToPassRemaining() {
+        return new Data("Car/"+m_carIdentifier+"/PushToPassRemaining",0,"integer",Data.State.NOTAVAILABLE);
+    }
+
+    /**
+     * Returns the push to pass active status.
+     * 
+     * <p>PATH = {@link #getIsPushToPassActive() /Car/(CARIDENTIFIER)/IsPushToPassStatus}
+     * 
+     * @return The true if push to pass is active in a {@link com.SIMRacingApps.Data} container.
+     */
+    public Data getIsPushToPassActive() {
+        return new Data("Car/"+m_carIdentifier+"/IsPushToPassActive",false,"boolean",Data.State.NOTAVAILABLE);
+    }
+
+    /**
      * Returns the radio channel number that this car is currently transmitting on.
      * 
      * <p>PATH = {@link #getRadioChannel() /Car/(CARIDENTIFIER)/RadioChannel}
